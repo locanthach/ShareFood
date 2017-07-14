@@ -1,0 +1,9 @@
+<Button xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/email_button"
+    android:background="@drawable/button_bg_transparent"
+    android:text="JOIN WITH EMAIL"
+    android:textColor="#e95b5f"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent" /> <!-- Used in tests -->

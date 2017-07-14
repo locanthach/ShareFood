@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="#4CAF50">
+
+    <ImageView
+        android:id="@+id/imgShareFood"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="150dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/handshake_256" />
+
+    <TextView
+        android:id="@+id/txtSnippet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imgShareFood"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="50dp"
+        android:gravity="center"
+        android:text="Share Food is an edible food Recovery Project which serves the surplus foods from Staffs and sharing for their Colleagues in Company."
+        android:textColor="#ffffff"
+        android:textSize="18dp" />
+
+</RelativeLayout>
