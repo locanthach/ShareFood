@@ -1,4 +1,4 @@
-package com.locanthach.sharefood;
+package com.locanthach.sharefood.intro;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,10 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.locanthach.sharefood.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

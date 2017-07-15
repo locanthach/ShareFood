@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    tools:context="com.locanthach.sharefood.MainActivity">
+    tools:context="com.locanthach.sharefood.activity.MainActivity">
 
     <ImageView
         android:layout_width="match_parent"
@@ -33,5 +33,5 @@
         android:layout_height="wrap_content"
         android:background="@drawable/button_bg_transparent"
         android:text="SIGN IN WITH GOOGLE"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"/>
 </FrameLayout>
