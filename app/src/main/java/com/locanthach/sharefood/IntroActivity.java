@@ -1,5 +1,6 @@
 package com.locanthach.sharefood;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -37,7 +38,9 @@ public class IntroActivity extends AppIntro {
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
         finish();
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        startActivity(new Intent(IntroActivity.this,NavigateSignInActivity.class));
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right); // animation
+//        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     @Override
