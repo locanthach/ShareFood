@@ -6,32 +6,7 @@
     android:animateLayoutChanges="true"
     tools:context="com.locanthach.sharefood.activity.MainActivity">
 
-    <ImageView
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:src="@drawable/sharefood" />
-
-    <Button
-        android:id="@+id/email_button"
-        android:layout_width="300dp"
-        android:layout_marginTop="420dp"
-        android:layout_marginBottom="10dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:background="@drawable/button_bg_transparent"
-        android:text="JOIN WITH EMAIL"
-        android:textColor="#ffffff" />
-
-    <Button
-        android:id="@+id/google_button"
-        android:layout_width="300dp"
-        android:layout_marginTop="500dp"
-        android:layout_gravity="center_horizontal"
-        android:textSize="16sp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_bg_transparent"
-        android:text="SIGN IN WITH GOOGLE"
-        android:textColor="#ffffff"/>
+        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 </FrameLayout>
