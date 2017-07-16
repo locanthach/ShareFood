@@ -2,6 +2,7 @@ package com.locanthach.sharefood.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -10,23 +11,36 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.locanthach.sharefood.R;
+import com.locanthach.sharefood.common.FireBaseConfig;
+import com.locanthach.sharefood.model.User;
+import com.locanthach.sharefood.utils.StringUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class LoginActivity extends AppCompatActivity {
 
-    @BindView(R.id.edtEmail) EditText edtEmail;
-    @BindView(R.id.edtPassword) EditText edtPassword;
-    @BindView(R.id.login_button) Button login_button;
-    @BindView(R.id.btnRegister) TextView btnRegister;
+    @BindView(R.id.edtEmail)
+    EditText edtEmail;
+    @BindView(R.id.edtPassword)
+    EditText edtPassword;
+    @BindView(R.id.login_button)
+    Button login_button;
+    @BindView(R.id.btnRegister)
+    TextView btnRegister;
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
+    private DatabaseReference databaseReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setUpFireBase() {
         mFirebaseAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
     }
 
     private void handleClickEvent() {
@@ -57,12 +72,21 @@ public class LoginActivity extends AppCompatActivity {
             }
             mFirebaseAuth.signInWithEmailAndPassword(email, password)
                     .addOnFailureListener(e -> showError(e.getMessage()))
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                onAuthSuccess(task.getResult().getUser());
+                            }
+                        }
+                    })
                     .addOnSuccessListener((AuthResult authResult) -> {
                         startActivity(MainActivity.getIntent(this));
                         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                     });
         });
     }
+
     private void showError(String error) {
         Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
     }
@@ -71,8 +95,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
-        if(mFirebaseUser!=null){
-            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+        if (mFirebaseUser != null) {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         }
     }
@@ -82,4 +106,19 @@ public class LoginActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         return intent;
     }
+
+    private void onAuthSuccess(FirebaseUser user) {
+        String username = StringUtils.usernameFromEmail(user.getEmail());
+
+        // Write new user
+        writeNewUser(user.getUid(), username, user.getEmail());
+    }
+
+    // [START basic_write]
+    private void writeNewUser(String userId, String name, String email) {
+        User user = new User(name, email);
+
+        databaseReference.child(FireBaseConfig.USERS_CHILD).child(userId).setValue(user);
+    }
+    // [END basic_write]
 }

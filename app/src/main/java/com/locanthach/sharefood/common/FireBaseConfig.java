@@ -5,5 +5,6 @@ package com.locanthach.sharefood.common;
  */
 
 public class FireBaseConfig {
-    public static final String POSTS = "posts";
+    public static final String POSTS_CHILD = "posts";
+    public static final String USERS_CHILD = "users";
 }
