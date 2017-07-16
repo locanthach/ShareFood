@@ -29,7 +29,7 @@ public class IntroActivity extends AppIntro {
         addSlide(SlideHowToUse2.newInstance(R.layout.slide_intro_to_use_2));
 
         setDepthAnimation();
-        showSkipButton(true);
+        showSkipButton(false);
 
     }
 
