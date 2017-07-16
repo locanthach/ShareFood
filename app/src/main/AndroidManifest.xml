@@ -19,11 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-<<<<<<< HEAD
-            android:name=".MainActivity"
-=======
             android:name=".activity.MainActivity"
->>>>>>> anlee
             android:theme="@style/NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,26 +28,12 @@
             </intent-filter>
         </activity>
         <activity
-<<<<<<< HEAD
-            android:name=".IntroActivity"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".NavigateSignInActivity"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".RegisterActivity"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name=".LoginActivity"
-            android:theme="@style/NoActionBar"/>
-=======
             android:name=".activity.IntroActivity"
             android:theme="@style/NoActionBar" />
         <activity android:name=".activity.QRScannerActivity" />
         <activity android:name=".activity.Main2Activity" />
         <activity android:name=".activity.TimeLineActivity" />
         <activity android:name=".activity.PostActivity"></activity>
->>>>>>> anlee
     </application>
 
 </manifest>

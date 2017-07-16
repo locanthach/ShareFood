@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.locanthach.sharefood.activity.MainActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.locanthach.sharefood.activity.MainActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

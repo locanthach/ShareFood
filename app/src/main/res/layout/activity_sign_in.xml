@@ -4,11 +4,7 @@
     android:layout_width="match_parent"
     android:animateLayoutChanges="true"
     android:layout_height="match_parent"
-<<<<<<< HEAD
-    tools:context="com.locanthach.sharefood.NavigateSignInActivity">
-=======
     tools:context="com.locanthach.sharefood.activity.NavigateSignInActivity">
->>>>>>> anlee
 
     <ImageView
         android:layout_width="match_parent"
