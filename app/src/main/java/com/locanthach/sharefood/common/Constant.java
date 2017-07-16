@@ -1,7 +1,7 @@
 package com.locanthach.sharefood.common;
 
 /**
- * Created by Dell on 7/15/2017.
+ * Created by An Lee on 7/15/2017.
  */
 
 public class Constant {

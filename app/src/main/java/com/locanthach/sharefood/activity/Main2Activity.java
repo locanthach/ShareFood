@@ -7,6 +7,9 @@ import android.view.View;
 
 import com.locanthach.sharefood.R;
 
+/**
+ * Created by An Lee on 7/16/2017.
+ */
 //Use for test
 public class Main2Activity extends AppCompatActivity {
 

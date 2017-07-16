@@ -13,6 +13,9 @@ import com.locanthach.sharefood.common.Constant;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
+/**
+ * Created by An Lee on 7/16/2017.
+ */
 public class QRScannerActivity extends Activity implements ZXingScannerView.ResultHandler {
     private ZXingScannerView mScannerView;
 

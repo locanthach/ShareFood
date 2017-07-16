@@ -31,9 +31,9 @@
             android:name=".activity.IntroActivity"
             android:theme="@style/NoActionBar" />
         <activity android:name=".activity.QRScannerActivity" />
-        <activity android:name=".activity.Main2Activity">
-
-        </activity>
+        <activity android:name=".activity.Main2Activity" />
+        <activity android:name=".activity.TimeLineActivity" />
+        <activity android:name=".activity.PostActivity"></activity>
     </application>
 
 </manifest>
