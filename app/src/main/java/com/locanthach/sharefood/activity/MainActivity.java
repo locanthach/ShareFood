@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private final int REQUEST_CODE = 20;
     private static final int RC_SIGN_IN = 1;
     //Firebase variable
     private FirebaseDatabase database;
@@ -60,18 +59,9 @@ public class MainActivity extends AppCompatActivity {
     //Start scan QR code activity
     private void startScanQRCode() {
         Intent intent = new Intent(MainActivity.this, QRScannerActivity.class);
-        startActivityForResult(intent, REQUEST_CODE);
+        startActivity(intent);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-            // Extract name value from result extras
-            String name = data.getExtras().getString(Constant.SCAN_RESULT);
-            // Toast the name to display temporarily on screen
-            Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-        }
-    }
 
     private void setUpAppIntro() {
         Intent intent = new Intent(MainActivity.this, IntroActivity.class);

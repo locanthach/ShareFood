@@ -5,5 +5,6 @@ package com.locanthach.sharefood.common;
  */
 
 public class Constant {
-    public static final String SCAN_RESULT = "scanResult";
+    public static final String SECURITY_CODE = "ShaFoo";
+    public static final String WRONG_SECURITY_MESS = "Wrong security code !! Please, try again.";
 }

@@ -43,20 +43,17 @@ public class QRScannerActivity extends Activity implements ZXingScannerView.Resu
 
     @Override
     public void handleResult(Result result) {
-        Toast.makeText(this, "Contents = " + result.getText() +
-                ", Format = " + result.getBarcodeFormat().toString(), Toast.LENGTH_SHORT).show();
-
+        String scanResult = result.getText();
+        if (scanResult.equals(Constant.SECURITY_CODE)) {
+            finish();
+        }else{
+            Toast.makeText(this, Constant.WRONG_SECURITY_MESS, Toast.LENGTH_SHORT).show();
+        }
         // Note:
         // * Wait 2 seconds to resume the preview.
         // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
         // * I don't know why this is the case but I don't have the time to figure out.
         Handler handler = new Handler();
         handler.postDelayed(() -> mScannerView.resumeCameraPreview(QRScannerActivity.this), 2000);
-
-        String scanResult = result.getText();
-        Intent data = new Intent();
-        data.putExtra(Constant.SCAN_RESULT, scanResult);
-        setResult(RESULT_OK, data);
-        finish();
     }
 }
