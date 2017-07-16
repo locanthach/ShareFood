@@ -1,4 +1,4 @@
-package com.locanthach.sharefood;
+package com.locanthach.sharefood.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,11 @@ import android.support.v4.content.ContextCompat;
 
 import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntroFragment;
+import com.locanthach.sharefood.R;
+import com.locanthach.sharefood.intro.SlideContent;
+import com.locanthach.sharefood.intro.SlideHome;
+import com.locanthach.sharefood.intro.SlideHowToUse;
+import com.locanthach.sharefood.intro.SlideHowToUse2;
 
 /**
  * Created by phant on 14-Jul-17.
@@ -24,7 +29,7 @@ public class IntroActivity extends AppIntro {
         addSlide(SlideHowToUse2.newInstance(R.layout.slide_intro_to_use_2));
 
         setDepthAnimation();
-        showSkipButton(false);
+        showSkipButton(true);
 
     }
 

@@ -1,4 +1,4 @@
-package com.locanthach.sharefood;
+package com.locanthach.sharefood.intro;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -6,33 +6,34 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.locanthach.sharefood.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by phant on 14-Jul-17.
+ * Created by phant on 15-Jul-17.
  */
 
-public class SlideHome extends Fragment {
+public class SlideHowToUse extends Fragment {
     private static final String ARG_LAYOUT_RES_ID = "layoutResId";
     private int layoutResId;
 
-    @BindView(R.id.txtShareFood)
-    TextView txtShareFood;
+    @BindView(R.id.imgTakePhoto)
+    ImageView imgTakePhoto;
 
-    public static SlideHome newInstance(int layoutResId) {
-        SlideHome sampleSlide = new SlideHome();
+    public static SlideHowToUse newInstance(int layoutResId) {
+        SlideHowToUse slideHowToUse = new SlideHowToUse();
 
         Bundle args = new Bundle();
         args.putInt(ARG_LAYOUT_RES_ID, layoutResId);
-        sampleSlide.setArguments(args);
+        slideHowToUse.setArguments(args);
 
-        return sampleSlide;
+        return slideHowToUse;
     }
 
     @Override
@@ -50,13 +51,10 @@ public class SlideHome extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(layoutResId, container, false);
         ButterKnife.bind(this, view);
-        YoYo.with(Techniques.Tada)
-                .duration(2000)
-                .repeat(2)
-                .playOn(txtShareFood);
-
+        YoYo.with(Techniques.Flash)
+                .duration(5000)
+                .repeat(-1)
+                .playOn(imgTakePhoto);
         return view;
     }
-
-
 }

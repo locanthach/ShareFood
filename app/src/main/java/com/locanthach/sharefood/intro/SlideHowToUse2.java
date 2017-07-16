@@ -1,4 +1,4 @@
-package com.locanthach.sharefood;
+package com.locanthach.sharefood.intro;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.locanthach.sharefood.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,21 +19,21 @@ import butterknife.ButterKnife;
  * Created by phant on 15-Jul-17.
  */
 
-public class SlideHowToUse extends Fragment {
+public class SlideHowToUse2 extends Fragment {
     private static final String ARG_LAYOUT_RES_ID = "layoutResId";
     private int layoutResId;
 
-    @BindView(R.id.imgTakePhoto)
-    ImageView imgTakePhoto;
+    @BindView(R.id.imgPost)
+    ImageView imgPost;
 
-    public static SlideHowToUse newInstance(int layoutResId) {
-        SlideHowToUse slideHowToUse = new SlideHowToUse();
+    public static SlideHowToUse2 newInstance(int layoutResId) {
+        SlideHowToUse2 slideHowToUse2 = new SlideHowToUse2();
 
         Bundle args = new Bundle();
         args.putInt(ARG_LAYOUT_RES_ID, layoutResId);
-        slideHowToUse.setArguments(args);
+        slideHowToUse2.setArguments(args);
 
-        return slideHowToUse;
+        return slideHowToUse2;
     }
 
     @Override
@@ -50,10 +51,10 @@ public class SlideHowToUse extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(layoutResId, container, false);
         ButterKnife.bind(this, view);
-        YoYo.with(Techniques.Flash)
+        YoYo.with(Techniques.Pulse)
                 .duration(5000)
                 .repeat(-1)
-                .playOn(imgTakePhoto);
+                .playOn(imgPost);
         return view;
     }
 }
