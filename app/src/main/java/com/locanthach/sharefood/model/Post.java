@@ -1,7 +1,5 @@
 package com.locanthach.sharefood.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.text.format.DateUtils;
 
 import com.google.firebase.database.Exclude;
@@ -63,7 +61,7 @@ public class Post implements Serializable {
     // [END post_to_map]
 
     public String getRelativeTimeAgo(String date) {
-        String twitterFormat = "MMM dd, YYYY H:mm:ss aa";
+        String twitterFormat = "MMM dd, yyyy h:mm:ss aa";
         SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
         sf.setLenient(true);
 
