@@ -20,7 +20,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,20 +29,24 @@
         </activity>
         <activity
             android:name=".activity.IntroActivity"
-            android:theme="@style/AppTheme.TransculentStatusBar" />
-        <activity android:name=".activity.QRScannerActivity" />
-        <activity android:name=".activity.Main2Activity" />
-        <activity android:name=".activity.TimeLineActivity" />
-        <activity android:name=".activity.PostActivity" />
+            android:theme="@style/TransculentStatusBar" />
+        <activity android:name=".activity.QRScannerActivity"
+            android:theme="@style/NoActionBar"/>
+        <activity android:name=".activity.Main2Activity"
+            android:theme="@style/NoActionBar"/>
+        <activity android:name=".activity.TimeLineActivity"
+            android:theme="@style/NoActionBar"/>
+        <activity android:name=".activity.PostActivity"
+            android:theme="@style/NoActionBar"/>
         <activity
             android:name=".activity.NavigateSignInActivity"
-            android:theme="@style/AppTheme.TransculentStatusBar" />
+            android:theme="@style/TransculentStatusBar" />
         <activity
             android:name=".activity.LoginActivity"
-            android:theme="@style/AppTheme.TransculentStatusBar" />
+            android:theme="@style/TransculentStatusBar" />
         <activity
             android:name=".activity.RegisterActivity"
-            android:theme="@style/AppTheme.TransculentStatusBar" />
+            android:theme="@style/TransculentStatusBar" />
     </application>
 
 </manifest>

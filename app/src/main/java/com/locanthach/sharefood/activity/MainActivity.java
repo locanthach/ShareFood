@@ -11,35 +11,50 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cooltechworks.views.shimmer.ShimmerAdapter;
+import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.locanthach.sharefood.R;
+import com.locanthach.sharefood.adapter.PostAdapter;
 import com.locanthach.sharefood.common.Constant;
+import com.locanthach.sharefood.common.FireBaseConfig;
+import com.locanthach.sharefood.model.Post;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static android.support.v7.widget.StaggeredGridLayoutManager.*;
+
 public class MainActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 1;
     //Firebase variable
     private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference commentDBRef;
+    private DatabaseReference postsDBRef;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
     private FirebaseAuth.AuthStateListener authStateListener;
+    private PostAdapter postAdapter;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -47,8 +62,10 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     @BindView(R.id.nvView)
     NavigationView navigationView;
-    @BindView(R.id.rvPost)
-    RecyclerView rvPost;
+    //    @BindView(R.id.rvPost)
+//    RecyclerView rvPost;
+    @BindView(R.id.shimmer_recycler_view)
+    ShimmerRecyclerView rvPost;
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
@@ -68,23 +85,20 @@ public class MainActivity extends AppCompatActivity {
             user = firebaseAuth.getCurrentUser();
             if (user != null) {
                 //user already logged in
+//                startActivity(new Intent(MainActivity.this, PostActivity.class));
                 //SHOW TIMELINE
+                fetchPosts();
             } else {
                 setUpAppIntro();
             }
         };
-
-
     }
 
     private void setUpDrawerLayout() {
         //setting Event Icon in NavigationView
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                //selectDrawerItem(item);
-                return true;
-            }
+        navigationView.setNavigationItemSelectedListener(item -> {
+            //selectDrawerItem(item);
+            return true;
         });
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.open, R.string.close);
@@ -118,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
     private void setUpFireBase() {
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
+        postsDBRef = firebaseDatabase.getReference();
     }
 
     private void setUpView() {
@@ -125,20 +140,17 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        getSupportActionBar().setHomeButtonEnabled(true);
+        postAdapter = new PostAdapter(this);
+        rvPost.setAdapter(postAdapter);
+        rvPost.setLayoutManager(new StaggeredGridLayoutManager(1, VERTICAL));
     }
-
-    //Start scan QR code activity
-    private void startScanQRCode() {
-        Intent intent = new Intent(MainActivity.this, QRScannerActivity.class);
-        startActivity(intent);
-    }
-
 
     private void setUpAppIntro() {
         Intent intent = new Intent(MainActivity.this, IntroActivity.class);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
+
     public static Intent getIntent(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -157,13 +169,31 @@ public class MainActivity extends AppCompatActivity {
         firebaseAuth.removeAuthStateListener(authStateListener);
     }
 
-    private void fetchPost(){
+    private void fetchPosts() {
+        postsDBRef.child(FireBaseConfig.POSTS_CHILD)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        List<Post> posts = new ArrayList<>();
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            Post post = child.getValue(Post.class);
+                            child.getValue();
+                            posts.add(post);
+                        }
+                        Collections.reverse(posts);
+                        postAdapter.setData(posts);
+                    }
 
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 break;
@@ -179,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);

@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,9 +24,12 @@ import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.model.User;
 import com.locanthach.sharefood.utils.StringUtils;
+import com.locanthach.sharefood.utils.ToastUtils;
+import com.tuyenmonkey.mkloader.MKLoader;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -33,9 +38,13 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.edtPassword)
     EditText edtPassword;
     @BindView(R.id.login_button)
-    Button login_button;
+    AppCompatButton login_button;
     @BindView(R.id.btnRegister)
     TextView btnRegister;
+    @BindView(R.id.loader)
+    MKLoader loader;
+    @BindView(R.id.viewTrans)
+    View viewTrans;
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
@@ -46,8 +55,13 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        setUpView();
         handleClickEvent();
         setUpFireBase();
+    }
+
+    private void setUpView() {
+        ToastUtils.toastConfigSuccess(getResources().getColor(R.color.teal700));
     }
 
     private void setUpFireBase() {
@@ -64,6 +78,8 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         login_button.setOnClickListener(v -> {
+            loader.setVisibility(View.VISIBLE);
+            viewTrans.setVisibility(View.VISIBLE);
             String email = edtEmail.getText().toString().trim();
             String password = edtPassword.getText().toString().trim();
             if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
@@ -71,16 +87,20 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
             mFirebaseAuth.signInWithEmailAndPassword(email, password)
-                    .addOnFailureListener(e -> showError(e.getMessage()))
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                onAuthSuccess(task.getResult().getUser());
-                            }
+                    .addOnFailureListener(e -> {
+                        loader.setVisibility(View.GONE);
+                        viewTrans.setVisibility(View.GONE);
+                        showError(e.getMessage());
+                    })
+                    .addOnCompleteListener(this, task -> {
+                        loader.setVisibility(View.GONE);
+                        viewTrans.setVisibility(View.GONE);
+                        if (task.isSuccessful()) {
+                            onAuthSuccess(task.getResult().getUser());
                         }
                     })
                     .addOnSuccessListener((AuthResult authResult) -> {
+                        Toasty.success(this, "Signed in!", Toast.LENGTH_SHORT, true).show();
                         startActivity(MainActivity.getIntent(this));
                         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                     });
@@ -88,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showError(String error) {
-        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+        Toasty.error(this, error, Toast.LENGTH_SHORT, true).show();
     }
 
     @Override

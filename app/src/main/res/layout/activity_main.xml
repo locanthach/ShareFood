@@ -19,10 +19,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/content"
+        <com.cooltechworks.views.shimmer.ShimmerRecyclerView
+            android:id="@+id/shimmer_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            />
 
         <android.support.design.widget.NavigationView
             android:id="@+id/nvView"
@@ -33,8 +34,5 @@
             app:menu="@menu/drawer_view" />
     </android.support.v4.widget.DrawerLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvPost"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+
 </LinearLayout>

@@ -1,107 +1,100 @@
 package com.locanthach.sharefood.model;
 
-import java.util.List;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.text.format.DateUtils;
+
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
+import com.locanthach.sharefood.common.Constant;
+
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by An Lee on 7/16/2017.
  */
 
-public class Post {
-    private String id;
-    private String title;
-    private String location;
-    private String timeStamp;
-    private List<Photo> photos;
-    private List<Comment> comments;
-    private int likeCount;
-    private boolean liked;
-    private User user;
+@IgnoreExtraProperties
+public class Post implements Serializable {
+    public String uid;
+    public String author;
+    public String content;
+    public String location;
+    public String time;
+    public String likeCount;
+    public String status;
+    public Map<String, Boolean> likes = new HashMap<>();
 
     public Post() {
     }
 
-    public Post(String id, String title, String location, String timeStamp, List<Photo> photos,
-                List<Comment> comments, int likeCount, boolean liked, User user) {
-        this.id = id;
-        this.title = title;
+    public Post(String uid, String author, String title, String location) {
+        this.uid = uid;
+        this.author = author;
+        this.content = title;
         this.location = location;
-        this.timeStamp = timeStamp;
-        this.photos = photos;
-        this.comments = comments;
-        this.likeCount = likeCount;
-        this.liked = liked;
-        this.user = user;
+        this.time = DateFormat.getDateTimeInstance().format(new Date());
+        this.status = String.valueOf(Constant.STATUS_AVAIABLE);
+        this.likeCount = String.valueOf(0);
     }
 
-    public String getId() {
-        return id;
+    // [START post_to_map]
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("id", uid);
+        result.put("author", author);
+        result.put("content", content);
+        result.put("location", location);
+        result.put("time", time);
+        result.put("likeCount", likeCount);
+        result.put("likes", likes);
+        result.put("status", status);
+
+        return result;
+    }
+    // [END post_to_map]
+
+    public String getRelativeTimeAgo(String date) {
+        String twitterFormat = "MMM dd, YYYY H:mm:ss aa";
+        SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+        sf.setLenient(true);
+
+        String relativeDate = "";
+        try {
+            long dateMillis = sf.parse(date).getTime();
+            relativeDate = DateUtils
+                    .getRelativeTimeSpanString(dateMillis,
+                            sf.parse(DateFormat.getDateTimeInstance().format(new Date())).getTime(),
+                            DateUtils.SECOND_IN_MILLIS)
+                    .toString();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return relativeDate;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getTime() {
+        return getRelativeTimeAgo(time);
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getTimeStamp() {
-        return timeStamp;
-    }
-
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
-    }
-
-    public List<Photo> getPhotos() {
-        return photos;
-    }
-
-    public void setPhotos(List<Photo> photos) {
-        this.photos = photos;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public int getLikeCount() {
+    public String getLikeCount() {
+        String likeCount = this.likeCount + " likes";
+        if (hasOneLike()) {
+            likeCount = this.likeCount + " like";
+        }
         return likeCount;
     }
 
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
-    }
-
-    public boolean isLiked() {
-        return liked;
-    }
-
-    public void setLiked(boolean liked) {
-        this.liked = liked;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    private boolean hasOneLike() {
+        return Integer.parseInt(likeCount) <= 1;
     }
 }

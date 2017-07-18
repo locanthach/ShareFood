@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="post"
+            type="com.locanthach.sharefood.model.Post" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgUser"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            tools:src="@drawable/saigon"
+            android:src="@drawable/saigon"/>
+
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="85dp"
+            android:layout_marginTop="35dp"
+            android:text="@{post.author}"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:text="thaoo_narii" />
+
+        <TextView
+            android:id="@+id/timeAgo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="35dp"
+            tools:text="5 minute ago"
+            android:text="@{post.time}"/>
+
+        <ImageView
+            android:id="@+id/imgPost"
+            android:layout_width="match_parent"
+            android:layout_height="256dp"
+            android:layout_marginTop="85dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/bg_home"
+            tools:src="@drawable/bg_home" />
+
+        <com.like.LikeButton
+            android:id="@+id/like_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="341dp"
+            app:anim_scale_factor="2.5"
+            app:icon_size="24dp"
+            app:icon_type="heart" />
+
+        <ImageView
+            android:id="@+id/comment_button"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="341dp"
+            android:src="@drawable/chat" />
+
+        <TextView
+            android:id="@+id/tvLikeCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="380dp"
+            android:textSize="14dp"
+            android:textStyle="bold"
+            tools:text="3.489 lượt thích"
+            android:text="@{post.likeCount}"/>
+
+        <TextView
+            android:id="@+id/tvUsername2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="400dp"
+            android:text="@{post.author}"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            tools:text="thao_narii" />
+
+        <TextView
+            android:id="@+id/txtContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="85dp"
+            android:layout_marginTop="400dp"
+            android:lines="2"
+            android:text="@{post.content}"
+            android:textSize="16dp"
+            tools:text="Tui có cái bánh nè mọi người." />
+
+    </FrameLayout>
+</layout>

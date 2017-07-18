@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:backgroundTint="@color/grey"
+                android:backgroundTint="@color/teal200"
                 android:hint="Email"
                 android:inputType="textEmailAddress"
                 android:textColor="#FFFFFF"
@@ -62,20 +62,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:backgroundTint="@color/grey"
+                android:backgroundTint="@color/teal200"
                 android:hint="Password"
                 android:textColorHint="#ffffff"
                 android:inputType="textPassword"
                 android:textColor="#FFFFFF" />
         </android.support.design.widget.TextInputLayout>
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/login_button"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="220dp"
-            android:background="@color/blueGrey"
+            android:background="@color/teal900"
             android:text="LOGIN"
             android:textColor="@android:color/white" />
 
@@ -91,5 +91,23 @@
             android:text="Create new account"
             android:textColor="@android:color/white"
             android:textSize="16sp" />
+
+
     </FrameLayout>
+    <View
+        android:id="@+id/viewTrans"
+        android:visibility="gone"
+        android:background="#99000000"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <com.tuyenmonkey.mkloader.MKLoader
+        android:layout_marginTop="390dp"
+        android:layout_marginStart="130dp"
+        android:id="@+id/loader"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:mk_color="@color/white"
+        app:mk_type="TwinFishesSpinner"
+        android:layout_width="15dp"
+        android:layout_height="15dp" />
 </RelativeLayout>

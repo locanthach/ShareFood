@@ -8,9 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.NoActionBar" parent="AppTheme">
+    <style name="TransculentStatusBar" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
 
         <!--EditText hint color-->
         <item name="colorControlActivated">#80DEEA</item>
@@ -19,7 +20,8 @@
         <item name="colorControlHighlight">@color/white</item>
     </style>
 
-    <style name="AppTheme.TransculentStatusBar" parent="AppTheme.NoActionBar">
-        <item name="android:windowTranslucentStatus">true</item>
+    <style name="NoActionBar" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 </resources>

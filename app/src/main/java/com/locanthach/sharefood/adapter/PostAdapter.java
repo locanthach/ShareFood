@@ -1,10 +1,15 @@
 package com.locanthach.sharefood.adapter;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.cooltechworks.views.shimmer.ShimmerViewHolder;
+import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.model.Post;
+import com.locanthach.sharefood.viewholder.PostViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +18,7 @@ import java.util.List;
  * Created by An Lee on 7/16/2017.
  */
 
-public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     private ArrayList<Post> posts;
     private final Context context;
 
@@ -23,13 +28,14 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+    public PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        return new PostViewHolder(DataBindingUtil.inflate(layoutInflater, R.layout.item_post, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
+    public void onBindViewHolder(PostViewHolder holder, int position) {
+        holder.bind(posts.get(position), context);
     }
 
     @Override
@@ -48,4 +54,8 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         posts.addAll(nextPos, newPosts);
         notifyItemRangeChanged(nextPos, newPosts.size());
     }
+
+//    public void setLayoutReference(int layoutReference) {
+//        this.mLayoutReference = layoutReference;
+//    }
 }

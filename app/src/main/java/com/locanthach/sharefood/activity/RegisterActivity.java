@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,9 +23,12 @@ import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.model.User;
 import com.locanthach.sharefood.utils.StringUtils;
+import com.locanthach.sharefood.utils.ToastUtils;
+import com.tuyenmonkey.mkloader.MKLoader;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 
 public class RegisterActivity extends AppCompatActivity {
     @BindView(R.id.edtEmail)
@@ -37,6 +41,10 @@ public class RegisterActivity extends AppCompatActivity {
     Button sign_up_button;
     @BindView(R.id.btnLogin)
     TextView btnLogin;
+    @BindView(R.id.loader)
+    MKLoader loader;
+    @BindView(R.id.viewTrans)
+    View viewTrans;
 
     private FirebaseAuth mFirebaseAuth;
     private DatabaseReference databaseReference;
@@ -46,8 +54,13 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
+        setUpView();
         setUpFireBase();
         handleClickEvent();
+    }
+
+    private void setUpView() {
+        ToastUtils.toastConfigSuccess(getResources().getColor(R.color.teal700));
     }
 
     private void setUpFireBase() {
@@ -72,6 +85,8 @@ public class RegisterActivity extends AppCompatActivity {
             } else if (!TextUtils.equals(password, confirmation)) {
                 showError("Confirmation is not match");
             } else {
+                loader.setVisibility(View.VISIBLE);
+                viewTrans.setVisibility(View.VISIBLE);
                 registerWithFirebase(email, password);
             }
         });
@@ -79,23 +94,27 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registerWithFirebase(String email, String password) {
         mFirebaseAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            onAuthSuccess(task.getResult().getUser());
-                        }
+                .addOnCompleteListener(this, task -> {
+                    loader.setVisibility(View.GONE);
+                    viewTrans.setVisibility(View.GONE);
+                    if (task.isSuccessful()) {
+                        onAuthSuccess(task.getResult().getUser());
                     }
                 })
                 .addOnSuccessListener(authResult -> {
+                    Toasty.success(this, "Success!", Toast.LENGTH_SHORT, true).show();
                     startActivity(MainActivity.getIntent(this));
                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 })
-                .addOnFailureListener(e -> showError(e.getMessage()));
+                .addOnFailureListener(e -> {
+                    loader.setVisibility(View.GONE);
+                    viewTrans.setVisibility(View.GONE);
+                    showError(e.getMessage());
+                });
     }
 
     private void showError(String error) {
-        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+        Toasty.error(this, error, Toast.LENGTH_SHORT, true).show();
     }
 
     public static Intent getIntent(Context context) {
@@ -106,7 +125,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void onAuthSuccess(FirebaseUser user) {
         String username = StringUtils.usernameFromEmail(user.getEmail());
-
         // Write new user
         writeNewUser(user.getUid(), username, user.getEmail());
     }
@@ -114,7 +132,6 @@ public class RegisterActivity extends AppCompatActivity {
     // [START basic_write]
     private void writeNewUser(String userId, String name, String email) {
         User user = new User(name, email);
-
         databaseReference.child(FireBaseConfig.USERS_CHILD).child(userId).setValue(user);
     }
     // [END basic_write]
