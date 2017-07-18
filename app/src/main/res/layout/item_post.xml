@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -13,6 +14,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         android:orientation="vertical">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -21,8 +23,8 @@
             android:layout_height="50dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
-            tools:src="@drawable/saigon"
-            android:src="@drawable/saigon"/>
+            android:src="@drawable/saigon"
+            tools:src="@drawable/saigon" />
 
         <TextView
             android:id="@+id/tvUsername"
@@ -31,6 +33,7 @@
             android:layout_marginStart="85dp"
             android:layout_marginTop="35dp"
             android:text="@{post.author}"
+            android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold"
             tools:text="thaoo_narii" />
@@ -42,8 +45,8 @@
             android:layout_gravity="end"
             android:layout_marginEnd="10dp"
             android:layout_marginTop="35dp"
-            tools:text="5 minute ago"
-            android:text="@{post.time}"/>
+            android:text="@{post.time}"
+            tools:text="5 minute ago" />
 
         <ImageView
             android:id="@+id/imgPost"
@@ -57,40 +60,43 @@
 
         <com.like.LikeButton
             android:id="@+id/like_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="341dp"
+            android:layout_marginTop="350dp"
             app:anim_scale_factor="2.5"
+            app:circle_start_color="@color/white"
             app:icon_size="24dp"
             app:icon_type="heart" />
 
         <ImageView
             android:id="@+id/comment_button"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="341dp"
-            android:src="@drawable/chat" />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="350dp"
+            android:src="@drawable/ic_mode_comment_black_24dp" />
 
         <TextView
             android:id="@+id/tvLikeCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="380dp"
+            android:layout_marginTop="390dp"
+            android:text="@{post.likeCount}"
+            android:textColor="@color/black"
             android:textSize="14dp"
             android:textStyle="bold"
-            tools:text="3.489 lượt thích"
-            android:text="@{post.likeCount}"/>
+            tools:text="3.489 lượt thích" />
 
         <TextView
             android:id="@+id/tvUsername2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="400dp"
+            android:layout_marginTop="410dp"
             android:text="@{post.author}"
+            android:textColor="@color/black"
             android:textSize="16dp"
             android:textStyle="bold"
             tools:text="thao_narii" />
@@ -100,7 +106,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="85dp"
-            android:layout_marginTop="400dp"
+            android:layout_marginTop="410dp"
             android:lines="2"
             android:text="@{post.content}"
             android:textSize="16dp"

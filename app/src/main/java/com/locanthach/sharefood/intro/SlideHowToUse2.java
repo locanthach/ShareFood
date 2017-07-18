@@ -52,7 +52,7 @@ public class SlideHowToUse2 extends Fragment {
         View view = inflater.inflate(layoutResId, container, false);
         ButterKnife.bind(this, view);
         YoYo.with(Techniques.Pulse)
-                .duration(5000)
+                .duration(3000)
                 .repeat(-1)
                 .playOn(imgPost);
         return view;

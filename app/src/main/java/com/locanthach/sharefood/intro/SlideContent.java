@@ -52,10 +52,9 @@ public class SlideContent extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(layoutResId, container, false);
         ButterKnife.bind(this, view);
-        YoYo.with(Techniques.Landing)
-                .duration(1500)
-                .delay(2000)
-                .repeat(2)
+        YoYo.with(Techniques.FadeInUp)
+                .duration(3000)
+                .repeat(-1)
                 .playOn(imgShareFood);
         return view;
     }
