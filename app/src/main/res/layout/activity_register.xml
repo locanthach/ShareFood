@@ -91,43 +91,62 @@
                 android:textColorHint="#FFFFFF" />
         </android.support.design.widget.TextInputLayout>
 
-        <Button
-            android:id="@+id/sign_up_button"
+        <com.balysv.materialripple.MaterialRippleLayout
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="120dp"
-            android:background="@color/teal900"
-            android:text="Sign Up"
-            android:textColor="@android:color/white" />
+            app:mrl_rippleAlpha="0.3"
+            app:mrl_rippleColor="@color/teal200"
+            app:mrl_rippleOverlay="true">
 
-        <TextView
-            android:id="@+id/btnLogin"
-            android:layout_width="match_parent"
+            <Button
+                android:id="@+id/sign_up_button"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:background="@color/teal900"
+                android:text="Sign Up"
+                android:textColor="@android:color/white" />
+        </com.balysv.materialripple.MaterialRippleLayout>
+
+        <com.balysv.materialripple.MaterialRippleLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="80dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            android:gravity="center"
-            android:text="Login to your account"
-            android:textColor="@android:color/white"
-            android:textSize="16sp" />
+            app:mrl_rippleAlpha="0.3"
+            app:mrl_rippleColor="@color/teal200"
+            app:mrl_rippleOverlay="true">
+
+            <TextView
+                android:id="@+id/btnLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Login to your account"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+        </com.balysv.materialripple.MaterialRippleLayout>
+
     </FrameLayout>
+
     <View
         android:id="@+id/viewTrans"
-        android:visibility="gone"
-        android:background="#99000000"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:visibility="gone" />
+
     <com.tuyenmonkey.mkloader.MKLoader
-        android:layout_marginTop="490dp"
-        android:layout_marginStart="130dp"
         android:id="@+id/loader"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="115dp"
+        android:layout_marginTop="480dp"
         android:visibility="gone"
-        tools:visibility="visible"
         app:mk_color="@color/white"
         app:mk_type="TwinFishesSpinner"
-        android:layout_width="15dp"
-        android:layout_height="15dp" />
+        tools:visibility="visible" />
 </RelativeLayout>

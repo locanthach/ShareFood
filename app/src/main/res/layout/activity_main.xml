@@ -9,10 +9,10 @@
     tools:context="com.locanthach.sharefood.activity.MainActivity">
 
     <android.support.v7.widget.Toolbar
-        android:background="@color/colorPrimary"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary" />
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawerLayout"
@@ -23,7 +23,10 @@
             android:id="@+id/shimmer_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            />
+            app:shimmer_demo_child_count="3"
+            app:shimmer_demo_layout="@layout/layout_demo"
+            app:shimmer_demo_layout_manager_type="linear_vertical" />
+
 
         <android.support.design.widget.NavigationView
             android:id="@+id/nvView"
@@ -32,7 +35,10 @@
             android:layout_gravity="start"
             app:headerLayout="@layout/drawer_header"
             app:menu="@menu/drawer_view" />
+
     </android.support.v4.widget.DrawerLayout>
 
-
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>

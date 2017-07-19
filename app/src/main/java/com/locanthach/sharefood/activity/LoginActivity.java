@@ -83,6 +83,8 @@ public class LoginActivity extends AppCompatActivity {
             String email = edtEmail.getText().toString().trim();
             String password = edtPassword.getText().toString().trim();
             if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+                loader.setVisibility(View.GONE);
+                viewTrans.setVisibility(View.GONE);
                 showError("Please enter email and password");
                 return;
             }

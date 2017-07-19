@@ -13,6 +13,6 @@
     <color name="teal700">#00796B</color>
     <color name="teal200">#80CBC4</color>
     <color name="teal500">#009688</color>
-    009688
+    <color name="black">#000000</color>
 
 </resources>

@@ -9,6 +9,11 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+<<<<<<< HEAD
+=======
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+>>>>>>> c1a3553e00bc1e19908bab226a4cedb951d0132c
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -53,8 +58,6 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     @BindView(R.id.nvView)
     NavigationView navigationView;
-    //    @BindView(R.id.rvPost)
-//    RecyclerView rvPost;
     @BindView(R.id.shimmer_recycler_view)
     ShimmerRecyclerView rvPost;
 
@@ -68,17 +71,13 @@ public class MainActivity extends AppCompatActivity {
         setUpFireBase();
         setUpDrawerLayout();
 
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()
-        );
         authStateListener = firebaseAuth -> {
             user = firebaseAuth.getCurrentUser();
             if (user != null) {
                 //user already logged in
-//                startActivity(new Intent(MainActivity.this, PostActivity.class));
                 //SHOW TIMELINE
                 fetchPosts();
+
             } else {
                 setUpAppIntro();
             }
@@ -133,7 +132,9 @@ public class MainActivity extends AppCompatActivity {
 //        getSupportActionBar().setHomeButtonEnabled(true);
         postAdapter = new PostAdapter(this);
         rvPost.setAdapter(postAdapter);
-        rvPost.setLayoutManager(new StaggeredGridLayoutManager(1, VERTICAL));
+        rvPost.setLayoutManager(new LinearLayoutManager(this));
+        rvPost.showShimmerAdapter();
+
     }
 
     private void setUpAppIntro() {
@@ -174,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         Collections.reverse(posts);
                         postAdapter.setData(posts);
+                        rvPost.hideShimmerAdapter();
                     }
 
                     @Override
@@ -198,8 +200,9 @@ public class MainActivity extends AppCompatActivity {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawers();
         } else {
-            super.onBackPressed();
+            finish();
         }
+        super.onBackPressed();
     }
 
     @Override
