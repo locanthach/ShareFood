@@ -9,6 +9,7 @@
     tools:context="com.locanthach.sharefood.activity.MainActivity">
 
     <android.support.v7.widget.Toolbar
+        android:elevation="10dp"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
