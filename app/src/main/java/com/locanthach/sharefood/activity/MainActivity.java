@@ -9,17 +9,11 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-<<<<<<< HEAD
-=======
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
->>>>>>> c1a3553e00bc1e19908bab226a4cedb951d0132c
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
-import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -33,14 +27,11 @@ import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.model.Post;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static android.support.v7.widget.StaggeredGridLayoutManager.VERTICAL;
 
 public class MainActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 1;
