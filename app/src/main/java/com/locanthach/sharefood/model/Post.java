@@ -1,18 +1,13 @@
 package com.locanthach.sharefood.model;
 
-import android.text.format.DateUtils;
-
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.locanthach.sharefood.common.Constant;
 
 import java.io.Serializable;
 import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -21,14 +16,15 @@ import java.util.Map;
 
 @IgnoreExtraProperties
 public class Post implements Serializable {
-    public String uid;
-    public String author;
-    public String content;
-    public String location;
-    public String time;
-    public String likeCount;
-    public String status;
-    public Map<String, Boolean> likes = new HashMap<>();
+    private String id;
+    private String uid;
+    private String author;
+    private String content;
+    private String location;
+    private String time;
+    private String likeCount;
+    private String status;
+    private Map<String, Boolean> likes = new HashMap<>();
 
     public Post() {
     }
@@ -47,7 +43,7 @@ public class Post implements Serializable {
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-        result.put("id", uid);
+        result.put("uid", uid);
         result.put("author", author);
         result.put("content", content);
         result.put("location", location);
@@ -60,39 +56,67 @@ public class Post implements Serializable {
     }
     // [END post_to_map]
 
-    public String getRelativeTimeAgo(String date) {
-        String twitterFormat = "MMM dd, yyyy h:mm:ss aa";
-        SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
-        sf.setLenient(true);
+    public String getUid() {
+        return uid;
+    }
 
-        String relativeDate = "";
-        try {
-            long dateMillis = sf.parse(date).getTime();
-            relativeDate = DateUtils
-                    .getRelativeTimeSpanString(dateMillis,
-                            sf.parse(DateFormat.getDateTimeInstance().format(new Date())).getTime(),
-                            DateUtils.SECOND_IN_MILLIS)
-                    .toString();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
-        return relativeDate;
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getTime() {
-        return getRelativeTimeAgo(time);
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public String getLikeCount() {
-        String likeCount = this.likeCount + " likes";
-        if (hasOneLike()) {
-            likeCount = this.likeCount + " like";
-        }
         return likeCount;
     }
 
-    private boolean hasOneLike() {
-        return Integer.parseInt(likeCount) <= 1;
+    public void setLikeCount(String likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

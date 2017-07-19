@@ -1,13 +1,14 @@
 package com.locanthach.sharefood.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.cooltechworks.views.shimmer.ShimmerViewHolder;
 import com.locanthach.sharefood.R;
+import com.locanthach.sharefood.activity.PostDetailActivity;
 import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.viewholder.PostViewHolder;
 
@@ -21,6 +22,7 @@ import java.util.List;
 public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     private ArrayList<Post> posts;
     private final Context context;
+
 
     public PostAdapter(Context context) {
         this.posts = new ArrayList<>();
@@ -36,6 +38,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     @Override
     public void onBindViewHolder(PostViewHolder holder, int position) {
         holder.bind(posts.get(position), context);
+        final String postKey = posts.get(position).getId();
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, PostDetailActivity.class);
+            intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, postKey);
+            context.startActivity(intent);
+        });
     }
 
     @Override

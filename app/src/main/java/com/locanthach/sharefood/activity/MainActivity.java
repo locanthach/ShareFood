@@ -3,22 +3,16 @@ package com.locanthach.sharefood.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.cooltechworks.views.shimmer.ShimmerAdapter;
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,21 +24,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.adapter.PostAdapter;
-import com.locanthach.sharefood.common.Constant;
 import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.model.Post;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 
-import static android.support.v7.widget.StaggeredGridLayoutManager.*;
+import static android.support.v7.widget.StaggeredGridLayoutManager.VERTICAL;
 
 public class MainActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 1;
@@ -177,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
                         List<Post> posts = new ArrayList<>();
                         for (DataSnapshot child : dataSnapshot.getChildren()) {
                             Post post = child.getValue(Post.class);
+                            post.setId(child.getKey());
                             child.getValue();
                             posts.add(post);
                         }

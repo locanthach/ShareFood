@@ -30,14 +30,15 @@
         <activity
             android:name=".activity.IntroActivity"
             android:theme="@style/TransculentStatusBar" />
-        <activity android:name=".activity.QRScannerActivity"
-            android:theme="@style/NoActionBar"/>
-        <activity android:name=".activity.Main2Activity"
-            android:theme="@style/NoActionBar"/>
-        <activity android:name=".activity.TimeLineActivity"
-            android:theme="@style/NoActionBar"/>
-        <activity android:name=".activity.PostActivity"
-            android:theme="@style/NoActionBar"/>
+        <activity
+            android:name=".activity.QRScannerActivity"
+            android:theme="@style/NoActionBar" />
+        <activity
+            android:name=".activity.Main2Activity"
+            android:theme="@style/NoActionBar" />
+        <activity
+            android:name=".activity.PostActivity"
+            android:theme="@style/NoActionBar" />
         <activity
             android:name=".activity.NavigateSignInActivity"
             android:theme="@style/TransculentStatusBar" />
@@ -46,6 +47,9 @@
             android:theme="@style/TransculentStatusBar" />
         <activity
             android:name=".activity.RegisterActivity"
+            android:theme="@style/TransculentStatusBar" />
+        <activity
+            android:name=".activity.PostDetailActivity"
             android:theme="@style/TransculentStatusBar" />
     </application>
 
