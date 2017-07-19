@@ -17,14 +17,17 @@
 
         android:orientation="vertical">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imgUser"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/saigon"
-            tools:src="@drawable/saigon" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:id="@+id/imgUser"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+
+                android:src="@drawable/saigon"
+                tools:src="@drawable/saigon" />
+
 
         <TextView
             android:id="@+id/tvUsername"
@@ -69,13 +72,13 @@
             app:icon_size="24dp"
             app:icon_type="heart" />
 
-        <ImageView
-            android:id="@+id/comment_button"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="350dp"
-            android:src="@drawable/ic_mode_comment_black_24dp" />
+            <ImageView
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="350dp"
+                android:id="@+id/comment_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_mode_comment_black_24dp" />
 
         <TextView
             android:id="@+id/tvLikeCount"
@@ -113,4 +116,5 @@
             tools:text="Tui có cái bánh nè mọi người." />
 
     </FrameLayout>
+
 </layout>
