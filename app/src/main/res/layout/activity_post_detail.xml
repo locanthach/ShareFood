@@ -87,6 +87,7 @@
                                     app:liked="true" />
 
                                 <TextView
+                                    android:textColor="@color/black"
                                     android:id="@+id/tvLikeCount"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -110,6 +111,7 @@
                                     android:src="@drawable/ic_view" />
 
                                 <TextView
+                                    android:textColor="@color/black"
                                     android:id="@+id/tvViews"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -134,6 +136,7 @@
                                     android:src="@drawable/ic_location" />
 
                                 <TextView
+                                    android:textColor="@color/black"
                                     android:id="@+id/tvLocation"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -175,6 +178,7 @@
 
                         <TextView
                             android:id="@+id/tvAuthor"
+                            android:textColor="@color/white"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
@@ -186,6 +190,7 @@
 
                         <TextView
                             android:id="@+id/tvTime"
+                            android:textColor="@color/white"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"

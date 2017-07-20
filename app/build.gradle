@@ -63,6 +63,9 @@ dependencies {
     compile 'com.balysv:material-ripple:1.0.2'
     //Fonts
     compile 'uk.co.chrisjenx:calligraphy:2.3.0'
+    //CardView
+    compile 'com.github.gabrielemariotti.cards:cardslib-core:2.1.0'
+    compile 'com.github.gabrielemariotti.cards:cardslib-recyclerview:2.1.0'
     //FIREBASE
     compile 'com.google.firebase:firebase-core:11.0.2'
     compile 'com.google.firebase:firebase-config:11.0.2'

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.activity.PostDetailActivity;
 import com.locanthach.sharefood.model.Post;
+import com.locanthach.sharefood.utils.UiUtils;
 import com.locanthach.sharefood.viewholder.PostViewHolder;
 
 import java.util.ArrayList;
@@ -62,6 +63,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         posts.addAll(nextPos, newPosts);
         notifyItemRangeChanged(nextPos, newPosts.size());
     }
+//    private int scaleItemHeightImage(Article.Media media) {
+//        int height = media.getHeight();
+//        int width = media.getWidth();
+//        int itemWidth = UiUtils.getScreenWitdh() / 2;
+//        int itemHeight = itemWidth * height / width;
+//        return itemHeight;
+//    }
 
 //    public void setLayoutReference(int layoutReference) {
 //        this.mLayoutReference = layoutReference;

@@ -18,15 +18,15 @@
         android:orientation="vertical">
 
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
-                android:id="@+id/imgUser"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgUser"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
 
-                android:src="@drawable/saigon"
-                tools:src="@drawable/saigon" />
+            android:src="@drawable/saigon"
+            tools:src="@drawable/saigon" />
 
 
         <TextView
@@ -57,7 +57,7 @@
             android:layout_height="256dp"
             android:layout_marginTop="85dp"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             android:src="@drawable/bg_home"
             tools:src="@drawable/bg_home" />
 
@@ -72,13 +72,13 @@
             app:icon_size="32dp"
             app:icon_type="heart" />
 
-            <ImageView
-                android:layout_marginStart="60dp"
-                android:layout_marginTop="350dp"
-                android:id="@+id/comment_button"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/ic_mode_comment_black_24dp" />
+        <ImageView
+            android:id="@+id/comment_button"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="350dp"
+            android:src="@drawable/ic_mode_comment_black_24dp" />
 
         <TextView
             android:id="@+id/tvLikeCount"
