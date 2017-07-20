@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -20,6 +22,9 @@ import com.locanthach.sharefood.model.Comment;
 import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.model.User;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.locanthach.sharefood.utils.ParseRelativeData.getRelativeTimeAgo;
 
 public class PostDetailActivity extends AppCompatActivity {
@@ -32,6 +37,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private ValueEventListener mPostListener;
     private String mPostKey;
     private CommentAdapter mAdapter;
+
 
     private ActivityPostDetailBinding binding;
 
