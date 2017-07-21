@@ -1,5 +1,7 @@
 package com.locanthach.sharefood.model;
 
+import com.locanthach.sharefood.utils.ParseRelativeData;
+
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.Date;
@@ -55,5 +57,9 @@ public class Comment implements Serializable{
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getRelativeTime() {
+        return ParseRelativeData.getRelativeTimeAgo(time);
     }
 }

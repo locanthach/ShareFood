@@ -3,6 +3,7 @@ package com.locanthach.sharefood.model;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.locanthach.sharefood.common.Constant;
+import com.locanthach.sharefood.utils.ParseRelativeData;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -118,5 +119,13 @@ public class Post implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getRelativeTime() {
+        return ParseRelativeData.getRelativeTimeAgo(time);
+    }
+
+    public String getLikeString() {
+        return ParseRelativeData.getLikeCount(likeCount);
     }
 }

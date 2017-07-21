@@ -31,4 +31,16 @@ public class ParseRelativeData {
         }
         return relativeDate;
     }
+
+    public static String getLikeCount(String likeCount) {
+        String count = likeCount + " likes";
+        if (hasOneLike(likeCount)) {
+            count = likeCount + " like";
+        }
+        return count;
+    }
+
+    private static boolean hasOneLike(String likeCount) {
+        return Integer.parseInt(likeCount) <= 1;
+    }
 }

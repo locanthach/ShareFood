@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -21,11 +19,6 @@ import com.locanthach.sharefood.databinding.ActivityPostDetailBinding;
 import com.locanthach.sharefood.model.Comment;
 import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.model.User;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-import static com.locanthach.sharefood.utils.ParseRelativeData.getRelativeTimeAgo;
 
 public class PostDetailActivity extends AppCompatActivity {
     private static final String TAG = "PostDetailActivity";
@@ -84,7 +77,8 @@ public class PostDetailActivity extends AppCompatActivity {
                 binding.tvAuthor.setText(post.getAuthor());
                 binding.tvContent.setText(post.getContent());
                 binding.tvLocation.setText(post.getLocation());
-                binding.tvTime.setText(getRelativeTimeAgo(post.getTime()));
+                binding.tvLikeCount.setText(post.getLikeString());
+                binding.tvTime.setText("shared " + post.getRelativeTime());
                 // [END_EXCLUDE]
             }
 

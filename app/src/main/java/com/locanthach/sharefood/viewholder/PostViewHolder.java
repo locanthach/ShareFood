@@ -6,8 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import com.locanthach.sharefood.databinding.ItemPostBinding;
 import com.locanthach.sharefood.model.Post;
 
-import static com.locanthach.sharefood.utils.ParseRelativeData.getRelativeTimeAgo;
-
 /**
  * Created by An Lee on 7/16/2017.
  */
@@ -40,20 +38,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public void bind(Post post, Context context) {
 //        ShimmerFrameLayout layout = (ShimmerFrameLayout) itemView;
 //        layout.startShimmerAnimation();
-        post.setTime(getRelativeTimeAgo(post.getTime()));
-        post.setLikeCount(getLikeCount(post.getLikeCount()));
         binding.setPost(post);
     }
 
-    public String getLikeCount(String likeCount) {
-        String count = likeCount + " likes";
-        if (hasOneLike(likeCount)) {
-            count = likeCount + " like";
-        }
-        return count;
-    }
 
-    private boolean hasOneLike(String likeCount) {
-        return Integer.parseInt(likeCount) <= 1;
-    }
 }
