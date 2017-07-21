@@ -19,6 +19,7 @@ import com.locanthach.sharefood.databinding.ActivityPostDetailBinding;
 import com.locanthach.sharefood.model.Comment;
 import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.model.User;
+import com.vstechlab.easyfonts.EasyFonts;
 
 public class PostDetailActivity extends AppCompatActivity {
     private static final String TAG = "PostDetailActivity";
@@ -75,10 +76,15 @@ public class PostDetailActivity extends AppCompatActivity {
                 Post post = dataSnapshot.getValue(Post.class);
                 // [START_EXCLUDE]
                 binding.tvAuthor.setText(post.getAuthor());
+                binding.tvAuthor.setTypeface(EasyFonts.robotoBold(PostDetailActivity.this));
                 binding.tvContent.setText(post.getContent());
+                binding.tvContent.setTypeface(EasyFonts.cac_champagne(PostDetailActivity.this));
                 binding.tvLocation.setText(post.getLocation());
+                binding.tvLocation.setTypeface(EasyFonts.robotoBold(PostDetailActivity.this));
                 binding.tvLikeCount.setText(post.getLikeString());
+                binding.tvLikeCount.setTypeface(EasyFonts.robotoBold(PostDetailActivity.this));
                 binding.tvTime.setText("shared " + post.getRelativeTime());
+                binding.tvTime.setTypeface(EasyFonts.robotoLight(PostDetailActivity.this));
                 // [END_EXCLUDE]
             }
 

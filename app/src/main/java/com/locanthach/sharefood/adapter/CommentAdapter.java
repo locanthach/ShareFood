@@ -54,6 +54,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
                 mCommentIds.add(dataSnapshot.getKey());
                 mComments.add(comment);
                 notifyItemInserted(mComments.size() - 1);
+                
                 // [END_EXCLUDE]
             }
 

@@ -25,7 +25,7 @@ public class IntroActivity extends AppIntro {
         super.onCreate(savedInstanceState);
         addSlide(SlideHome.newInstance(R.layout.slide_intro_home));
         addSlide(SlideContent.newInstance(R.layout.slide_intro_content));
-        addSlide(AppIntroFragment.newInstance("How to use", "ShareFood is really easy to use. \nLet's start!", R.drawable.how_to_use, ContextCompat.getColor(this,R.color.teal900)));
+        addSlide(AppIntroFragment.newInstance("How to use", "ShareFood is really easy to use. \nLet's start!", R.drawable.how_to_use, ContextCompat.getColor(this,R.color.teal400)));
         addSlide(SlideHowToUse.newInstance(R.layout.slide_intro_to_use));
         askForPermissions(new String[]{Manifest.permission.CAMERA},3);
         addSlide(SlideHowToUse2.newInstance(R.layout.slide_intro_to_use_2));
