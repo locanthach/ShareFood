@@ -57,8 +57,8 @@
                         android:layout_gravity="center"
                         android:background="@color/white"
                         android:gravity="center"
-                        android:paddingBottom="8sp"
-                        android:paddingTop="16sp">
+                        android:paddingBottom="4sp"
+                        android:paddingTop="4sp">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -70,7 +70,7 @@
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:layout_gravity="center"
-                                android:layout_marginBottom="8dp"
+                                android:layout_marginBottom="4sp"
                                 app:icon_size="20dp"
                                 app:liked="true" />
 
@@ -93,7 +93,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_marginBottom="8dp"
+                                android:layout_marginBottom="4sp"
                                 android:src="@drawable/ic_view" />
 
                             <TextView
@@ -115,7 +115,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_marginBottom="8dp"
+                                android:layout_marginBottom="4sp"
                                 android:src="@drawable/ic_location" />
 
                             <TextView
@@ -173,7 +173,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:maxLines="1"
-                        android:paddingTop="8sp"
+                        android:paddingTop="4sp"
                         android:textColor="@color/white"
                         tools:text="3 minutes ago" />
                 </LinearLayout>
@@ -207,9 +207,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:paddingLeft="4sp"
                     android:transitionGroup="true"
                     app:hintAnimationEnabled="true"
-                    android:paddingLeft="4sp"
                     app:hintTextAppearance="@anim/slide_in_left">
 
                     <EditText
