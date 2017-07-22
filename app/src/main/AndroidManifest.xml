@@ -4,7 +4,8 @@
 
     <!-- PERMISSION FOR CAMERA -->
     <uses-permission android:name="android.permission.CAMERA" />
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <!-- PERMISSION FOR INTERNET -->
@@ -38,7 +39,7 @@
             android:theme="@style/NoActionBar" />
         <activity
             android:name=".activity.PostActivity"
-            android:theme="@style/NoActionBar" />
+            android:theme="@style/TransculentStatusBar" />
         <activity
             android:name=".activity.NavigateSignInActivity"
             android:theme="@style/TransculentStatusBar" />

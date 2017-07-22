@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:backgroundTint="@color/teal200"
+                android:backgroundTint="@color/colorAccent"
                 android:hint="Email"
                 android:inputType="textEmailAddress"
                 android:textColor="#FFFFFF"
@@ -62,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:backgroundTint="@color/teal200"
+                android:backgroundTint="@color/colorAccent"
                 android:hint="Password"
                 android:inputType="textPassword"
                 android:textColor="#FFFFFF"
@@ -84,7 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:backgroundTint="@color/teal200"
+                android:backgroundTint="@color/colorAccent"
                 android:hint="Confirmation"
                 android:inputType="textPassword"
                 android:textColor="#FFFFFF"
@@ -97,14 +97,14 @@
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="120dp"
             app:mrl_rippleAlpha="0.3"
-            app:mrl_rippleColor="@color/teal200"
+            app:mrl_rippleColor="@color/colorAccent"
             app:mrl_rippleOverlay="true">
 
             <Button
                 android:id="@+id/sign_up_button"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:background="@color/teal900"
+                android:background="@color/colorPrimaryDark"
                 android:text="Sign Up"
                 android:textColor="@android:color/white" />
         </com.balysv.materialripple.MaterialRippleLayout>
@@ -117,7 +117,7 @@
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             app:mrl_rippleAlpha="0.3"
-            app:mrl_rippleColor="@color/teal200"
+            app:mrl_rippleColor="@color/colorAccent"
             app:mrl_rippleOverlay="true">
 
             <TextView

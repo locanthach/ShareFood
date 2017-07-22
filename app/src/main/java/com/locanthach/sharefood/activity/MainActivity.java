@@ -3,7 +3,9 @@ package com.locanthach.sharefood.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,6 +24,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.adapter.PostAdapter;
 import com.locanthach.sharefood.common.FireBaseConfig;
@@ -35,6 +40,8 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 1;
+    public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1000;
+    public final static int UPLOAD_IMAGE_ACTIVITY_REQUEST_CODE = 2000;
     //Firebase variable
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference postsDBRef;
@@ -42,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser user;
     private FirebaseAuth.AuthStateListener authStateListener;
     private PostAdapter postAdapter;
+    private String mCurrentPhotoPath;
+    private StorageReference mStorageReference;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -51,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
     NavigationView navigationView;
     @BindView(R.id.shimmer_recycler_view)
     ShimmerRecyclerView rvPost;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
@@ -73,6 +84,15 @@ public class MainActivity extends AppCompatActivity {
                 setUpAppIntro();
             }
         };
+    }
+
+    private void handleWritePost() {
+
+    }
+
+    private void openCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivity(intent);
     }
 
     private void setUpDrawerLayout() {
@@ -114,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         postsDBRef = firebaseDatabase.getReference();
+        mStorageReference = FirebaseStorage.getInstance().getReference();
     }
 
     private void setUpView() {
@@ -125,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
         rvPost.setAdapter(postAdapter);
         rvPost.setLayoutManager(new LinearLayoutManager(this));
         rvPost.showShimmerAdapter();
+
 
     }
 
@@ -200,5 +222,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         actionBarDrawerToggle.syncState();
+    }
+
+    public void fab_button(View view) {
+        startActivity(new Intent(MainActivity.this, PostActivity.class));
     }
 }

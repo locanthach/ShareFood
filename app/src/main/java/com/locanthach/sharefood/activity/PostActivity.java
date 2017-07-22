@@ -44,11 +44,11 @@ public class PostActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         // [END initialize_database_ref]
 
-        mTitle = (EditText) findViewById(R.id.field_title);
-        mLocation = (EditText) findViewById(R.id.field_body);
-        mSubmitButton = (FloatingActionButton) findViewById(R.id.fab_submit_post);
+//        mTitle = (EditText) findViewById(R.id.field_title);
+//        mLocation = (EditText) findViewById(R.id.field_body);
+//        mSubmitButton = (FloatingActionButton) findViewById(R.id.fab_submit_post);
 
-        mSubmitButton.setOnClickListener(v -> submitPost());
+//        mSubmitButton.setOnClickListener(v -> submitPost());
     }
 
     private void submitPost() {

@@ -23,5 +23,8 @@
     <color name="grey200">#EEEEEE</color>
     <color name="lightGreen">#8BC34A</color>
     <color name="indigo400">#5C6BC0</color>
+    <color name="blueGrey800">#37474F</color>
+    <color name="blueGrey900">#263238</color>
+    <color name="blueGrey700">#455A64</color>
 
 </resources>

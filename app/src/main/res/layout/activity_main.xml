@@ -49,6 +49,7 @@
                 android:layout_gravity="bottom|end"
                 android:layout_margin="16dp"
                 android:clickable="true"
+                android:onClick="fab_button"
                 android:elevation="16dp"
                 android:src="@drawable/ic_add"
                 app:backgroundTint="@color/colorPrimaryDark"

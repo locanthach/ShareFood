@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:backgroundTint="@color/teal200"
+                android:backgroundTint="@color/colorAccent"
                 android:hint="Email"
                 android:inputType="textEmailAddress"
                 android:textColor="#FFFFFF"
@@ -62,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:backgroundTint="@color/teal200"
+                android:backgroundTint="@color/colorAccent"
                 android:hint="Password"
                 android:textColorHint="#ffffff"
                 android:inputType="textPassword"
@@ -72,7 +72,7 @@
         <com.balysv.materialripple.MaterialRippleLayout
             app:mrl_rippleAlpha="0.3"
             app:mrl_rippleOverlay="true"
-            app:mrl_rippleColor="@color/teal200"
+            app:mrl_rippleColor="@color/colorAccent"
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="220dp"
             android:layout_width="300dp"
@@ -81,7 +81,7 @@
                 android:id="@+id/login_button"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:background="@color/teal900"
+                android:background="@color/colorPrimaryDark"
                 android:text="LOGIN"
                 android:textColor="@android:color/white" />
         </com.balysv.materialripple.MaterialRippleLayout>
@@ -90,7 +90,7 @@
         <com.balysv.materialripple.MaterialRippleLayout
             app:mrl_rippleAlpha="0.3"
             app:mrl_rippleOverlay="true"
-            app:mrl_rippleColor="@color/teal200"
+            app:mrl_rippleColor="@color/colorAccent"
             android:layout_gravity="bottom|center"
             android:layout_marginBottom="180dp"
             android:layout_marginLeft="12dp"
