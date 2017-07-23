@@ -1,5 +1,6 @@
 package com.locanthach.sharefood.activity;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,12 +9,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -130,6 +129,7 @@ public class PostActivity extends AppCompatActivity {
                         // Finish this Activity, back to the stream
 //                        setEditingEnabled(true);
                         hideProgressBar();
+                        setResult(Activity.RESULT_OK);
                         finish();
                     }
 

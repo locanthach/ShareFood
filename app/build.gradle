@@ -70,6 +70,8 @@ dependencies {
     compile 'com.github.gabrielemariotti.cards:cardslib-core:2.1.0'
     //Camera
     compile 'com.google.android.exoplayer:exoplayer:r2.4.0'
+    //Event Bus
+    compile 'org.greenrobot:eventbus:3.0.0'
     //EditText
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile 'com.github.florent37:materialtextfield:1.0.7'
