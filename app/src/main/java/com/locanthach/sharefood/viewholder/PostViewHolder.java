@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.locanthach.sharefood.databinding.ItemPostBinding;
 import com.locanthach.sharefood.model.Post;
+import com.locanthach.sharefood.utils.BindingUtil;
 
 /**
  * Created by An Lee on 7/16/2017.
@@ -38,6 +39,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public void bind(Post post, Context context) {
 //        ShimmerFrameLayout layout = (ShimmerFrameLayout) itemView;
 //        layout.startShimmerAnimation();
+        BindingUtil.loadImage(binding.imgPost, post.getPhotoUrl());
         binding.setPost(post);
     }
 

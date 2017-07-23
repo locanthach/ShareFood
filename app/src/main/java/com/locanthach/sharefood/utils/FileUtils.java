@@ -42,7 +42,7 @@ public class FileUtils {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DCIM), "100MEDIA");//Directory need to be changed, it depend on your Mobile's Dir.
+                Environment.DIRECTORY_DCIM), "Camera");//Directory need to be changed, it depend on your Mobile's Dir.
         File image = null;
         try {
             image = File.createTempFile(
