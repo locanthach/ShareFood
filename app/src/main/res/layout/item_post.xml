@@ -53,7 +53,6 @@
                     tools:text="thaoo_narii" />
 
                 <TextView
-                    android:textColor="@color/black"
                     android:id="@+id/tvTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -61,6 +60,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginTop="28dp"
                     android:text="@{post.relativeTime}"
+                    android:textColor="@color/black"
                     tools:text="5 minute ago" />
             </FrameLayout>
 
@@ -110,29 +110,36 @@
                 android:textStyle="bold"
                 tools:text="3.489 lượt thích" />
 
-            <TextView
-                android:id="@+id/tvUsername2"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:layout_marginTop="360dp"
-                android:text="@{post.author}"
-                android:textColor="@color/black"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                tools:text="thao_narii" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:textColor="@color/black"
-                android:id="@+id/txtContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="85dp"
-                android:layout_marginTop="360dp"
-                android:lines="2"
-                android:text="@{post.content}"
-                android:textSize="16dp"
-                tools:text="Tui có cái bánh nè mọi người." />
+                <TextView
+                    android:id="@+id/tvUsername2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@{post.author}"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    tools:text="thao_narii" />
+
+                <TextView
+                    android:paddingEnd="8dp"
+                    android:paddingStart="8dp"
+                    android:id="@+id/txtContent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lines="2"
+                    android:text="@{post.content}"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    tools:text="Tui có cái bánh nè mọi người." />
+            </LinearLayout>
+
 
         </FrameLayout>
     </android.support.v7.widget.CardView>

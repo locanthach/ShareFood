@@ -21,6 +21,7 @@ public class Post implements Serializable {
     private String uid;
     private String author;
     private String content;
+    private String photoUrl;
     private String location;
     private String time;
     private String likeCount;
@@ -30,10 +31,11 @@ public class Post implements Serializable {
     public Post() {
     }
 
-    public Post(String uid, String author, String title, String location) {
+    public Post(String uid, String author, String title, String photoUrl, String location) {
         this.uid = uid;
         this.author = author;
         this.content = title;
+        this.photoUrl = photoUrl;
         this.location = location;
         this.time = DateFormat.getDateTimeInstance().format(new Date());
         this.status = String.valueOf(Constant.STATUS_AVAIABLE);
@@ -47,6 +49,7 @@ public class Post implements Serializable {
         result.put("uid", uid);
         result.put("author", author);
         result.put("content", content);
+        result.put("photoUrl",photoUrl);
         result.put("location", location);
         result.put("time", time);
         result.put("likeCount", likeCount);
@@ -127,5 +130,13 @@ public class Post implements Serializable {
 
     public String getLikeString() {
         return ParseRelativeData.getLikeCount(likeCount);
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }

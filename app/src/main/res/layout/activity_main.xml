@@ -54,6 +54,7 @@
                 android:src="@drawable/ic_add"
                 app:backgroundTint="@color/colorPrimaryDark"
                 app:fabSize="normal"
+                app:layout_anchorGravity="bottom|right|end"
                 app:layout_anchor="@+id/shimmer_recycler_view"
                 app:layout_behavior="com.locanthach.sharefood.utils.ScrollAwareFABBehavior"
                 app:rippleColor="@color/teal200" />

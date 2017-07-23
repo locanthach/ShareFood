@@ -1,75 +1,112 @@
 package com.locanthach.sharefood.activity;
 
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.model.User;
+import com.locanthach.sharefood.utils.FileUtils;
+import com.locanthach.sharefood.utils.PhotoUtils;
+import com.vstechlab.easyfonts.EasyFonts;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 
 public class PostActivity extends AppCompatActivity {
 
     private static final String TAG = "NewPostActivity";
     private static final String REQUIRED = "Required";
+    private final static String MY_CURRENT_IMAGE_PATH = "MY_IMAGE_PATH";
 
-    // [START declare_database_ref]
+    //FIREBASE VARIABLES
     private DatabaseReference mDatabase;
-    // [END declare_database_ref]
+    private StorageReference storageReference;
 
-    private EditText mTitle;
-    private EditText mLocation;
-    private FloatingActionButton mSubmitButton;
+    //MY VARIABLES
+    private String mCurrentPhotoUri = null;
+    private String mCurrentPhotoPath = null;
+
+    @BindView(R.id.edtStatus) EditText mTitle;
+    @BindView(R.id.edtLocation) EditText mLocation;
+    @BindView(R.id.share_button) TextView mSubmitButton;
+    @BindView(R.id.imgUpload) ImageView imgUpload;
+    @BindView(R.id.back_button) ImageView back_button;
+    @BindView(R.id.progressBar) CardView progressBar;
+    @BindView(R.id.progressBarTitle) TextView progressBarTitle;
+    @BindView(R.id.transparentView) View transparentView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
+        ButterKnife.bind(this);
+        getCurrentPhotoPath();
+        setupFireBase();
+        setUpViews();
+        submitButton();
+        backButton();
 
-        // [START initialize_database_ref]
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        // [END initialize_database_ref]
+    }
 
-//        mTitle = (EditText) findViewById(R.id.field_title);
-//        mLocation = (EditText) findViewById(R.id.field_body);
-//        mSubmitButton = (FloatingActionButton) findViewById(R.id.fab_submit_post);
-
-//        mSubmitButton.setOnClickListener(v -> submitPost());
+    private void uploadImage(String userId, User user, String title, String location) {
+        Uri file = FileUtils.fromFile(this, mCurrentPhotoPath);
+        storageReference.child("images/" + file.getLastPathSegment())
+                .putFile(file)
+                .addOnFailureListener(e -> {
+                    showError(e.getMessage());
+                })
+                .addOnSuccessListener(taskSnapshot -> {
+                    mCurrentPhotoUri = String.valueOf(taskSnapshot.getDownloadUrl());
+                    writeNewPost(userId, user.getName(), title, location, mCurrentPhotoUri);
+                });
     }
 
     private void submitPost() {
+        showPrgoressBar();
         final String title = mTitle.getText().toString();
         final String location = mLocation.getText().toString();
 
         // Title is required
         if (TextUtils.isEmpty(title)) {
             mTitle.setError(REQUIRED);
+            hideProgressBar();
             return;
         }
 
         // Body is required
         if (TextUtils.isEmpty(location)) {
             mLocation.setError(REQUIRED);
+            hideProgressBar();
             return;
         }
 
         // Disable button so there are no multi-posts
-        setEditingEnabled(false);
-        Toast.makeText(this, "Posting...", Toast.LENGTH_SHORT).show();
+//        setEditingEnabled(false);
+//        Toast.makeText(this, "Posting...", Toast.LENGTH_SHORT).show();
 
         // [START single_value_read]
         final String userId = FireBaseConfig.getUid();
@@ -88,21 +125,19 @@ public class PostActivity extends AppCompatActivity {
                                     "Error: could not fetch user.",
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            // Write new post
-                            writeNewPost(userId, user.getName(), title, location);
+                            uploadImage(userId,user,title,location);
                         }
-
                         // Finish this Activity, back to the stream
-                        setEditingEnabled(true);
+//                        setEditingEnabled(true);
+                        hideProgressBar();
                         finish();
-                        // [END_EXCLUDE]
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         Log.w(TAG, "getUser:onCancelled", databaseError.toException());
                         // [START_EXCLUDE]
-                        setEditingEnabled(true);
+//                        setEditingEnabled(true);
                         // [END_EXCLUDE]
                     }
                 });
@@ -120,11 +155,11 @@ public class PostActivity extends AppCompatActivity {
     }
 
     // [START write_fan_out]
-    private void writeNewPost(String userId, String username, String title, String location) {
+    private void writeNewPost(String userId, String username, String title, String location, String photoUri) {
         // Create new post at /user-posts/$userid/$postid and at
         // /posts/$postid simultaneously
         String key = mDatabase.child("posts").push().getKey();
-        Post post = new Post(userId, username, title, location);
+        Post post = new Post(userId, username, title, photoUri, location);
         Map<String, Object> postValues = post.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
@@ -133,5 +168,46 @@ public class PostActivity extends AppCompatActivity {
 
         mDatabase.updateChildren(childUpdates);
     }
-    // [END write_fan_out]
+
+    private void showError(String error) {
+        Toasty.error(this, error, Toast.LENGTH_SHORT, true).show();
+    }
+
+    private void hideProgressBar() {
+        transparentView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
+        progressBarTitle.setVisibility(View.GONE);
+    }
+
+    private void showPrgoressBar(){
+        transparentView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+        progressBarTitle.setVisibility(View.VISIBLE);
+    }
+
+    private void setUpViews() {
+        PhotoUtils.takeImage(this, imgUpload, mCurrentPhotoPath);
+        progressBarTitle.setTypeface(EasyFonts.robotoLight(this));
+        hideProgressBar();
+
+    }
+
+    private void getCurrentPhotoPath() {
+        mCurrentPhotoPath = getIntent().getStringExtra(MY_CURRENT_IMAGE_PATH);
+    }
+
+    private void backButton() {
+        back_button.setOnClickListener(v -> {
+            finish();
+        });
+    }
+
+    private void submitButton() {
+        mSubmitButton.setOnClickListener(v -> submitPost());
+    }
+
+    private void setupFireBase() {
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        storageReference = FirebaseStorage.getInstance().getReference();
+    }
 }

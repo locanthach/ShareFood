@@ -2,8 +2,11 @@ package com.locanthach.sharefood.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -15,8 +18,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,22 +33,28 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.adapter.PostAdapter;
 import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.model.Post;
+import com.locanthach.sharefood.utils.BitmapScaler;
+import com.locanthach.sharefood.utils.FileUtils;
+import com.locanthach.sharefood.utils.PermissionUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 
 public class MainActivity extends AppCompatActivity {
-    private static final int RC_SIGN_IN = 1;
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1000;
-    public final static int UPLOAD_IMAGE_ACTIVITY_REQUEST_CODE = 2000;
+    private final static String MY_CURRENT_IMAGE_PATH = "MY_IMAGE_PATH";
     //Firebase variable
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference postsDBRef;
@@ -84,15 +97,6 @@ public class MainActivity extends AppCompatActivity {
                 setUpAppIntro();
             }
         };
-    }
-
-    private void handleWritePost() {
-
-    }
-
-    private void openCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivity(intent);
     }
 
     private void setUpDrawerLayout() {
@@ -224,7 +228,43 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
     }
 
-    public void fab_button(View view) {
-        startActivity(new Intent(MainActivity.this, PostActivity.class));
+    private void showError(String error) {
+        Toasty.error(this, error, Toast.LENGTH_SHORT, true).show();
     }
+
+    public void fab_button(View view) {
+//        startActivity(new Intent(MainActivity.this, PostActivity.class));
+        openCamera(CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+    }
+    private void openCamera(int requestCode) {
+        if (PermissionUtils.checkExternal(this)) {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            File file = FileUtils.createPhotoFile(this);
+            mCurrentPhotoPath = file.getAbsolutePath();
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, FileUtils.fromFile(this, file));
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(intent, requestCode);
+            }
+        } else {
+            PermissionUtils.requestExternal(this);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+                handleImageTaken();
+            }
+        }
+    }
+
+    private void handleImageTaken() {
+        Intent intent = new Intent(MainActivity.this, PostActivity.class);
+        intent.putExtra(MY_CURRENT_IMAGE_PATH,mCurrentPhotoPath);
+        startActivity(intent);
+    }
+
+
 }
