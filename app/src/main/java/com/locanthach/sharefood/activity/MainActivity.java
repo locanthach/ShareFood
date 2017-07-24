@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,10 +35,15 @@ import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.utils.FileUtils;
 import com.locanthach.sharefood.utils.PermissionUtils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,8 +51,9 @@ import es.dmoral.toasty.Toasty;
 
 public class MainActivity extends AppCompatActivity {
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1000;
-    public final static int POST_REQUEST_CODE = 2000;
     private final static String MY_CURRENT_IMAGE_PATH = "MY_IMAGE_PATH";
+    private final int REQUEST_POST_CODE = 20;
+    private final static String NEW_POST = "NEW_POST";
     //Firebase variable
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference postsDBRef;
@@ -56,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
     private PostAdapter postAdapter;
     private String mCurrentPhotoPath;
     private StorageReference mStorageReference;
+    private List<Post> posts;
+
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -67,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
     ShimmerRecyclerView rvPost;
     @BindView(R.id.fab)
     FloatingActionButton fab;
+    @BindView(R.id.swipeContainer)
+    SwipeRefreshLayout swipeContainer;
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
@@ -141,8 +152,10 @@ public class MainActivity extends AppCompatActivity {
         rvPost.setAdapter(postAdapter);
         rvPost.setLayoutManager(new LinearLayoutManager(this));
         rvPost.showShimmerAdapter();
-
-
+        swipeToRefresh();
+    }
+    private void swipeToRefresh() {
+        swipeContainer.setOnRefreshListener(() -> fetchPosts());
     }
 
     private void setUpAppIntro() {
@@ -161,10 +174,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         firebaseAuth.addAuthStateListener(authStateListener);
+        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onPause() {
+        EventBus.getDefault().unregister(this);
         super.onPause();
         firebaseAuth.removeAuthStateListener(authStateListener);
     }
@@ -174,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        List<Post> posts = new ArrayList<>();
+                        posts = new ArrayList<>();
                         for (DataSnapshot child : dataSnapshot.getChildren()) {
                             Post post = child.getValue(Post.class);
                             post.setId(child.getKey());
@@ -184,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
                         Collections.reverse(posts);
                         postAdapter.setData(posts);
                         rvPost.hideShimmerAdapter();
+                        swipeContainer.setRefreshing(false);
                     }
 
                     @Override
@@ -245,23 +261,62 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
                 handleImageTaken();
             }
-        }
-        if (requestCode == POST_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                fetchPosts();
+            if(requestCode == REQUEST_POST_CODE){
+                Post post = data.getExtras().getParcelable(NEW_POST);
+                if(post!=null){
+                    postAdapter.addPost(post);
+                    rvPost.smoothScrollToPosition(0);
+                }
             }
         }
     }
 
     private void handleImageTaken() {
         Intent intent = new Intent(MainActivity.this, PostActivity.class);
-        intent.putExtra(MY_CURRENT_IMAGE_PATH, mCurrentPhotoPath);
-        startActivityForResult(intent, POST_REQUEST_CODE);
+        intent.putExtra(MY_CURRENT_IMAGE_PATH,mCurrentPhotoPath);
+        startActivityForResult(intent,REQUEST_POST_CODE);
     }
 
+    @Subscribe
+    public void onEvent(PostAdapter.PostEvent event) {
+        String userId = firebaseAuth.getCurrentUser().getUid();
+        setLikePost(userId, event.post);
+    }
 
+    private void setLikePost(String userId, Post post) {
+        String key = post.getId();
+        Map<String, Boolean> likes = post.getLikes();
+        if (isLiked(post, userId)) {
+            likes.put(userId, false);
+            int likeCount = Integer.parseInt(post.getLikeCount()) - 1;
+            post.setLikeCount(String.valueOf(likeCount));
+            Toast.makeText(this, "dislike", Toast.LENGTH_SHORT).show();
+        } else {
+            likes.put(userId, true);
+            int likeCount = Integer.parseInt(post.getLikeCount()) + 1;
+            post.setLikeCount(String.valueOf(likeCount));
+            Toast.makeText(this, "like", Toast.LENGTH_SHORT).show();
+        }
+        post.setLikes(likes);
+        Map<String, Object> postValues = post.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/posts/" + key, postValues);
+        childUpdates.put("/user-posts/" + post.getUid() + "/" + key, postValues);
+
+        postsDBRef.updateChildren(childUpdates);
+        postAdapter.updatePost(post);
+    }
+
+    private boolean isLiked(Post post, String userId) {
+        Map<String, Boolean> likes = post.getLikes();
+        if (!likes.containsKey(userId)) {
+            likes.put(userId, false);
+        }
+        return likes.get(userId);
+    }
 }

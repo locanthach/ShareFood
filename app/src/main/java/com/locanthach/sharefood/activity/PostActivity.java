@@ -1,6 +1,6 @@
 package com.locanthach.sharefood.activity;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +41,7 @@ public class PostActivity extends AppCompatActivity {
     private static final String TAG = "NewPostActivity";
     private static final String REQUIRED = "Required";
     private final static String MY_CURRENT_IMAGE_PATH = "MY_IMAGE_PATH";
+    private final static String NEW_POST = "NEW_POST";
 
     //FIREBASE VARIABLES
     private DatabaseReference mDatabase;
@@ -53,7 +55,7 @@ public class PostActivity extends AppCompatActivity {
     @BindView(R.id.edtLocation) EditText mLocation;
     @BindView(R.id.share_button) TextView mSubmitButton;
     @BindView(R.id.imgUpload) ImageView imgUpload;
-    @BindView(R.id.back_button) ImageView back_button;
+    @BindView(R.id.back_button) FrameLayout back_button;
     @BindView(R.id.progressBar) CardView progressBar;
     @BindView(R.id.progressBarTitle) TextView progressBarTitle;
     @BindView(R.id.transparentView) View transparentView;
@@ -128,9 +130,6 @@ public class PostActivity extends AppCompatActivity {
                         }
                         // Finish this Activity, back to the stream
 //                        setEditingEnabled(true);
-                        hideProgressBar();
-                        setResult(Activity.RESULT_OK);
-                        finish();
                     }
 
                     @Override
@@ -156,9 +155,8 @@ public class PostActivity extends AppCompatActivity {
 
     // [START write_fan_out]
     private void writeNewPost(String userId, String username, String title, String location, String photoUri) {
-        // Create new post at /user-posts/$userid/$postid and at
-        // /posts/$postid simultaneously
-        String key = mDatabase.child("posts").push().getKey();
+        //new post
+        String key = mDatabase.child(FireBaseConfig.POSTS_CHILD).push().getKey();
         Post post = new Post(userId, username, title, photoUri, location);
         Map<String, Object> postValues = post.toMap();
 
@@ -167,6 +165,27 @@ public class PostActivity extends AppCompatActivity {
         childUpdates.put("/user-posts/" + userId + "/" + key, postValues);
 
         mDatabase.updateChildren(childUpdates);
+
+        mDatabase.child(FireBaseConfig.POSTS_CHILD)
+                .child(key)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Post newPost = dataSnapshot.getValue(Post.class);
+                        newPost.setId(dataSnapshot.getKey());
+
+                        Intent intent = new Intent(PostActivity.this, MainActivity.class);
+                        intent.putExtra(NEW_POST, newPost);
+                        setResult(RESULT_OK, intent);
+                        hideProgressBar();
+                        finish();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     private void showError(String error) {

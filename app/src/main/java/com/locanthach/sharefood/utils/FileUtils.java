@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- Created by nongdenchet on 11/5/16.
+ * Created by nongdenchet on 11/5/16.
  */
 public class FileUtils {
 
@@ -43,6 +43,8 @@ public class FileUtils {
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_DCIM), "Camera");//Directory need to be changed, it depend on your Mobile's Dir.
+//        File storageDir = new File(Environment.getExternalStoragePublicDirectory(
+//                Environment.DIRECTORY_DCIM), "100MEDIA");//Directory need to be changed, it depend on your Mobile's Dir.
         File image = null;
         try {
             image = File.createTempFile(

@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class FireBaseConfig {
     public static final String POSTS_CHILD = "posts";
     public static final String USERS_CHILD = "users";
+    public static final String USER_POSTS_CHILD = "user-posts";
 
     public static String getUid(){
         return FirebaseAuth.getInstance().getCurrentUser().getUid();

@@ -21,6 +21,11 @@ import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.model.User;
 import com.vstechlab.easyfonts.EasyFonts;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.locanthach.sharefood.utils.BindingUtil.loadImage;
+
 public class PostDetailActivity extends AppCompatActivity {
     private static final String TAG = "PostDetailActivity";
 
@@ -31,6 +36,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private ValueEventListener mPostListener;
     private String mPostKey;
     private CommentAdapter mAdapter;
+    private Post mPost;
 
 
     private ActivityPostDetailBinding binding;
@@ -41,12 +47,14 @@ public class PostDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_post_detail);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_detail);
         // Get post key from intent
-        mPostKey = getIntent().getStringExtra(EXTRA_POST_KEY);
+        mPost = getIntent().getExtras().getParcelable(EXTRA_POST_KEY);
+        mPostKey = mPost.getId();
         if (mPostKey == null) {
             throw new IllegalArgumentException("Must pass EXTRA_POST_KEY");
         }
         initDatabase();
         setUpView();
+        increaseViewCount(mPost);
     }
 
     private void setUpView() {
@@ -75,16 +83,9 @@ public class PostDetailActivity extends AppCompatActivity {
                 // Get Post object and use the values to update the UI
                 Post post = dataSnapshot.getValue(Post.class);
                 // [START_EXCLUDE]
-                binding.tvAuthor.setText(post.getAuthor());
-                binding.tvAuthor.setTypeface(EasyFonts.robotoBold(PostDetailActivity.this));
-                binding.tvContent.setText(post.getContent());
-                binding.tvContent.setTypeface(EasyFonts.cac_champagne(PostDetailActivity.this));
-                binding.tvLocation.setText(post.getLocation());
-                binding.tvLocation.setTypeface(EasyFonts.robotoBold(PostDetailActivity.this));
-                binding.tvLikeCount.setText(post.getLikeString());
-                binding.tvLikeCount.setTypeface(EasyFonts.robotoBold(PostDetailActivity.this));
-                binding.tvTime.setText("shared " + post.getRelativeTime());
-                binding.tvTime.setTypeface(EasyFonts.robotoLight(PostDetailActivity.this));
+                binding.setPost(post);
+                loadImage(binding.ivCover, mPost.getPhotoUrl());
+                setFont();
                 // [END_EXCLUDE]
             }
 
@@ -147,5 +148,27 @@ public class PostDetailActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    private void setFont() {
+        binding.tvAuthor.setTypeface(EasyFonts.robotoBold(PostDetailActivity.this));
+        binding.tvContent.setTypeface(EasyFonts.cac_champagne(PostDetailActivity.this));
+        binding.tvLocation.setTypeface(EasyFonts.robotoBold(PostDetailActivity.this));
+        binding.tvLikeCount.setTypeface(EasyFonts.robotoBold(PostDetailActivity.this));
+        binding.tvViews.setTypeface(EasyFonts.robotoBold(PostDetailActivity.this));
+        binding.tvTime.setTypeface(EasyFonts.robotoLight(PostDetailActivity.this));
+    }
+
+    private void increaseViewCount(Post post) {
+        String key = post.getId();
+        int count = Integer.parseInt(post.getViewCount()) + 1;
+        post.setViewCount(String.valueOf(count));
+        Map<String, Object> postValues = post.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/posts/" + key, postValues);
+        childUpdates.put("/user-posts/" + post.getUid() + "/" + key, postValues);
+
+        FirebaseDatabase.getInstance().getReference().updateChildren(childUpdates);
     }
 }

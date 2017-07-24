@@ -47,9 +47,6 @@
             android:name=".activity.QRScannerActivity"
             android:theme="@style/NoActionBar" />
         <activity
-            android:name=".activity.Main2Activity"
-            android:theme="@style/NoActionBar" />
-        <activity
             android:name=".activity.PostActivity"
             android:theme="@style/TransculentStatusBar" />
         <activity

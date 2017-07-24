@@ -1,22 +1,27 @@
 package com.locanthach.sharefood.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.locanthach.sharefood.common.Constant;
 import com.locanthach.sharefood.utils.ParseRelativeData;
 
-import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.locanthach.sharefood.utils.ParseRelativeData.getRelativeTimeAgo;
+import static com.locanthach.sharefood.utils.ParseRelativeData.getStringCount;
 
 /**
  * Created by An Lee on 7/16/2017.
  */
 
 @IgnoreExtraProperties
-public class Post implements Serializable {
+public class Post implements Parcelable {
     private String id;
     private String uid;
     private String author;
@@ -26,6 +31,7 @@ public class Post implements Serializable {
     private String time;
     private String likeCount;
     private String status;
+    private String viewCount;
     private Map<String, Boolean> likes = new HashMap<>();
 
     public Post() {
@@ -40,7 +46,33 @@ public class Post implements Serializable {
         this.time = DateFormat.getDateTimeInstance().format(new Date());
         this.status = String.valueOf(Constant.STATUS_AVAIABLE);
         this.likeCount = String.valueOf(0);
+        this.viewCount = String.valueOf(0);
     }
+
+    protected Post(Parcel in) {
+        id = in.readString();
+        uid = in.readString();
+        author = in.readString();
+        content = in.readString();
+        photoUrl = in.readString();
+        location = in.readString();
+        time = in.readString();
+        likeCount = in.readString();
+        status = in.readString();
+        viewCount = in.readString();
+    }
+
+    public static final Creator<Post> CREATOR = new Creator<Post>() {
+        @Override
+        public Post createFromParcel(Parcel in) {
+            return new Post(in);
+        }
+
+        @Override
+        public Post[] newArray(int size) {
+            return new Post[size];
+        }
+    };
 
     // [START post_to_map]
     @Exclude
@@ -49,10 +81,11 @@ public class Post implements Serializable {
         result.put("uid", uid);
         result.put("author", author);
         result.put("content", content);
-        result.put("photoUrl",photoUrl);
+        result.put("photoUrl", photoUrl);
         result.put("location", location);
         result.put("time", time);
         result.put("likeCount", likeCount);
+        result.put("viewCount", viewCount);
         result.put("likes", likes);
         result.put("status", status);
 
@@ -125,11 +158,15 @@ public class Post implements Serializable {
     }
 
     public String getRelativeTime() {
-        return ParseRelativeData.getRelativeTimeAgo(time);
+        return getRelativeTimeAgo(time);
     }
 
     public String getLikeString() {
         return ParseRelativeData.getLikeCount(likeCount);
+    }
+
+    public String getViewString() {
+        return getStringCount(viewCount);
     }
 
     public String getPhotoUrl() {
@@ -138,5 +175,40 @@ public class Post implements Serializable {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public String getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(String viewCount) {
+        this.viewCount = viewCount;
+    }
+
+    public Map<String, Boolean> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Map<String, Boolean> likes) {
+        this.likes = likes;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(uid);
+        dest.writeString(author);
+        dest.writeString(content);
+        dest.writeString(photoUrl);
+        dest.writeString(location);
+        dest.writeString(time);
+        dest.writeString(likeCount);
+        dest.writeString(status);
+        dest.writeString(viewCount);
     }
 }

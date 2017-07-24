@@ -34,13 +34,21 @@ public class ParseRelativeData {
 
     public static String getLikeCount(String likeCount) {
         String count = likeCount + " likes";
-        if (hasOneLike(likeCount)) {
+        if (hasOne(likeCount)) {
             count = likeCount + " like";
         }
         return count;
     }
 
-    private static boolean hasOneLike(String likeCount) {
-        return Integer.parseInt(likeCount) <= 1;
+    public static String getStringCount(String viewCount) {
+        String count = viewCount + " views";
+        if (hasOne(viewCount)) {
+            count = viewCount + " view";
+        }
+        return count;
+    }
+
+    private static boolean hasOne(String count) {
+        return Integer.parseInt(count) <= 1;
     }
 }

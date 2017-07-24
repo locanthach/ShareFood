@@ -10,11 +10,11 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
+        app:titleTextColor="@color/white"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
-        android:elevation="10dp"
-        app:titleTextColor="@color/white" />
+        android:elevation="10dp" />
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawerLayout"
@@ -34,13 +34,20 @@
             android:layout_height="match_parent">
 
 
-            <com.cooltechworks.views.shimmer.ShimmerRecyclerView
-                android:id="@+id/shimmer_recycler_view"
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipeContainer"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:shimmer_demo_child_count="3"
-                app:shimmer_demo_layout="@layout/layout_demo"
-                app:shimmer_demo_layout_manager_type="linear_vertical" />
+                android:layout_height="match_parent">
+
+
+                <com.cooltechworks.views.shimmer.ShimmerRecyclerView
+                    android:id="@+id/shimmer_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:shimmer_demo_child_count="3"
+                    app:shimmer_demo_layout="@layout/layout_demo"
+                    app:shimmer_demo_layout_manager_type="linear_vertical" />
+            </android.support.v4.widget.SwipeRefreshLayout>
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fab"

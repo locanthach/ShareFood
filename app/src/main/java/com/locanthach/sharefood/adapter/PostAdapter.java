@@ -7,10 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.like.LikeButton;
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.activity.PostDetailActivity;
 import com.locanthach.sharefood.model.Post;
-import com.locanthach.sharefood.utils.UiUtils;
 import com.locanthach.sharefood.viewholder.PostViewHolder;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         final String postKey = posts.get(position).getId();
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, PostDetailActivity.class);
-            intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, postKey);
+            intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, posts.get(position));
             context.startActivity(intent);
         });
     }
@@ -58,10 +58,22 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         notifyDataSetChanged();
     }
 
+    public void updatePost(Post data) {
+        for (int i = 0; i < posts.size(); i++) {
+            posts.set(i, data);
+            notifyItemChanged(i);
+            return;
+        }
+    }
+
     public void appendData(List<Post> newPosts) {
         int nextPos = posts.size();
         posts.addAll(nextPos, newPosts);
         notifyItemRangeChanged(nextPos, newPosts.size());
+    }
+    public void addPost(Post post){
+        posts.add(0,post);
+        notifyItemInserted(0);
     }
 //    private int scaleItemHeightImage(Article.Media media) {
 //        int height = media.getHeight();
@@ -74,4 +86,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
 //    public void setLayoutReference(int layoutReference) {
 //        this.mLayoutReference = layoutReference;
 //    }
+
+    public static class PostEvent {
+        public final LikeButton btnLike;
+        public final Post post;
+
+        public PostEvent(LikeButton btnLike, Post post) {
+            this.btnLike = btnLike;
+            this.post = post;
+        }
+    }
 }

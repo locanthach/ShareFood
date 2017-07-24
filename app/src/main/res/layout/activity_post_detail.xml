@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="post"
+            type="com.locanthach.sharefood.model.Post" />
+    </data>
+
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/activity_collapsing_toolbar"
         android:layout_width="match_parent"
@@ -34,10 +41,11 @@
                     <ImageView
                         android:id="@+id/ivCover"
                         android:layout_width="match_parent"
-                        android:layout_height="256dp"
+                        android:layout_height="256sp"
                         android:adjustViewBounds="true"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/saigon" />
+                        android:scaleType="fitCenter"
+                        android:src="@{post.photoUrl}"
+                        tools:src="@drawable/saigon" />
 
                     <TextView
                         android:id="@+id/tvContent"
@@ -48,6 +56,7 @@
                         android:ellipsize="end"
                         android:maxLines="2"
                         android:padding="32sp"
+                        android:text="@{post.content}"
                         android:textColor="@color/black"
                         android:textSize="24sp"
                         tools:text="@string/Status" />
@@ -68,6 +77,7 @@
                             android:orientation="vertical">
 
                             <com.like.LikeButton
+                                android:id="@+id/btnLike"
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:layout_gravity="center"
@@ -80,6 +90,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
+                                android:text="@{post.likeString}"
                                 android:textColor="@color/black"
                                 tools:text="342 Likes" />
                         </LinearLayout>
@@ -102,6 +113,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
+                                android:text="@{post.viewString}"
                                 android:textColor="@color/black"
                                 tools:text="342 Views" />
                         </LinearLayout>
@@ -124,6 +136,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
+                                android:text="@{post.location}"
                                 android:textColor="@color/black"
                                 tools:text="Room 3" />
                         </LinearLayout>
@@ -165,6 +178,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:maxLines="1"
+                        android:text="@{post.author}"
                         android:textColor="@color/white"
                         android:textStyle="bold"
                         tools:text="phan.thanhloc1705" />
@@ -175,6 +189,7 @@
                         android:layout_height="wrap_content"
                         android:maxLines="1"
                         android:paddingTop="4sp"
+                        android:text="@{post.relativeTime}"
                         android:textColor="@color/white"
                         tools:text="3 minutes ago" />
                 </LinearLayout>
