@@ -49,6 +49,7 @@ public class Post implements Parcelable {
         this.viewCount = String.valueOf(0);
     }
 
+
     protected Post(Parcel in) {
         id = in.readString();
         uid = in.readString();
@@ -81,7 +82,7 @@ public class Post implements Parcelable {
         result.put("uid", uid);
         result.put("author", author);
         result.put("content", content);
-        result.put("photoUrl", photoUrl);
+        result.put("photoUrl",photoUrl);
         result.put("location", location);
         result.put("time", time);
         result.put("likeCount", likeCount);

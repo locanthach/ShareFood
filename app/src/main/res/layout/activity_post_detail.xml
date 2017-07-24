@@ -39,11 +39,12 @@
                     app:layout_collapseMode="parallax">
 
                     <ImageView
+                        android:background="@color/white"
                         android:id="@+id/ivCover"
                         android:layout_width="match_parent"
                         android:layout_height="256sp"
                         android:adjustViewBounds="true"
-                        android:scaleType="fitCenter"
+                        android:scaleType="centerCrop"
                         android:src="@{post.photoUrl}"
                         tools:src="@drawable/saigon" />
 
@@ -52,7 +53,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
-                        android:background="@color/grey100"
+                        android:background="@color/blueGrey100"
                         android:ellipsize="end"
                         android:maxLines="2"
                         android:padding="32sp"

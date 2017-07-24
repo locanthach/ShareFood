@@ -21,7 +21,7 @@
         android:theme="@style/AppTheme">
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="${applicationId}.provider"
+            android:authorities="${applicationId}.contentprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -32,6 +32,8 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <activity
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
             android:name=".activity.MainActivity"
             android:theme="@style/NoActionBar">
             <intent-filter>
@@ -47,6 +49,7 @@
             android:name=".activity.QRScannerActivity"
             android:theme="@style/NoActionBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".activity.PostActivity"
             android:theme="@style/TransculentStatusBar" />
         <activity
@@ -59,8 +62,21 @@
             android:name=".activity.RegisterActivity"
             android:theme="@style/TransculentStatusBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".activity.PostDetailActivity"
             android:theme="@style/TransculentStatusBar" />
+        <service
+            android:name=".service.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".service.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

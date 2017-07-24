@@ -3,6 +3,8 @@ package com.locanthach.sharefood.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -23,7 +25,7 @@ import java.util.List;
 public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     private ArrayList<Post> posts;
     private final Context context;
-
+    private static final String STATE = "listState";
 
     public PostAdapter(Context context) {
         this.posts = new ArrayList<>();
@@ -66,14 +68,23 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         }
     }
 
+    public void addPost(Post post){
+        posts.add(0,post);
+        notifyItemInserted(0);
+    }
+
     public void appendData(List<Post> newPosts) {
         int nextPos = posts.size();
         posts.addAll(nextPos, newPosts);
         notifyItemRangeChanged(nextPos, newPosts.size());
     }
-    public void addPost(Post post){
-        posts.add(0,post);
-        notifyItemInserted(0);
+
+    public void setState(Bundle state) {
+        state.putParcelableArrayList(STATE, (ArrayList<? extends Parcelable>) posts);
+    }
+
+    public List<Post> getStateList(Bundle state) {
+        return state.getParcelableArrayList(STATE);
     }
 //    private int scaleItemHeightImage(Article.Media media) {
 //        int height = media.getHeight();

@@ -38,7 +38,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 //        ShimmerFrameLayout layout = (ShimmerFrameLayout) itemView;
 //        layout.startShimmerAnimation();
         setUpLikeClick();
-        loadImage(binding.imgPost, post.getPhotoUrl());
+        loadImage(context,binding.imgPost, post.getPhotoUrl());
         binding.setPost(post);
     }
 

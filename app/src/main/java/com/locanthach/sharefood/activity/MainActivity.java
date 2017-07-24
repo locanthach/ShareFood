@@ -2,6 +2,7 @@ package com.locanthach.sharefood.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private final static String MY_CURRENT_IMAGE_PATH = "MY_IMAGE_PATH";
     private final int REQUEST_POST_CODE = 20;
     private final static String NEW_POST = "NEW_POST";
+    private String KEEP_IMAGE_PATH = "KEEP_IMAGE_PATH";
     //Firebase variable
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference postsDBRef;
@@ -61,10 +63,9 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser user;
     private FirebaseAuth.AuthStateListener authStateListener;
     private PostAdapter postAdapter;
-    private String mCurrentPhotoPath;
+    private String mCurrentPhotoPath = null;
     private StorageReference mStorageReference;
     private List<Post> posts;
-
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -95,10 +96,14 @@ public class MainActivity extends AppCompatActivity {
                 //user already logged in
                 //SHOW TIMELINE
                 fetchPosts();
+
             } else {
                 setUpAppIntro();
             }
         };
+        if (savedInstanceState != null) {
+            onRestoreInstanceState(savedInstanceState);
+        }
     }
 
     private void setUpDrawerLayout() {
@@ -146,14 +151,24 @@ public class MainActivity extends AppCompatActivity {
     private void setUpView() {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("ShareFood");
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        getSupportActionBar().setHomeButtonEnabled(true);
         postAdapter = new PostAdapter(this);
         rvPost.setAdapter(postAdapter);
         rvPost.setLayoutManager(new LinearLayoutManager(this));
         rvPost.showShimmerAdapter();
+
         swipeToRefresh();
+        swipeContainer.setColorSchemeResources(
+                android.R.color.holo_green_light,
+                android.R.color.holo_red_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_blue_dark);
+
     }
+
     private void swipeToRefresh() {
         swipeContainer.setOnRefreshListener(() -> fetchPosts());
     }
@@ -247,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
     private void openCamera(int requestCode) {
         if (PermissionUtils.checkExternal(this)) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             File file = FileUtils.createPhotoFile(this);
             mCurrentPhotoPath = file.getAbsolutePath();
             intent.putExtra(MediaStore.EXTRA_OUTPUT, FileUtils.fromFile(this, file));
@@ -265,9 +281,9 @@ public class MainActivity extends AppCompatActivity {
             if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
                 handleImageTaken();
             }
-            if(requestCode == REQUEST_POST_CODE){
+            if (requestCode == REQUEST_POST_CODE) {
                 Post post = data.getExtras().getParcelable(NEW_POST);
-                if(post!=null){
+                if (post != null) {
                     postAdapter.addPost(post);
                     rvPost.smoothScrollToPosition(0);
                 }
@@ -277,9 +293,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleImageTaken() {
         Intent intent = new Intent(MainActivity.this, PostActivity.class);
-        intent.putExtra(MY_CURRENT_IMAGE_PATH,mCurrentPhotoPath);
-        startActivityForResult(intent,REQUEST_POST_CODE);
+        intent.putExtra(MY_CURRENT_IMAGE_PATH, mCurrentPhotoPath);
+        startActivityForResult(intent, REQUEST_POST_CODE);
     }
+
 
     @Subscribe
     public void onEvent(PostAdapter.PostEvent event) {
@@ -318,5 +335,19 @@ public class MainActivity extends AppCompatActivity {
             likes.put(userId, false);
         }
         return likes.get(userId);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        postAdapter.setState(outState);
+        outState.putString(KEEP_IMAGE_PATH, mCurrentPhotoPath);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        mCurrentPhotoPath = savedInstanceState.getString(KEEP_IMAGE_PATH);
+        List<Post> statePostList = postAdapter.getStateList(savedInstanceState);
+        postAdapter.setData(statePostList);
     }
 }

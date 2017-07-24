@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,7 +54,7 @@ public class PostActivity extends AppCompatActivity {
 
     @BindView(R.id.edtStatus) EditText mTitle;
     @BindView(R.id.edtLocation) EditText mLocation;
-    @BindView(R.id.share_button) TextView mSubmitButton;
+    @BindView(R.id.share_button) FrameLayout mSubmitButton;
     @BindView(R.id.imgUpload) ImageView imgUpload;
     @BindView(R.id.back_button) FrameLayout back_button;
     @BindView(R.id.progressBar) CardView progressBar;
@@ -130,6 +131,7 @@ public class PostActivity extends AppCompatActivity {
                         }
                         // Finish this Activity, back to the stream
 //                        setEditingEnabled(true);
+
                     }
 
                     @Override
@@ -156,6 +158,7 @@ public class PostActivity extends AppCompatActivity {
     // [START write_fan_out]
     private void writeNewPost(String userId, String username, String title, String location, String photoUri) {
         //new post
+
         String key = mDatabase.child(FireBaseConfig.POSTS_CHILD).push().getKey();
         Post post = new Post(userId, username, title, photoUri, location);
         Map<String, Object> postValues = post.toMap();
