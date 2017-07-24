@@ -2,30 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/action_walk"
-            android:icon="@drawable/ic_walk"
-            android:title="Walk" />
-        <item
-            android:id="@+id/action_car"
-            android:icon="@drawable/ic_car"
-            android:title="Car" />
-        <item
-            android:id="@+id/action_bus"
-            android:icon="@drawable/ic_bus"
-            android:title="Bus" />
+            android:id="@+id/home_button"
+            android:icon="@drawable/ic_home"
+            android:title="Home" />
     </group>
 
     <item android:title="Other">
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                    android:id="@+id/action_transit"
-                    android:icon="@drawable/ic_transit"
-                    android:title="Transit" />
-                <item
-                    android:id="@+id/action_flight"
-                    android:icon="@drawable/ic_flight"
-                    android:title="Flight" />
+                    android:id="@+id/signOut_button"
+                    android:icon="@drawable/ic_sign_out"
+                    android:title="Sign Out" />
             </group>
         </menu>
     </item>

@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
     private void setUpDrawerLayout() {
         //setting Event Icon in NavigationView
         navigationView.setNavigationItemSelectedListener(item -> {
-            //selectDrawerItem(item);
+            selectDrawerItem(item);
             return true;
         });
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
@@ -121,14 +121,11 @@ public class MainActivity extends AppCompatActivity {
         //Sample Code
         String title;
         switch (item.getItemId()) {
-            case R.id.action_walk:
-                title = "Walk";
+            case R.id.home_button:
+                title = "Home";
                 break;
-            case R.id.action_car:
-                title = "Car";
-                break;
-            case R.id.action_bus:
-                title = "Bus";
+            case R.id.signOut_button:
+                title = "Sign out";
                 break;
             default:
                 title = "None";

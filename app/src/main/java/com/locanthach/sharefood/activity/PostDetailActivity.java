@@ -152,7 +152,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
     private void setFont() {
         binding.tvAuthor.setTypeface(EasyFonts.robotoBold(PostDetailActivity.this));
-        binding.tvContent.setTypeface(EasyFonts.robotoBoldItalic(PostDetailActivity.this));
+        binding.tvContent.setTypeface(EasyFonts.robotoLight(PostDetailActivity.this));
         binding.tvLocation.setTypeface(EasyFonts.robotoBold(PostDetailActivity.this));
         binding.tvLikeCount.setTypeface(EasyFonts.robotoBold(PostDetailActivity.this));
         binding.tvViews.setTypeface(EasyFonts.robotoBold(PostDetailActivity.this));
