@@ -58,14 +58,22 @@ public class PostActivity extends AppCompatActivity {
     private String mCurrentPhotoUri = null;
     private String mCurrentPhotoPath = null;
 
-    @BindView(R.id.edtStatus) EditText mTitle;
-    @BindView(R.id.edtLocation) EditText mLocation;
-    @BindView(R.id.share_button) FrameLayout mSubmitButton;
-    @BindView(R.id.imgUpload) ImageView imgUpload;
-    @BindView(R.id.back_button) FrameLayout back_button;
-    @BindView(R.id.progressBar) CardView progressBar;
-    @BindView(R.id.progressBarTitle) TextView progressBarTitle;
-    @BindView(R.id.transparentView) View transparentView;
+    @BindView(R.id.edtStatus)
+    EditText mTitle;
+    @BindView(R.id.edtLocation)
+    EditText mLocation;
+    @BindView(R.id.share_button)
+    FrameLayout mSubmitButton;
+    @BindView(R.id.imgUpload)
+    ImageView imgUpload;
+    @BindView(R.id.back_button)
+    FrameLayout back_button;
+    @BindView(R.id.progressBar)
+    CardView progressBar;
+    @BindView(R.id.progressBarTitle)
+    TextView progressBarTitle;
+    @BindView(R.id.transparentView)
+    View transparentView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +141,7 @@ public class PostActivity extends AppCompatActivity {
                                     "Error: could not fetch user.",
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            uploadImage(userId,user,title,location);
+                            uploadImage(userId, user, title, location);
                         }
                         // Finish this Activity, back to the stream
 //                        setEditingEnabled(true);
@@ -232,7 +240,7 @@ public class PostActivity extends AppCompatActivity {
         progressBarTitle.setVisibility(View.GONE);
     }
 
-    private void showPrgoressBar(){
+    private void showPrgoressBar() {
         transparentView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.VISIBLE);
         progressBarTitle.setVisibility(View.VISIBLE);

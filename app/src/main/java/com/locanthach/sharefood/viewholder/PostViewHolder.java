@@ -1,6 +1,5 @@
 package com.locanthach.sharefood.viewholder;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 
 import com.locanthach.sharefood.adapter.PostAdapter;

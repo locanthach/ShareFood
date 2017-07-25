@@ -70,8 +70,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         }
     }
 
-    public void addPost(Post post){
-        posts.add(0,post);
+    public void addPost(Post post) {
+        posts.add(0, post);
         notifyItemInserted(0);
     }
 
