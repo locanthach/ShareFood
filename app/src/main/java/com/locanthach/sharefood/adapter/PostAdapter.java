@@ -62,14 +62,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
     public void updatePost(Post data) {
         for (int i = 0; i < posts.size(); i++) {
-            posts.set(i, data);
-            notifyItemChanged(i);
-            return;
+            if (posts.get(i).getId().equals(data.getId())) {
+                posts.set(i, data);
+                notifyItemChanged(i);
+                return;
+            }
         }
     }
 
-    public void addPost(Post post){
-        posts.add(0,post);
+    public void addPost(Post post) {
+        posts.add(0, post);
         notifyItemInserted(0);
     }
 
