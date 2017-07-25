@@ -166,7 +166,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="start|center"
                         android:layout_marginStart="16dp"
-                        android:text="Home"
+                        android:text="Time line"
                         android:textColor="#000000"
                         android:textSize="14dp" />
                 </LinearLayout>
@@ -201,6 +201,7 @@
                     android:id="@+id/sign_out_button"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
+                    android:layout_marginBottom="16dp"
                     android:layout_gravity="bottom"
                     android:background="?android:attr/selectableItemBackground"
                     android:clickable="true"
@@ -219,7 +220,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="start|center"
                         android:layout_marginStart="16dp"
-                        android:text="Sign out"
+                        android:text="Log out"
                         android:textColor="#000000"
                         android:textSize="14dp" />
                 </LinearLayout>

@@ -202,6 +202,7 @@
                         android:layout_marginTop="16dp">
 
                         <com.github.florent37.materialtextfield.MaterialTextField
+                            android:id="@+id/materialText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:mtf_animationDuration="800"

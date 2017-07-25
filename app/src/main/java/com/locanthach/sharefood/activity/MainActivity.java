@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -17,8 +18,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -56,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private final int REQUEST_POST_CODE = 20;
     private final static String NEW_POST = "NEW_POST";
     private String KEEP_IMAGE_PATH = "KEEP_IMAGE_PATH";
+    private boolean CHECK_FIRSTIME_USER_LOGIN = false;
     //Firebase variable
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference postsDBRef;
@@ -67,18 +72,14 @@ public class MainActivity extends AppCompatActivity {
     private StorageReference mStorageReference;
     private List<Post> posts;
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.drawerLayout)
-    DrawerLayout drawerLayout;
-    @BindView(R.id.nvView)
-    NavigationView navigationView;
-    @BindView(R.id.shimmer_recycler_view)
-    ShimmerRecyclerView rvPost;
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
-    @BindView(R.id.swipeContainer)
-    SwipeRefreshLayout swipeContainer;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.drawerLayout) DrawerLayout drawerLayout;
+    @BindView(R.id.nvView) NavigationView navigationView;
+    @BindView(R.id.shimmer_recycler_view) ShimmerRecyclerView rvPost;
+    @BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
+    @BindView(R.id.sign_out_button) LinearLayout sign_out_button;
+    @BindView(R.id.profile_button) LinearLayout profile_button;
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
@@ -96,14 +97,17 @@ public class MainActivity extends AppCompatActivity {
                 //user already logged in
                 //SHOW TIMELINE
                 fetchPosts();
+                CHECK_FIRSTIME_USER_LOGIN = true;
 
-            } else {
+            } else if((user == null) && (CHECK_FIRSTIME_USER_LOGIN == false)){
                 setUpAppIntro();
             }
         };
         if (savedInstanceState != null) {
             onRestoreInstanceState(savedInstanceState);
         }
+
+
     }
 
     private void setUpDrawerLayout() {
@@ -148,7 +152,6 @@ public class MainActivity extends AppCompatActivity {
     private void setUpView() {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("ShareFood");
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        getSupportActionBar().setHomeButtonEnabled(true);
@@ -164,6 +167,21 @@ public class MainActivity extends AppCompatActivity {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_blue_dark);
 
+        sign_out_button.setOnClickListener(v -> new MaterialDialog.Builder(this)
+                .content("Are you sure you want to log out")
+                .positiveText("Log out")
+                .onPositive((dialog, which) -> {
+                    firebaseAuth.signOut();
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                })
+                .neutralText("Cancel")
+                .show());
+
+        profile_button.setOnClickListener(v ->{
+            startActivity(new Intent(MainActivity.this, UserDetailActitvity.class));
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        });
     }
 
     private void swipeToRefresh() {

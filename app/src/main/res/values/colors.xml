@@ -28,7 +28,9 @@
     <color name="blueGrey900">#263238</color>
     <color name="blueGrey700">#455A64</color>
     <color name="red500">#F44336</color>
+    <color name="red400">#EF5350</color>
     <color name="yellow500">#FFEB3B</color>
     <color name="green500">#4CAF50</color>
+    <color name="transparent99">#99000000</color>
 
 </resources>

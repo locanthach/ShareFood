@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.florent37.materialtextfield.MaterialTextField;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -58,22 +59,15 @@ public class PostActivity extends AppCompatActivity {
     private String mCurrentPhotoUri = null;
     private String mCurrentPhotoPath = null;
 
-    @BindView(R.id.edtStatus)
-    EditText mTitle;
-    @BindView(R.id.edtLocation)
-    EditText mLocation;
-    @BindView(R.id.share_button)
-    FrameLayout mSubmitButton;
-    @BindView(R.id.imgUpload)
-    ImageView imgUpload;
-    @BindView(R.id.back_button)
-    FrameLayout back_button;
-    @BindView(R.id.progressBar)
-    CardView progressBar;
-    @BindView(R.id.progressBarTitle)
-    TextView progressBarTitle;
-    @BindView(R.id.transparentView)
-    View transparentView;
+    @BindView(R.id.edtStatus) EditText mTitle;
+    @BindView(R.id.edtLocation) EditText mLocation;
+    @BindView(R.id.share_button) FrameLayout mSubmitButton;
+    @BindView(R.id.imgUpload) ImageView imgUpload;
+    @BindView(R.id.back_button) FrameLayout back_button;
+    @BindView(R.id.progressBar) CardView progressBar;
+    @BindView(R.id.progressBarTitle) TextView progressBarTitle;
+    @BindView(R.id.transparentView) View transparentView;
+    @BindView(R.id.materialText) MaterialTextField materialText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,26 +97,22 @@ public class PostActivity extends AppCompatActivity {
 
     private void submitPost() {
         showPrgoressBar();
+        mLocation.setEnabled(false);
+        materialText.reduce();
         final String title = mTitle.getText().toString();
         final String location = mLocation.getText().toString();
-
         // Title is required
         if (TextUtils.isEmpty(title)) {
             mTitle.setError(REQUIRED);
             hideProgressBar();
             return;
         }
-
         // Body is required
         if (TextUtils.isEmpty(location)) {
             mLocation.setError(REQUIRED);
             hideProgressBar();
             return;
         }
-
-        // Disable button so there are no multi-posts
-//        setEditingEnabled(false);
-//        Toast.makeText(this, "Posting...", Toast.LENGTH_SHORT).show();
 
         // [START single_value_read]
         final String userId = FireBaseConfig.getUid();
@@ -132,7 +122,6 @@ public class PostActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         // Get user value
                         User user = dataSnapshot.getValue(User.class);
-
                         // [START_EXCLUDE]
                         if (user == null) {
                             // User is null, error out
@@ -144,8 +133,6 @@ public class PostActivity extends AppCompatActivity {
                             uploadImage(userId, user, title, location);
                         }
                         // Finish this Activity, back to the stream
-//                        setEditingEnabled(true);
-
                     }
 
                     @Override
@@ -157,16 +144,6 @@ public class PostActivity extends AppCompatActivity {
                     }
                 });
         // [END single_value_read]
-    }
-
-    private void setEditingEnabled(boolean enabled) {
-        mTitle.setEnabled(enabled);
-        mLocation.setEnabled(enabled);
-        if (enabled) {
-            mSubmitButton.setVisibility(View.VISIBLE);
-        } else {
-            mSubmitButton.setVisibility(View.GONE);
-        }
     }
 
     // [START write_fan_out]
