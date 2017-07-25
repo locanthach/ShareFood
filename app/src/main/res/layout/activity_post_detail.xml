@@ -38,38 +38,45 @@
                     android:orientation="vertical"
                     app:layout_collapseMode="parallax">
 
-                    <ImageView
-                        android:background="@color/white"
-                        android:id="@+id/ivCover"
+                    <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="256sp"
-                        android:adjustViewBounds="true"
-                        android:scaleType="centerCrop"
-                        android:src="@{post.photoUrl}"
-                        tools:src="@drawable/saigon" />
+                        android:background="#30000000">
 
-                    <TextView
-                        android:id="@+id/tvContent"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:background="@color/blueGrey100"
-                        android:ellipsize="end"
-                        android:maxLines="2"
-                        android:padding="32sp"
-                        android:text="@{post.content}"
-                        android:textColor="@color/black"
-                        android:textSize="24sp"
-                        tools:text="@string/Status" />
+                        <ImageView
+                            android:id="@+id/ivCover"
+                            android:layout_width="match_parent"
+                            android:layout_height="256sp"
+                            android:adjustViewBounds="true"
+                            android:background="@color/white"
+                            android:scaleType="centerCrop"
+                            android:src="@{post.photoUrl}"
+                            tools:src="@drawable/saigon" />
+
+                        <TextView
+                            android:id="@+id/tvContent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:background="#50000000"
+                            android:ellipsize="end"
+                            android:fontFamily="sans-serif-medium"
+                            android:maxLines="2"
+                            android:padding="16sp"
+                            android:text="@{post.content}"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            tools:text="@string/Status" />
+                    </FrameLayout>
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:background="@color/white"
+                        android:background="#804DB6AC"
                         android:gravity="center"
-                        android:paddingBottom="4sp"
-                        android:paddingTop="4sp">
+                        android:padding="8dp">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -91,8 +98,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
+                                android:fontFamily="sans-serif-light"
                                 android:text="@{post.likeString}"
-                                android:textColor="@color/black"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
                                 tools:text="342 Likes" />
                         </LinearLayout>
 
@@ -114,8 +123,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
+                                android:fontFamily="sans-serif-light"
                                 android:text="@{post.viewString}"
-                                android:textColor="@color/black"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
                                 tools:text="342 Views" />
                         </LinearLayout>
 
@@ -137,8 +148,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
+                                android:fontFamily="sans-serif-light"
                                 android:text="@{post.location}"
-                                android:textColor="@color/black"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
                                 tools:text="Room 3" />
                         </LinearLayout>
 
@@ -165,14 +178,14 @@
                     android:id="@+id/imgUser1"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
+                    android:layout_margin="8dp"
                     android:src="@drawable/saigon" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:paddingLeft="8sp"
-                    android:paddingTop="2sp">
+                    android:gravity="start|center"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tvAuthor"

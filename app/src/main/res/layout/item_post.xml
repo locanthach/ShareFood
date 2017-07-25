@@ -27,10 +27,10 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:padding="4sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="4sp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imgUser"
@@ -44,8 +44,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="8sp"
-                    android:layout_marginStart="8sp"
+                    android:layout_marginLeft="16sp"
+                    android:layout_marginStart="16sp"
                     android:text="@{post.author}"
                     android:textColor="@color/black"
                     android:textSize="14sp"
@@ -58,8 +58,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="end"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-light"
                     android:text="@{post.relativeTime}"
-                    android:textColor="@color/black"
+                    android:textColor="#000000"
                     tools:text="5 minute ago" />
             </LinearLayout>
 
@@ -75,41 +77,78 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="4sp"
+                android:layout_margin="8dp"
                 android:orientation="horizontal">
+                <LinearLayout
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:id="@+id/btnLike"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:src="@drawable/ic_favorite" />
 
-                <com.like.LikeButton
-                    android:id="@+id/btnLike"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_favorite"
-                    app:anim_scale_factor="1.5" />
+                    <TextView
+                        android:id="@+id/tvLikeCount"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="@{post.likeString}"
+                        android:textColor="#000000"
+                        android:fontFamily="sans-serif-light"
+                        android:textSize="14sp"
+                        tools:text="3.489 Likes" />
+                </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/comment_button"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_marginLeft="8sp"
-                    android:src="@drawable/ic_comment" />
+                <View
+                    android:background="@color/blueGrey"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"/>
+                <LinearLayout
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_gravity=""
+                        android:id="@+id/comment_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8sp"
+                        android:src="@drawable/ic_comment" />
+                    <TextView
+                        android:textColor="#000000"
+                        android:text="Comments"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-light"
+                        android:layout_marginStart="8dp"
+                        android:layout_gravity="start|center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvLikeCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <View
                 android:layout_marginStart="8dp"
-                android:text="@{post.likeString}"
-                android:textColor="@color/black"
-                android:textSize="14dp"
-                android:textStyle="bold"
-                tools:text="3.489 lượt thích" />
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/blueGrey"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8sp"
-                android:layout_marginTop="4sp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -118,18 +157,20 @@
                     android:layout_height="wrap_content"
                     android:text="@{post.author}"
                     android:textColor="@color/black"
-                    android:textSize="16dp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     tools:text="thao_narii" />
 
                 <TextView
+                    android:fontFamily="sans-serif-light"
                     android:id="@+id/txtContent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingEnd="8dp"
                     android:paddingStart="8dp"
                     android:text="@{post.content}"
                     android:textColor="@color/black"
-                    android:textSize="16dp"
+                    android:textSize="14sp"
                     tools:text="Tui có cái bánh nè mọi người." />
             </LinearLayout>
         </LinearLayout>

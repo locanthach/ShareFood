@@ -84,7 +84,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 Post post = dataSnapshot.getValue(Post.class);
                 // [START_EXCLUDE]
                 binding.setPost(post);
-                loadImage(PostDetailActivity.this,binding.ivCover, mPost.getPhotoUrl());
+                loadImage(binding.ivCover, mPost.getPhotoUrl());
                 setFont();
                 // [END_EXCLUDE]
             }
@@ -152,10 +152,9 @@ public class PostDetailActivity extends AppCompatActivity {
 
     private void setFont() {
         binding.tvAuthor.setTypeface(EasyFonts.robotoBold(PostDetailActivity.this));
-        binding.tvContent.setTypeface(EasyFonts.robotoLight(PostDetailActivity.this));
-        binding.tvLocation.setTypeface(EasyFonts.robotoBold(PostDetailActivity.this));
-        binding.tvLikeCount.setTypeface(EasyFonts.robotoBold(PostDetailActivity.this));
-        binding.tvViews.setTypeface(EasyFonts.robotoBold(PostDetailActivity.this));
+        binding.tvLocation.setTypeface(EasyFonts.robotoLight(PostDetailActivity.this));
+        binding.tvLikeCount.setTypeface(EasyFonts.robotoLight(PostDetailActivity.this));
+        binding.tvViews.setTypeface(EasyFonts.robotoLight(PostDetailActivity.this));
         binding.tvTime.setTypeface(EasyFonts.robotoLight(PostDetailActivity.this));
     }
 

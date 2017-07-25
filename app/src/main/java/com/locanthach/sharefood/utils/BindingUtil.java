@@ -1,6 +1,5 @@
 package com.locanthach.sharefood.utils;
 
-import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.widget.ImageView;
 
@@ -12,13 +11,11 @@ import com.bumptech.glide.Glide;
 
 public class BindingUtil {
     @BindingAdapter("bind:image")
-    public static void loadImage(Context context, ImageView imageView, String url) {
-//        PhotoUtils.takeImage(context, imageView, url);
+    public static void loadImage( ImageView imageView, String url) {
         Glide.with(imageView.getContext())
                 .load(url)
                 .centerCrop()
                 .animate(android.R.anim.slide_in_left)
-//                .transform(new RotateTransformation(context, 90))
                 .into(imageView);
     }
 }

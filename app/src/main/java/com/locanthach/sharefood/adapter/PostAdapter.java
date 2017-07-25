@@ -8,6 +8,7 @@ import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.like.LikeButton;
 import com.locanthach.sharefood.R;
@@ -40,8 +41,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
     @Override
     public void onBindViewHolder(PostViewHolder holder, int position) {
-        holder.bind(posts.get(position), context);
-        final String postKey = posts.get(position).getId();
+        holder.bind(posts.get(position));
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, PostDetailActivity.class);
             intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, posts.get(position));
@@ -62,9 +62,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
     public void updatePost(Post data) {
         for (int i = 0; i < posts.size(); i++) {
-            posts.set(i, data);
-            notifyItemChanged(i);
-            return;
+            if (posts.get(i).getId().equals(data.getId())) {
+                posts.set(i, data);
+                notifyItemChanged(i);
+                return;
+            }
         }
     }
 
@@ -99,10 +101,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
 //    }
 
     public static class PostEvent {
-        public final LikeButton btnLike;
+        public final ImageView btnLike;
         public final Post post;
 
-        public PostEvent(LikeButton btnLike, Post post) {
+        public PostEvent(ImageView btnLike, Post post) {
             this.btnLike = btnLike;
             this.post = post;
         }
