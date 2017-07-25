@@ -1,8 +1,13 @@
 package com.locanthach.sharefood.activity;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
@@ -14,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,6 +30,7 @@ import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.model.User;
+import com.locanthach.sharefood.service.MyFirebaseMessagingService;
 import com.locanthach.sharefood.utils.FileUtils;
 import com.locanthach.sharefood.utils.PhotoUtils;
 import com.vstechlab.easyfonts.EasyFonts;
@@ -47,19 +52,28 @@ public class PostActivity extends AppCompatActivity {
     //FIREBASE VARIABLES
     private DatabaseReference mDatabase;
     private StorageReference storageReference;
+    private MyFirebaseMessagingService fmService;
 
     //MY VARIABLES
     private String mCurrentPhotoUri = null;
     private String mCurrentPhotoPath = null;
 
-    @BindView(R.id.edtStatus) EditText mTitle;
-    @BindView(R.id.edtLocation) EditText mLocation;
-    @BindView(R.id.share_button) FrameLayout mSubmitButton;
-    @BindView(R.id.imgUpload) ImageView imgUpload;
-    @BindView(R.id.back_button) FrameLayout back_button;
-    @BindView(R.id.progressBar) CardView progressBar;
-    @BindView(R.id.progressBarTitle) TextView progressBarTitle;
-    @BindView(R.id.transparentView) View transparentView;
+    @BindView(R.id.edtStatus)
+    EditText mTitle;
+    @BindView(R.id.edtLocation)
+    EditText mLocation;
+    @BindView(R.id.share_button)
+    FrameLayout mSubmitButton;
+    @BindView(R.id.imgUpload)
+    ImageView imgUpload;
+    @BindView(R.id.back_button)
+    FrameLayout back_button;
+    @BindView(R.id.progressBar)
+    CardView progressBar;
+    @BindView(R.id.progressBarTitle)
+    TextView progressBarTitle;
+    @BindView(R.id.transparentView)
+    View transparentView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +141,7 @@ public class PostActivity extends AppCompatActivity {
                                     "Error: could not fetch user.",
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            uploadImage(userId,user,title,location);
+                            uploadImage(userId, user, title, location);
                         }
                         // Finish this Activity, back to the stream
 //                        setEditingEnabled(true);
@@ -176,7 +190,8 @@ public class PostActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Post newPost = dataSnapshot.getValue(Post.class);
                         newPost.setId(dataSnapshot.getKey());
-
+                        // send notification to Firebase Message
+                        sendNotification(newPost.getAuthor(), newPost.getLocation());
                         Intent intent = new Intent(PostActivity.this, MainActivity.class);
                         intent.putExtra(NEW_POST, newPost);
                         setResult(RESULT_OK, intent);
@@ -191,6 +206,30 @@ public class PostActivity extends AppCompatActivity {
                 });
     }
 
+    //send notification to Firebase Message
+    private void sendNotification(String author, String location) {
+        String message = author + " has shared food at " + location;
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_stat_ic_notification)
+                .setContentTitle("Share Food Message")
+                .setContentText(message)
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+
     private void showError(String error) {
         Toasty.error(this, error, Toast.LENGTH_SHORT, true).show();
     }
@@ -201,7 +240,7 @@ public class PostActivity extends AppCompatActivity {
         progressBarTitle.setVisibility(View.GONE);
     }
 
-    private void showPrgoressBar(){
+    private void showPrgoressBar() {
         transparentView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.VISIBLE);
         progressBarTitle.setVisibility(View.VISIBLE);
