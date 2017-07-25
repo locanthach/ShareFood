@@ -84,7 +84,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 Post post = dataSnapshot.getValue(Post.class);
                 // [START_EXCLUDE]
                 binding.setPost(post);
-                loadImage(PostDetailActivity.this,binding.ivCover, mPost.getPhotoUrl());
+                loadImage(binding.ivCover, mPost.getPhotoUrl());
                 setFont();
                 // [END_EXCLUDE]
             }

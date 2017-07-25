@@ -40,8 +40,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
     @Override
     public void onBindViewHolder(PostViewHolder holder, int position) {
-        holder.bind(posts.get(position), context);
-        final String postKey = posts.get(position).getId();
+        holder.bind(posts.get(position));
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, PostDetailActivity.class);
             intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, posts.get(position));

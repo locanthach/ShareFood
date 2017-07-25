@@ -1,6 +1,5 @@
 package com.locanthach.sharefood.viewholder;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 
 import com.locanthach.sharefood.adapter.PostAdapter;
@@ -34,11 +33,11 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 //        layout.setAutoStart(false);
 //    }
 //
-    public void bind(Post post, Context context) {
+    public void bind(Post post) {
 //        ShimmerFrameLayout layout = (ShimmerFrameLayout) itemView;
 //        layout.startShimmerAnimation();
         setUpLikeClick();
-        loadImage(context,binding.imgPost, post.getPhotoUrl());
+        loadImage(binding.imgPost, post.getPhotoUrl());
         binding.setPost(post);
     }
 
