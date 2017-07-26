@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
 import com.cooltechworks.views.shimmer.ShimmerAdapter;
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,7 +30,9 @@ import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.adapter.UserTimeLineAdapter;
 import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.model.Post;
+import com.locanthach.sharefood.model.User;
 import com.locanthach.sharefood.utils.StringUtils;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +40,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.locanthach.sharefood.R.id.tvEmail;
+import static com.locanthach.sharefood.R.id.tvUsername;
 
 /**
  * Created by phant on 26-Jul-17.
@@ -50,13 +57,19 @@ public class UserTimeLineActivity extends AppCompatActivity {
     @BindView(R.id.nvView) NavigationView nvView;
     @BindView(R.id.sign_out_button) LinearLayout sign_out_button;
     @BindView(R.id.profile_button) LinearLayout profile_button;
+    @BindView(R.id.timeline_button) LinearLayout timeline_button;
     @BindView(R.id.drawerLayout) DrawerLayout drawerLayout;
     @BindView(R.id.home_button) LinearLayout home_button;
+    @BindView(R.id.imgUser) CircleImageView imgUser;
+    @BindView(R.id.tvUsername) TextView tvUsername;
+    @BindView(R.id.tvEmail) TextView tvEmail;
+    private MaterialEditText etRepost;
 
     private UserTimeLineAdapter userTimeLineAdapter;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private List<Post> posts;
     private TextView toolbar_title;
+    private User currentUser;
     //FIREBASE
     private DatabaseReference postsDBRef;
     private FirebaseAuth firebaseAuth;
@@ -118,7 +131,7 @@ public class UserTimeLineActivity extends AppCompatActivity {
 
         });
         userTimeLineAdapter.setRepostListener(post -> {
-
+            showRepostDialog(post);
         });
 
         profile_button.setOnClickListener(v ->{
@@ -126,8 +139,12 @@ public class UserTimeLineActivity extends AppCompatActivity {
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         });
 
-        home_button.setOnClickListener(v -> {
+        timeline_button.setOnClickListener(v -> {
             startActivity(new Intent(UserTimeLineActivity.this, UserTimeLineActivity.class));
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        });
+        home_button.setOnClickListener(v -> {
+            startActivity(new Intent(UserTimeLineActivity.this, MainActivity.class));
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         });
 
@@ -141,6 +158,24 @@ public class UserTimeLineActivity extends AppCompatActivity {
                 })
                 .neutralText("Cancel")
                 .show());
+    }
+
+    private void showRepostDialog(Post post) {
+        boolean wrapInScrollView = true;
+        MaterialDialog dialog = new MaterialDialog.Builder(UserTimeLineActivity.this)
+                .backgroundColorRes(R.color.colorPrimary)
+                .customView(R.layout.repost_dialog, wrapInScrollView)
+                .positiveText("Post")
+                .positiveColorRes(R.color.colorPrimary)
+                .cancelable(true)
+                .build();
+
+        setUpViewforDialog(dialog);
+    }
+
+    private void setUpViewforDialog(MaterialDialog dialog) {
+        etRepost = (MaterialEditText) dialog.findViewById(R.id.etRepost);
+
     }
 
     private void setUpFireBase() {
@@ -166,7 +201,37 @@ public class UserTimeLineActivity extends AppCompatActivity {
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.open, R.string.close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        setUpNavigationDrawer();
     }
+    private void setUpNavigationDrawer() {
+        postsDBRef.child(FireBaseConfig.USERS_CHILD)
+                .child(FireBaseConfig.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // Get user value
+                        currentUser = dataSnapshot.getValue(User.class);
+                        if (currentUser != null) {
+                            if (currentUser.getProfileImageUrl() != null) {
+                                Glide.with(UserTimeLineActivity.this)
+                                        .load(currentUser.getProfileImageUrl())
+                                        .override(58, 58)
+                                        .centerCrop()
+                                        .into(imgUser);
+                            }else{
+
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+        tvUsername.setText(StringUtils.usernameFromEmail(firebaseAuth.getCurrentUser().getEmail()));
+        tvEmail.setText(firebaseAuth.getCurrentUser().getEmail());
+
+    };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

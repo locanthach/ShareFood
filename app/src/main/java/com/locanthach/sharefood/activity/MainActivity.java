@@ -3,8 +3,10 @@ package com.locanthach.sharefood.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -21,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
@@ -37,6 +40,7 @@ import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.adapter.PostAdapter;
 import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.model.Post;
+import com.locanthach.sharefood.model.User;
 import com.locanthach.sharefood.utils.FileUtils;
 import com.locanthach.sharefood.utils.PermissionUtils;
 import com.locanthach.sharefood.utils.StringUtils;
@@ -74,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
     private PostAdapter postAdapter;
     private String mCurrentPhotoPath = null;
     private List<Post> posts;
+    private User currentUser;
 
-<<<<<<< HEAD
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.drawerLayout) DrawerLayout drawerLayout;
     @BindView(R.id.nvView) NavigationView navigationView;
@@ -85,27 +89,10 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.sign_out_button) LinearLayout sign_out_button;
     @BindView(R.id.profile_button) LinearLayout profile_button;
     @BindView(R.id.home_button) LinearLayout home_button;
+    @BindView(R.id.timeline_button) LinearLayout timeline_button;
     @BindView(R.id.imgUser) CircleImageView imgUser;
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.tvEmail) TextView tvEmail;
-=======
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.drawerLayout)
-    DrawerLayout drawerLayout;
-    @BindView(R.id.nvView)
-    NavigationView navigationView;
-    @BindView(R.id.shimmer_recycler_view)
-    ShimmerRecyclerView rvPost;
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
-    @BindView(R.id.swipeContainer)
-    SwipeRefreshLayout swipeContainer;
-    @BindView(R.id.sign_out_button)
-    LinearLayout sign_out_button;
-    @BindView(R.id.profile_button)
-    LinearLayout profile_button;
->>>>>>> 3a8f98e6b244ff669e2ec8a12d6815706d0a37c9
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
@@ -124,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 setUpNavigationDrawer();
                 CHECK_FIRSTIME_USER_LOGIN = true;
 
-            } else if ((user == null) && (CHECK_FIRSTIME_USER_LOGIN == false)) {
+            } else if((user == null) && (CHECK_FIRSTIME_USER_LOGIN == false)){
                 setUpAppIntro();
             }
         };
@@ -190,13 +177,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpNavigationDrawer() {
-        if(firebaseAuth.getCurrentUser().getPhotoUrl()!= null){
-            Glide.with(this).load(firebaseAuth.getCurrentUser().getPhotoUrl())
-                    .placeholder(R.drawable.ic_placeholder_user)
-                    .override(58,58)
-                    .centerCrop()
-                    .into(imgUser);
-        }
+        postsDBRef.child(FireBaseConfig.USERS_CHILD)
+                .child(FireBaseConfig.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // Get user value
+                        currentUser = dataSnapshot.getValue(User.class);
+                        if (user != null) {
+                            if (currentUser.getProfileImageUrl() != null) {
+                                Glide.with(MainActivity.this)
+                                        .load(currentUser.getProfileImageUrl())
+                                        .override(58, 58)
+                                        .centerCrop()
+                                        .into(imgUser);
+                            }else{
+
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
         tvUsername.setText(StringUtils.usernameFromEmail(firebaseAuth.getCurrentUser().getEmail()));
         tvEmail.setText(firebaseAuth.getCurrentUser().getEmail());
 
@@ -223,13 +227,17 @@ public class MainActivity extends AppCompatActivity {
                 .neutralText("Cancel")
                 .show());
 
-        profile_button.setOnClickListener(v -> {
+        profile_button.setOnClickListener(v ->{
             startActivity(new Intent(MainActivity.this, UserDetailActitvity.class));
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         });
 
-        home_button.setOnClickListener(v -> {
+        timeline_button.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, UserTimeLineActivity.class));
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        });
+        home_button.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, MainActivity.class));
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         });
     }
@@ -380,21 +388,10 @@ public class MainActivity extends AppCompatActivity {
         String key = post.getId();
         if (isLiked(post, userId)) {
             post = disLike(userId, post);
-            event.btnLike.setBackgroundResource(R.color.blueGrey800);
+            event.btnLike.getDrawable().mutate().setColorFilter(getResources().getColor(R.color.red400), PorterDuff.Mode.SRC_IN);
         } else {
             post = like(userId, post);
-            event.btnLike.setBackgroundResource(R.color.red400);
-=======
-        setUpLike(userId, event.post);
-    }
-
-    private void setUpLike(String userId, Post post) {
-        String key = post.getId();
-        if (isLiked(post, userId)) {
-            post = disLike(userId, post);
-        } else {
-            post = like(userId, post);
->>>>>>> 3a8f98e6b244ff669e2ec8a12d6815706d0a37c9
+            event.btnLike.getDrawable().mutate().setColorFilter(getResources().getColor(R.color.blueGrey800), PorterDuff.Mode.SRC_IN);
         }
         Map<String, Object> postValues = post.toMap();
 

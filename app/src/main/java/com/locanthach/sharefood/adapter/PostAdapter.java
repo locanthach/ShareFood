@@ -1,6 +1,7 @@
 package com.locanthach.sharefood.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -9,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.like.LikeButton;
 import com.locanthach.sharefood.R;
+import com.locanthach.sharefood.activity.PostDetailActivity;
 import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.viewholder.PostViewHolder;
 
