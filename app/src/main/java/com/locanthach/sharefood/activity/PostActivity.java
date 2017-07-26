@@ -148,7 +148,6 @@ public class PostActivity extends AppCompatActivity {
 
     // [START write_fan_out]
     private void writeNewPost(String userId, String username, String title, String location, String photoUri) {
-        //new post
 
         String key = mDatabase.child(FireBaseConfig.POSTS_CHILD).push().getKey();
         Post post = new Post(userId, username, title, photoUri, location);

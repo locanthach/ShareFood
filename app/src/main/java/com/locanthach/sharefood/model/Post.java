@@ -49,8 +49,13 @@ public class Post implements Parcelable {
         this.viewCount = String.valueOf(0);
     }
 
-
     protected Post(Parcel in) {
+        final int N = in.readInt();
+        for (int i = 0; i < N; i++) {
+            String key = in.readString();
+            Boolean value = Boolean.parseBoolean(in.readString());
+            likes.put(key, value);
+        }
         id = in.readString();
         uid = in.readString();
         author = in.readString();
@@ -82,7 +87,7 @@ public class Post implements Parcelable {
         result.put("uid", uid);
         result.put("author", author);
         result.put("content", content);
-        result.put("photoUrl",photoUrl);
+        result.put("photoUrl", photoUrl);
         result.put("location", location);
         result.put("time", time);
         result.put("likeCount", likeCount);
@@ -201,6 +206,14 @@ public class Post implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        final int N = likes.size();
+        dest.writeInt(N);
+        if (N > 0) {
+            for (Map.Entry<String, Boolean> entry : likes.entrySet()) {
+                dest.writeString(entry.getKey());
+                dest.writeString(entry.getValue().toString());
+            }
+        }
         dest.writeString(id);
         dest.writeString(uid);
         dest.writeString(author);

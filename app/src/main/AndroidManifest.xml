@@ -45,29 +45,41 @@
         <activity
             android:name=".activity.IntroActivity"
             android:theme="@style/TransculentStatusBar" />
+
         <activity
             android:name=".activity.QRScannerActivity"
             android:theme="@style/NoActionBar" />
+
         <activity
             android:screenOrientation="portrait"
             android:name=".activity.PostActivity"
             android:theme="@style/TransculentStatusBar" />
+
         <activity
             android:name=".activity.NavigateSignInActivity"
             android:theme="@style/TransculentStatusBar" />
+
         <activity
             android:name=".activity.LoginActivity"
             android:theme="@style/TransculentStatusBar" />
+
         <activity
             android:name=".activity.RegisterActivity"
             android:theme="@style/TransculentStatusBar" />
+
         <activity
             android:screenOrientation="portrait"
             android:name=".activity.PostDetailActivity"
             android:theme="@style/TransculentStatusBar" />
+
         <activity
             android:name=".activity.UserDetailActitvity"
             android:theme="@style/TransculentStatusBar" />
+
+        <activity
+            android:name=".activity.UserTimeLineActivity"
+            android:theme="@style/NoActionBar" />
+
         <service
             android:name=".service.MyFirebaseMessagingService">
             <intent-filter>
