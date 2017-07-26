@@ -5,10 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import com.locanthach.sharefood.adapter.PostAdapter;
 import com.locanthach.sharefood.databinding.ItemPostBinding;
 import com.locanthach.sharefood.model.Post;
+import com.locanthach.sharefood.model.User;
 
 import org.greenrobot.eventbus.EventBus;
 
 import static com.locanthach.sharefood.utils.BindingUtil.loadImage;
+import static com.locanthach.sharefood.utils.BindingUtil.loadImageAva;
 
 /**
  * Created by An Lee on 7/16/2017.
@@ -33,13 +35,15 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 //        layout.setAutoStart(false);
 //    }
 //
-    public void bind(Post post) {
+    public void bind(Post post, User user) {
 //        ShimmerFrameLayout layout = (ShimmerFrameLayout) itemView;
 //        layout.startShimmerAnimation();
         setUpLikeClick();
         setImagePostClick();
+        loadImageAva(binding.imgUser, user.getProfileImageUrl());
         loadImage(binding.imgPost, post.getPhotoUrl());
         binding.setPost(post);
+        binding.setUser(user);
     }
 
     private void setImagePostClick() {

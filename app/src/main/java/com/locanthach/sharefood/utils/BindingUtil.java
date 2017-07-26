@@ -11,11 +11,18 @@ import com.bumptech.glide.Glide;
 
 public class BindingUtil {
     @BindingAdapter({"image"})
-    public static void loadImage( ImageView imageView, String url) {
+    public static void loadImage(ImageView imageView, String url) {
         Glide.with(imageView.getContext())
                 .load(url)
                 .centerCrop()
                 .animate(android.R.anim.slide_in_left)
+                .into(imageView);
+    }
+
+    @BindingAdapter({"image"})
+    public static void loadImageAva(ImageView imageView, String url) {
+        Glide.with(imageView.getContext())
+                .load(url)
                 .into(imageView);
     }
 }

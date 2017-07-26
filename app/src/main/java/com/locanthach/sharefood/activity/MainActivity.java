@@ -35,6 +35,7 @@ import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.adapter.PostAdapter;
 import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.model.Post;
+import com.locanthach.sharefood.model.User;
 import com.locanthach.sharefood.utils.FileUtils;
 import com.locanthach.sharefood.utils.PermissionUtils;
 
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     //Firebase variable
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference postsDBRef;
+    private DatabaseReference usersDBRef;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     private String mCurrentPhotoPath = null;
     private StorageReference mStorageReference;
     private List<Post> posts;
+    private List<User> users;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -105,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 //user already logged in
                 //SHOW TIMELINE
                 fetchPosts();
+                fetchUsers();
                 CHECK_FIRSTIME_USER_LOGIN = true;
 
             } else if ((user == null) && (CHECK_FIRSTIME_USER_LOGIN == false)) {
@@ -154,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         postsDBRef = firebaseDatabase.getReference();
+        usersDBRef = firebaseDatabase.getReference();
         mStorageReference = FirebaseStorage.getInstance().getReference();
     }
 
@@ -193,7 +198,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void swipeToRefresh() {
-        swipeContainer.setOnRefreshListener(() -> fetchPosts());
+        swipeContainer.setOnRefreshListener(() -> {
+            fetchPosts();
+            fetchUsers();
+            swipeContainer.setRefreshing(false);
+        });
     }
 
     private void setUpAppIntro() {
@@ -235,9 +244,31 @@ public class MainActivity extends AppCompatActivity {
                             posts.add(post);
                         }
                         Collections.reverse(posts);
-                        postAdapter.setData(posts);
+                        postAdapter.setPosts(posts);
                         rvPost.hideShimmerAdapter();
-                        swipeContainer.setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+    private void fetchUsers() {
+        postsDBRef.child(FireBaseConfig.USERS_CHILD)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        users = new ArrayList<>();
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            User user = child.getValue(User.class);
+                            user.setId(child.getKey());
+                            child.getValue();
+                            users.add(user);
+                        }
+                        postAdapter.setUsers(users);
+                        rvPost.hideShimmerAdapter();
                     }
 
                     @Override
@@ -391,6 +422,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         mCurrentPhotoPath = savedInstanceState.getString(KEEP_IMAGE_PATH);
         List<Post> statePostList = postAdapter.getStateList(savedInstanceState);
-        postAdapter.setData(statePostList);
+        postAdapter.setPosts(statePostList);
     }
 }

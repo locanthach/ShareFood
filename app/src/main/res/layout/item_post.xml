@@ -9,6 +9,10 @@
         <variable
             name="post"
             type="com.locanthach.sharefood.model.Post" />
+
+        <variable
+            name="user"
+            type="com.locanthach.sharefood.model.User" />
     </data>
 
     <android.support.v7.widget.CardView
@@ -36,7 +40,7 @@
                     android:id="@+id/imgUser"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/saigon"
+                    android:src="@{user.profileImageUrl}"
                     tools:src="@drawable/saigon" />
 
                 <TextView
@@ -46,7 +50,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="16sp"
                     android:layout_marginStart="16sp"
-                    android:text="@{post.author}"
+                    android:text="@{user.name}"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -57,11 +61,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:gravity="end"
-                    android:textSize="14sp"
                     android:fontFamily="sans-serif-light"
+                    android:gravity="end"
                     android:text="@{post.relativeTime}"
                     android:textColor="#000000"
+                    android:textSize="14sp"
                     tools:text="5 minute ago" />
             </LinearLayout>
 
@@ -79,93 +83,98 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:orientation="horizontal">
+
                 <LinearLayout
-                    android:gravity="center"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content">
+                    android:gravity="center">
+
                     <ImageView
-                        android:layout_gravity="center"
                         android:id="@+id/btnLike"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:clickable="true"
                         android:src="@drawable/ic_favorite" />
 
                     <TextView
                         android:id="@+id/tvLikeCount"
-                        android:layout_gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginStart="8dp"
+                        android:fontFamily="sans-serif-light"
                         android:text="@{post.likeString}"
                         android:textColor="#000000"
-                        android:fontFamily="sans-serif-light"
                         android:textSize="14sp"
                         tools:text="3.489 Likes" />
                 </LinearLayout>
 
                 <View
-                    android:background="@color/blueGrey"
                     android:layout_width="1dp"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:background="@color/blueGrey" />
+
                 <LinearLayout
-                    android:gravity="center"
-                    android:layout_weight="1"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
                     <ImageView
-                        android:layout_gravity=""
                         android:id="@+id/comment_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity=""
                         android:layout_marginLeft="8sp"
                         android:src="@drawable/ic_comment" />
+
                     <TextView
-                        android:textColor="#000000"
-                        android:text="Comments"
-                        android:textSize="14sp"
-                        android:fontFamily="sans-serif-light"
-                        android:layout_marginStart="8dp"
-                        android:layout_gravity="start|center"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center"
+                        android:layout_marginStart="8dp"
+                        android:fontFamily="sans-serif-light"
+                        android:text="Comments"
+                        android:textColor="#000000"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
 
             </LinearLayout>
 
             <View
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="@color/blueGrey"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"/>
+                android:layout_height="1dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:background="@color/blueGrey" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tvUsername2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{post.author}"
+                    android:text="@{user.name}"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     tools:text="thao_narii" />
 
                 <TextView
-                    android:fontFamily="sans-serif-light"
                     android:id="@+id/txtContent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
                     android:paddingEnd="8dp"
                     android:paddingStart="8dp"
                     android:text="@{post.content}"
