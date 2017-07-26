@@ -52,6 +52,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.dmoral.toasty.Toasty;
 
+import static com.locanthach.sharefood.activity.PostDetailActivity.EXTRA_POST;
+
 public class MainActivity extends AppCompatActivity {
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1000;
     private final static String MY_CURRENT_IMAGE_PATH = "MY_IMAGE_PATH";
@@ -321,7 +323,7 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe
     public void onEvent(PostAdapter.ImagePostEvent event) {
         Intent intent = new Intent(MainActivity.this, PostDetailActivity.class);
-        intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, event.post);
+        intent.putExtra(EXTRA_POST, event.post);
         startActivity(intent);
     }
 

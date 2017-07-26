@@ -29,7 +29,7 @@ import static com.locanthach.sharefood.utils.BindingUtil.loadImage;
 public class PostDetailActivity extends AppCompatActivity {
     private static final String TAG = "PostDetailActivity";
 
-    public static final String EXTRA_POST_KEY = "post_key";
+    public static final String EXTRA_POST = "post";
 
     private DatabaseReference mPostReference;
     private DatabaseReference mCommentsReference;
@@ -47,7 +47,7 @@ public class PostDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_post_detail);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_detail);
         // Get post key from intent
-        mPost = getIntent().getExtras().getParcelable(EXTRA_POST_KEY);
+        mPost = getIntent().getExtras().getParcelable(EXTRA_POST);
         mPostKey = mPost.getId();
         if (mPostKey == null) {
             throw new IllegalArgumentException("Must pass EXTRA_POST_KEY");
