@@ -3,6 +3,7 @@ package com.locanthach.sharefood.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -18,9 +19,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,8 +38,10 @@ import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.adapter.PostAdapter;
 import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.model.Post;
+import com.locanthach.sharefood.model.User;
 import com.locanthach.sharefood.utils.FileUtils;
 import com.locanthach.sharefood.utils.PermissionUtils;
+import com.locanthach.sharefood.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -50,6 +55,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
 
 import static com.locanthach.sharefood.activity.PostDetailActivity.EXTRA_POST;
@@ -64,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     //Firebase variable
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference postsDBRef;
+    private DatabaseReference usersDBRef;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -71,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
     private String mCurrentPhotoPath = null;
     private StorageReference mStorageReference;
     private List<Post> posts;
+    private List<User> users;
+    private User currentUser;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -88,6 +97,16 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout sign_out_button;
     @BindView(R.id.profile_button)
     LinearLayout profile_button;
+    @BindView(R.id.home_button)
+    LinearLayout home_button;
+    @BindView(R.id.timeline_button)
+    LinearLayout timeline_button;
+    @BindView(R.id.imgUser)
+    CircleImageView imgUser;
+    @BindView(R.id.tvUsername)
+    TextView tvUsername;
+    @BindView(R.id.tvEmail)
+    TextView tvEmail;
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
@@ -105,6 +124,8 @@ public class MainActivity extends AppCompatActivity {
                 //user already logged in
                 //SHOW TIMELINE
                 fetchPosts();
+                fetchUsers();
+                setUpNavigationDrawer();
                 CHECK_FIRSTIME_USER_LOGIN = true;
 
             } else if ((user == null) && (CHECK_FIRSTIME_USER_LOGIN == false)) {
@@ -154,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         postsDBRef = firebaseDatabase.getReference();
+        usersDBRef = firebaseDatabase.getReference();
         mStorageReference = FirebaseStorage.getInstance().getReference();
     }
 
@@ -168,13 +190,52 @@ public class MainActivity extends AppCompatActivity {
         rvPost.setLayoutManager(new LinearLayoutManager(this));
         rvPost.showShimmerAdapter();
 
+        setUpRefresh();
+        handleClickEvent();
+
+
+    }
+
+    private void setUpNavigationDrawer() {
+        postsDBRef.child(FireBaseConfig.USERS_CHILD)
+                .child(FireBaseConfig.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // Get user value
+                        currentUser = dataSnapshot.getValue(User.class);
+                        if (user != null) {
+                            if (currentUser.getProfileImageUrl() != null) {
+                                Glide.with(MainActivity.this)
+                                        .load(currentUser.getProfileImageUrl())
+                                        .override(58, 58)
+                                        .centerCrop()
+                                        .into(imgUser);
+                            } else {
+
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+        tvUsername.setText(StringUtils.usernameFromEmail(firebaseAuth.getCurrentUser().getEmail()));
+        tvEmail.setText(firebaseAuth.getCurrentUser().getEmail());
+
+    }
+
+    private void setUpRefresh() {
         swipeToRefresh();
         swipeContainer.setColorSchemeResources(
                 android.R.color.holo_green_light,
                 android.R.color.holo_red_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_blue_dark);
+    }
 
+    private void handleClickEvent() {
         sign_out_button.setOnClickListener(v -> new MaterialDialog.Builder(this)
                 .content("Are you sure you want to log out")
                 .positiveText("Log out")
@@ -190,10 +251,23 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, UserDetailActitvity.class));
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         });
+
+        timeline_button.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, UserTimeLineActivity.class));
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        });
+        home_button.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, MainActivity.class));
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        });
     }
 
     private void swipeToRefresh() {
-        swipeContainer.setOnRefreshListener(() -> fetchPosts());
+        swipeContainer.setOnRefreshListener(() -> {
+            fetchPosts();
+            fetchUsers();
+            swipeContainer.setRefreshing(false);
+        });
     }
 
     private void setUpAppIntro() {
@@ -235,9 +309,31 @@ public class MainActivity extends AppCompatActivity {
                             posts.add(post);
                         }
                         Collections.reverse(posts);
-                        postAdapter.setData(posts);
+                        postAdapter.setPosts(posts);
                         rvPost.hideShimmerAdapter();
-                        swipeContainer.setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+    private void fetchUsers() {
+        postsDBRef.child(FireBaseConfig.USERS_CHILD)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        users = new ArrayList<>();
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            User user = child.getValue(User.class);
+                            user.setId(child.getKey());
+                            child.getValue();
+                            users.add(user);
+                        }
+                        postAdapter.setUsers(users);
+                        rvPost.hideShimmerAdapter();
                     }
 
                     @Override
@@ -330,15 +426,18 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe
     public void onEvent(PostAdapter.LikeEvent event) {
         String userId = firebaseAuth.getCurrentUser().getUid();
-        setUpLike(userId, event.post);
+        setUpLike(userId, event);
     }
 
-    private void setUpLike(String userId, Post post) {
+    private void setUpLike(String userId, PostAdapter.LikeEvent event) {
+        Post post = event.post;
         String key = post.getId();
         if (isLiked(post, userId)) {
             post = disLike(userId, post);
+            event.btnLike.getDrawable().mutate().setColorFilter(getResources().getColor(R.color.red400), PorterDuff.Mode.SRC_IN);
         } else {
             post = like(userId, post);
+            event.btnLike.getDrawable().mutate().setColorFilter(getResources().getColor(R.color.blueGrey800), PorterDuff.Mode.SRC_IN);
         }
         Map<String, Object> postValues = post.toMap();
 
@@ -391,6 +490,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         mCurrentPhotoPath = savedInstanceState.getString(KEEP_IMAGE_PATH);
         List<Post> statePostList = postAdapter.getStateList(savedInstanceState);
-        postAdapter.setData(statePostList);
+        postAdapter.setPosts(statePostList);
     }
 }

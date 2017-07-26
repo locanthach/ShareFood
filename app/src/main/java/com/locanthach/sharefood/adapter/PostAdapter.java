@@ -1,6 +1,7 @@
 package com.locanthach.sharefood.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.model.Post;
+import com.locanthach.sharefood.model.User;
 import com.locanthach.sharefood.viewholder.PostViewHolder;
 
 import java.util.ArrayList;
@@ -21,12 +23,14 @@ import java.util.List;
  */
 
 public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
-    private ArrayList<Post> posts;
+    private final ArrayList<Post> posts;
+    private final ArrayList<User> users;
     private final Context context;
     private static final String STATE = "listState";
 
     public PostAdapter(Context context) {
         this.posts = new ArrayList<>();
+        this.users = new ArrayList<>();
         this.context = context;
     }
 
@@ -38,7 +42,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
     @Override
     public void onBindViewHolder(PostViewHolder holder, int position) {
-        holder.bind(posts.get(position));
+        User postOwner = new User();
+        for (User user : users) {
+            if (posts.get(position).getUid().equals(user.getId())) {
+                postOwner = user;
+            }
+        }
+        holder.bind(posts.get(position), postOwner);
 //        holder.itemView.setOnClickListener(v -> {
 //            Intent intent = new Intent(context, PostDetailActivity.class);
 //            intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, posts.get(position));
@@ -51,9 +61,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         return posts.size();
     }
 
-    public void setData(List<Post> data) {
+    public void setPosts(List<Post> data) {
         posts.clear();
         posts.addAll(data);
+        notifyDataSetChanged();
+    }
+
+    public void setUsers(List<User> data) {
+        users.clear();
+        users.addAll(data);
         notifyDataSetChanged();
     }
 
