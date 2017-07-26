@@ -5,11 +5,14 @@ package com.locanthach.sharefood.model;
  */
 
 public class User {
+    private String id;
     private String name;
     private String email;
     private String profileImageUrl;
 
     public User() {
+        this.name = "Anonymous";
+        this.email = "Anonymous";
     }
 
     public User(String name, String email) {
@@ -39,5 +42,13 @@ public class User {
 
     public void setProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
