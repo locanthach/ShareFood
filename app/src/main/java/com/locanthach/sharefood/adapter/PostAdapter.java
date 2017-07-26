@@ -1,7 +1,6 @@
 package com.locanthach.sharefood.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -10,9 +9,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.like.LikeButton;
 import com.locanthach.sharefood.R;
-import com.locanthach.sharefood.activity.PostDetailActivity;
 import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.viewholder.PostViewHolder;
 
@@ -42,11 +39,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     @Override
     public void onBindViewHolder(PostViewHolder holder, int position) {
         holder.bind(posts.get(position));
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, PostDetailActivity.class);
-            intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, posts.get(position));
-            context.startActivity(intent);
-        });
+//        holder.itemView.setOnClickListener(v -> {
+//            Intent intent = new Intent(context, PostDetailActivity.class);
+//            intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, posts.get(position));
+//            context.startActivity(intent);
+//        });
     }
 
     @Override
@@ -100,12 +97,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
 //        this.mLayoutReference = layoutReference;
 //    }
 
-    public static class PostEvent {
+    public static class LikeEvent {
         public final ImageView btnLike;
         public final Post post;
 
-        public PostEvent(ImageView btnLike, Post post) {
+        public LikeEvent(ImageView btnLike, Post post) {
             this.btnLike = btnLike;
+            this.post = post;
+        }
+    }
+
+    public static class ImagePostEvent {
+        public final Post post;
+
+        public ImagePostEvent(Post post) {
             this.post = post;
         }
     }

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -21,7 +20,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -72,14 +70,22 @@ public class MainActivity extends AppCompatActivity {
     private StorageReference mStorageReference;
     private List<Post> posts;
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.drawerLayout) DrawerLayout drawerLayout;
-    @BindView(R.id.nvView) NavigationView navigationView;
-    @BindView(R.id.shimmer_recycler_view) ShimmerRecyclerView rvPost;
-    @BindView(R.id.fab) FloatingActionButton fab;
-    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
-    @BindView(R.id.sign_out_button) LinearLayout sign_out_button;
-    @BindView(R.id.profile_button) LinearLayout profile_button;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.drawerLayout)
+    DrawerLayout drawerLayout;
+    @BindView(R.id.nvView)
+    NavigationView navigationView;
+    @BindView(R.id.shimmer_recycler_view)
+    ShimmerRecyclerView rvPost;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    @BindView(R.id.swipeContainer)
+    SwipeRefreshLayout swipeContainer;
+    @BindView(R.id.sign_out_button)
+    LinearLayout sign_out_button;
+    @BindView(R.id.profile_button)
+    LinearLayout profile_button;
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
@@ -99,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 fetchPosts();
                 CHECK_FIRSTIME_USER_LOGIN = true;
 
-            } else if((user == null) && (CHECK_FIRSTIME_USER_LOGIN == false)){
+            } else if ((user == null) && (CHECK_FIRSTIME_USER_LOGIN == false)) {
                 setUpAppIntro();
             }
         };
@@ -178,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
                 .neutralText("Cancel")
                 .show());
 
-        profile_button.setOnClickListener(v ->{
+        profile_button.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, UserDetailActitvity.class));
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         });
@@ -312,28 +318,26 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_POST_CODE);
     }
 
-
     @Subscribe
-    public void onEvent(PostAdapter.PostEvent event) {
-        String userId = firebaseAuth.getCurrentUser().getUid();
-        setLikePost(userId, event.post);
+    public void onEvent(PostAdapter.ImagePostEvent event) {
+        Intent intent = new Intent(MainActivity.this, PostDetailActivity.class);
+        intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, event.post);
+        startActivity(intent);
     }
 
-    private void setLikePost(String userId, Post post) {
+    @Subscribe
+    public void onEvent(PostAdapter.LikeEvent event) {
+        String userId = firebaseAuth.getCurrentUser().getUid();
+        setUpLike(userId, event.post);
+    }
+
+    private void setUpLike(String userId, Post post) {
         String key = post.getId();
-        Map<String, Boolean> likes = post.getLikes();
         if (isLiked(post, userId)) {
-            likes.put(userId, false);
-            int likeCount = Integer.parseInt(post.getLikeCount()) - 1;
-            post.setLikeCount(String.valueOf(likeCount));
-            Toast.makeText(this, "dislike", Toast.LENGTH_SHORT).show();
+            post = disLike(userId, post);
         } else {
-            likes.put(userId, true);
-            int likeCount = Integer.parseInt(post.getLikeCount()) + 1;
-            post.setLikeCount(String.valueOf(likeCount));
-            Toast.makeText(this, "like", Toast.LENGTH_SHORT).show();
+            post = like(userId, post);
         }
-        post.setLikes(likes);
         Map<String, Object> postValues = post.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
@@ -342,6 +346,28 @@ public class MainActivity extends AppCompatActivity {
 
         postsDBRef.updateChildren(childUpdates);
         postAdapter.updatePost(post);
+    }
+
+    private Post like(String userId, Post post) {
+        Post temp = post;
+        Map<String, Boolean> likes = temp.getLikes();
+        likes.put(userId, true);
+        int likeCount = Integer.parseInt(temp.getLikeCount()) + 1;
+        temp.setLikeCount(String.valueOf(likeCount));
+        temp.setLikes(likes);
+        Toast.makeText(this, "like", Toast.LENGTH_SHORT).show();
+        return temp;
+    }
+
+    private Post disLike(String userId, Post post) {
+        Post temp = post;
+        Map<String, Boolean> likes = temp.getLikes();
+        likes.put(userId, false);
+        int likeCount = Integer.parseInt(temp.getLikeCount()) - 1;
+        temp.setLikeCount(String.valueOf(likeCount));
+        temp.setLikes(likes);
+        Toast.makeText(this, "dislike", Toast.LENGTH_SHORT).show();
+        return temp;
     }
 
     private boolean isLiked(Post post, String userId) {
