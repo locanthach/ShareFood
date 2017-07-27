@@ -3,7 +3,6 @@ package com.locanthach.sharefood.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -123,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
             if (user != null) {
                 //user already logged in
                 //SHOW TIMELINE
+                postAdapter.setCurrentUid(user.getUid());
                 fetchPosts();
                 fetchUsers();
                 setUpNavigationDrawer();
@@ -192,8 +192,6 @@ public class MainActivity extends AppCompatActivity {
 
         setUpRefresh();
         handleClickEvent();
-
-
     }
 
     private void setUpNavigationDrawer() {
@@ -434,17 +432,14 @@ public class MainActivity extends AppCompatActivity {
         String key = post.getId();
         if (isLiked(post, userId)) {
             post = disLike(userId, post);
-            event.btnLike.getDrawable().mutate().setColorFilter(getResources().getColor(R.color.red400), PorterDuff.Mode.SRC_IN);
         } else {
             post = like(userId, post);
-            event.btnLike.getDrawable().mutate().setColorFilter(getResources().getColor(R.color.blueGrey800), PorterDuff.Mode.SRC_IN);
         }
         Map<String, Object> postValues = post.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/posts/" + key, postValues);
         childUpdates.put("/user-posts/" + post.getUid() + "/" + key, postValues);
-
         postsDBRef.updateChildren(childUpdates);
         postAdapter.updatePost(post);
     }
@@ -456,7 +451,6 @@ public class MainActivity extends AppCompatActivity {
         int likeCount = Integer.parseInt(temp.getLikeCount()) + 1;
         temp.setLikeCount(String.valueOf(likeCount));
         temp.setLikes(likes);
-        Toast.makeText(this, "like", Toast.LENGTH_SHORT).show();
         return temp;
     }
 
@@ -467,7 +461,6 @@ public class MainActivity extends AppCompatActivity {
         int likeCount = Integer.parseInt(temp.getLikeCount()) - 1;
         temp.setLikeCount(String.valueOf(likeCount));
         temp.setLikes(likes);
-        Toast.makeText(this, "dislike", Toast.LENGTH_SHORT).show();
         return temp;
     }
 

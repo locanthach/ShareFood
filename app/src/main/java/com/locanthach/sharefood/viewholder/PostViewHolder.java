@@ -1,7 +1,10 @@
 package com.locanthach.sharefood.viewholder;
 
+import android.content.Context;
+import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 
+import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.adapter.PostAdapter;
 import com.locanthach.sharefood.databinding.ItemPostBinding;
 import com.locanthach.sharefood.model.Post;
@@ -35,13 +38,33 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 //        layout.setAutoStart(false);
 //    }
 //
-    public void bind(Post post, User user) {
+    public void bind(Context context, Post post, User user, String currentUid) {
+        binding.setPost(post);
+        binding.setUser(user);
+        //Deactive like icon
+        binding.btnLike
+                .getDrawable()
+                .mutate()
+                .setColorFilter(context.getResources().getColor(R.color.blueGrey800),
+                        PorterDuff.Mode.SRC_IN);
+        if (islike(post, currentUid)) {
+            //If logging user like post, active like icon
+            binding.btnLike
+                    .getDrawable()
+                    .mutate()
+                    .setColorFilter(context.getResources().getColor(R.color.red400),
+                            PorterDuff.Mode.SRC_IN);
+        }
         setUpLikeClick();
         setImagePostClick();
         loadImageAva(binding.imgUser, user.getProfileImageUrl());
         loadImage(binding.imgPost, post.getPhotoUrl());
-        binding.setPost(post);
-        binding.setUser(user);
+    }
+
+    private boolean islike(Post post, String currentUid) {
+        return !post.getLikes().isEmpty() &&
+                post.getLikes().containsKey(currentUid) &&
+                post.getLikes().get(currentUid);
     }
 
     private void setImagePostClick() {

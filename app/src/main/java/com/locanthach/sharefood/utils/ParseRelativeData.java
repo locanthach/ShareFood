@@ -48,7 +48,7 @@ public class ParseRelativeData {
         return count;
     }
 
-    private static boolean hasOne(String count) {
+    public static boolean hasOne(String count) {
         return Integer.parseInt(count) <= 1;
     }
 }

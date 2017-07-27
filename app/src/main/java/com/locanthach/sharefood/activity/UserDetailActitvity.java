@@ -23,6 +23,7 @@ import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.model.User;
 import com.locanthach.sharefood.ui.NumberAnimTextView;
+import com.locanthach.sharefood.utils.ParseRelativeData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,16 +39,25 @@ import es.dmoral.toasty.Toasty;
 
 public class UserDetailActitvity extends AppCompatActivity {
 
-    @BindView(R.id.imgUser) CircleImageView imgUser;
-    @BindView(R.id.add_image_button) ImageView add_image_button;
-    @BindView(R.id.tvUsername) TextView tvUsername;
-    @BindView(R.id.like_count) NumberAnimTextView like_count;
-    @BindView(R.id.post_count) NumberAnimTextView post_count;
-    @BindView(R.id.view_count) NumberAnimTextView view_count;
+    @BindView(R.id.imgUser)
+    CircleImageView imgUser;
+    @BindView(R.id.add_image_button)
+    ImageView add_image_button;
+    @BindView(R.id.tvUsername)
+    TextView tvUsername;
+    @BindView(R.id.like_count)
+    NumberAnimTextView like_count;
+    @BindView(R.id.post_count)
+    NumberAnimTextView post_count;
+    @BindView(R.id.view_count)
+    NumberAnimTextView view_count;
 
     public final static int PICK_PHOTO_CODE = 1046;
     private String userPhotoURL = null;
     private User user;
+    private int mTotalLike = 0;
+    private int mTotalView = 0;
+    private int mTotalPost = 0;
 
     //FIREBASE
     private FirebaseAuth firebaseAuth;
@@ -61,7 +71,82 @@ public class UserDetailActitvity extends AppCompatActivity {
         setUpview();
         setUpFireBase();
         getCurrentUser();
+        countTotalLike();
+        countTotalView();
+        countTotalPost();
         eventClickButton();
+    }
+
+    private void countTotalLike() {
+        databaseReference.child(FireBaseConfig.USER_POSTS_CHILD)
+                .child(FireBaseConfig.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            int likeCount = Integer.parseInt(child.child("likeCount")
+                                    .getValue(String.class));
+                            mTotalLike = mTotalLike + likeCount;
+                        }
+                        if (ParseRelativeData.hasOne(String.valueOf(mTotalLike))) {
+                            like_count.setText(String.valueOf(mTotalLike) + " like");
+                        } else {
+                            like_count.setText(String.valueOf(mTotalLike) + " likes");
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+    private void countTotalView() {
+        databaseReference.child(FireBaseConfig.USER_POSTS_CHILD)
+                .child(FireBaseConfig.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            int viewCount = Integer.parseInt(child.child("viewCount")
+                                    .getValue(String.class));
+                            mTotalView = mTotalView + viewCount;
+                        }
+                        if (ParseRelativeData.hasOne(String.valueOf(mTotalView))) {
+                            view_count.setText(String.valueOf(mTotalView) + " view");
+                        } else {
+                            view_count.setText(String.valueOf(mTotalView) + " views");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+    private void countTotalPost() {
+        databaseReference.child(FireBaseConfig.USER_POSTS_CHILD)
+                .child(FireBaseConfig.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        mTotalPost = (int) dataSnapshot.getChildrenCount();
+                        if (ParseRelativeData.hasOne(String.valueOf(mTotalPost))) {
+                            post_count.setText(String.valueOf(mTotalPost) + " post");
+                        } else {
+                            post_count.setText(String.valueOf(mTotalPost) + " posts");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     private void getCurrentUser() {
@@ -78,7 +163,7 @@ public class UserDetailActitvity extends AppCompatActivity {
                             if (user.getProfileImageUrl() != null) {
                                 Glide.with(UserDetailActitvity.this)
                                         .load(user.getProfileImageUrl()).override(104, 104).fitCenter().into(imgUser);
-                            }else{
+                            } else {
 
                             }
                         }
@@ -132,7 +217,7 @@ public class UserDetailActitvity extends AppCompatActivity {
                                         User user = dataSnapshot.getValue(User.class);
                                         if (user != null) {
                                             tvUsername.setText(user.getName());
-                                            if ( user.getProfileImageUrl() != null) {
+                                            if (user.getProfileImageUrl() != null) {
                                                 Glide.with(UserDetailActitvity.this)
                                                         .load(user.getProfileImageUrl()).override(104, 104).fitCenter().into(imgUser);
                                             }

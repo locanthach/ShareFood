@@ -40,7 +40,7 @@
                     android:id="@+id/imgUser"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@{user.profileImageUrl}"
+                    app:image="@{user.profileImageUrl}"
                     tools:src="@drawable/saigon" />
 
                 <TextView

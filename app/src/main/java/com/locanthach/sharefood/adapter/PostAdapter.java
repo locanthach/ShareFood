@@ -1,7 +1,6 @@
 package com.locanthach.sharefood.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -25,6 +24,7 @@ import java.util.List;
 public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     private final ArrayList<Post> posts;
     private final ArrayList<User> users;
+    private String uid;
     private final Context context;
     private static final String STATE = "listState";
 
@@ -46,9 +46,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         for (User user : users) {
             if (posts.get(position).getUid().equals(user.getId())) {
                 postOwner = user;
+                postOwner.setId(user.getId());
             }
         }
-        holder.bind(posts.get(position), postOwner);
+        holder.bind(context, posts.get(position), postOwner, uid);
 //        holder.itemView.setOnClickListener(v -> {
 //            Intent intent = new Intent(context, PostDetailActivity.class);
 //            intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, posts.get(position));
@@ -59,6 +60,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     @Override
     public int getItemCount() {
         return posts.size();
+    }
+
+    public void setCurrentUid(String uid) {
+        this.uid = uid;
     }
 
     public void setPosts(List<Post> data) {
