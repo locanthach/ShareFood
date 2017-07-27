@@ -32,5 +32,6 @@
     <color name="yellow500">#FFEB3B</color>
     <color name="green500">#4CAF50</color>
     <color name="transparent99">#99000000</color>
+    <color name="greyBackGround">#E6E6E6</color>
 
 </resources>

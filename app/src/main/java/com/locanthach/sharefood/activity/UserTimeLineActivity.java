@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -64,6 +65,9 @@ public class UserTimeLineActivity extends AppCompatActivity {
     @BindView(R.id.tvUsername) TextView tvUsername;
     @BindView(R.id.tvEmail) TextView tvEmail;
     private MaterialEditText etRepost;
+    private ImageView imgPost;
+    private TextView tvUsernamePost;
+    private TextView tvStatus;
 
     private UserTimeLineAdapter userTimeLineAdapter;
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -165,17 +169,26 @@ public class UserTimeLineActivity extends AppCompatActivity {
         MaterialDialog dialog = new MaterialDialog.Builder(UserTimeLineActivity.this)
                 .backgroundColorRes(R.color.colorPrimary)
                 .customView(R.layout.repost_dialog, wrapInScrollView)
+                .backgroundColorRes(R.color.greyBackGround)
                 .positiveText("Post")
                 .positiveColorRes(R.color.colorPrimary)
                 .cancelable(true)
                 .build();
 
-        setUpViewforDialog(dialog);
+        setUpViewforDialog(dialog, post);
     }
 
-    private void setUpViewforDialog(MaterialDialog dialog) {
+    private void setUpViewforDialog(MaterialDialog dialog, Post post) {
         etRepost = (MaterialEditText) dialog.findViewById(R.id.etRepost);
+        imgPost = (ImageView) dialog.findViewById(R.id.imgPost);
+        tvUsernamePost = (TextView) dialog.findViewById(R.id.tvUsernamePost);
+        tvStatus = (TextView) dialog.findViewById(R.id.tvStatus);
 
+        Glide.with(this).load(post.getPhotoUrl()).override(56,56).animate(R.anim.slide_in_left).into(imgPost);
+        tvUsernamePost.setText(post.getAuthor());
+        tvStatus.setText(post.getContent());
+
+        dialog.show();
     }
 
     private void setUpFireBase() {
