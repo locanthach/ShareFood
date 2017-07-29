@@ -12,6 +12,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.adapter.CommentAdapter;
 import com.locanthach.sharefood.common.FireBaseConfig;
@@ -31,6 +33,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POST = "post";
 
+    private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mPostReference;
     private DatabaseReference mCommentsReference;
     private ValueEventListener mPostListener;
@@ -55,6 +58,8 @@ public class PostDetailActivity extends AppCompatActivity {
         initDatabase();
         setUpView();
         increaseViewCount(mPost);
+        setUpLike();
+        setFont();
     }
 
     private void setUpView() {
@@ -62,10 +67,12 @@ public class PostDetailActivity extends AppCompatActivity {
         binding.btnComment.setOnClickListener(v -> {
             postComment();
         });
+
     }
 
     private void initDatabase() {
         // Initialize Database
+        firebaseDatabase = FirebaseDatabase.getInstance();
         mPostReference = FirebaseDatabase.getInstance().getReference()
                 .child("posts").child(mPostKey);
         mCommentsReference = FirebaseDatabase.getInstance().getReference()
@@ -85,7 +92,6 @@ public class PostDetailActivity extends AppCompatActivity {
                 // [START_EXCLUDE]
                 binding.setPost(post);
                 loadImage(binding.ivCover, mPost.getPhotoUrl());
-                setFont();
                 // [END_EXCLUDE]
             }
 
@@ -156,6 +162,64 @@ public class PostDetailActivity extends AppCompatActivity {
         binding.tvLikeCount.setTypeface(EasyFonts.robotoLight(PostDetailActivity.this));
         binding.tvViews.setTypeface(EasyFonts.robotoLight(PostDetailActivity.this));
         binding.tvTime.setTypeface(EasyFonts.robotoLight(PostDetailActivity.this));
+    }
+
+    private void setUpLike() {
+        String userId = FireBaseConfig.getUid();
+        binding.btnLike.setLiked(isLiked(mPost, userId));
+        binding.btnLike.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+                Post post = mPost;
+                String key = post.getId();
+                post = like(userId, post);
+                Map<String, Object> postValues = post.toMap();
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put("/posts/" + key, postValues);
+                childUpdates.put("/user-posts/" + post.getUid() + "/" + key, postValues);
+                firebaseDatabase.getReference().updateChildren(childUpdates);
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+                Post post = mPost;
+                String key = post.getId();
+                post = disLike(userId, post);
+                Map<String, Object> postValues = post.toMap();
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put("/posts/" + key, postValues);
+                childUpdates.put("/user-posts/" + post.getUid() + "/" + key, postValues);
+                firebaseDatabase.getReference().updateChildren(childUpdates);
+            }
+        });
+    }
+
+    private boolean isLiked(Post post, String userId) {
+        Map<String, Boolean> likes = post.getLikes();
+        if (!likes.containsKey(userId)) {
+            likes.put(userId, false);
+        }
+        return likes.get(userId);
+    }
+
+    private Post like(String userId, Post post) {
+        Post temp = post;
+        Map<String, Boolean> likes = temp.getLikes();
+        likes.put(userId, true);
+        int likeCount = Integer.parseInt(temp.getLikeCount()) + 1;
+        temp.setLikeCount(String.valueOf(likeCount));
+        temp.setLikes(likes);
+        return temp;
+    }
+
+    private Post disLike(String userId, Post post) {
+        Post temp = post;
+        Map<String, Boolean> likes = temp.getLikes();
+        likes.put(userId, false);
+        int likeCount = Integer.parseInt(temp.getLikeCount()) - 1;
+        temp.setLikeCount(String.valueOf(likeCount));
+        temp.setLikes(likes);
+        return temp;
     }
 
     private void increaseViewCount(Post post) {

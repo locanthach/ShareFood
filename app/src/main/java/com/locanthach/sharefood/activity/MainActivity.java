@@ -1,29 +1,35 @@
 package com.locanthach.sharefood.activity;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
-import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -80,32 +86,20 @@ public class MainActivity extends AppCompatActivity {
     private List<User> users;
     private User currentUser;
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.drawerLayout)
-    DrawerLayout drawerLayout;
-    @BindView(R.id.nvView)
-    NavigationView navigationView;
-    @BindView(R.id.shimmer_recycler_view)
-    ShimmerRecyclerView rvPost;
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
-    @BindView(R.id.swipeContainer)
-    SwipeRefreshLayout swipeContainer;
-    @BindView(R.id.sign_out_button)
-    LinearLayout sign_out_button;
-    @BindView(R.id.profile_button)
-    LinearLayout profile_button;
-    @BindView(R.id.home_button)
-    LinearLayout home_button;
-    @BindView(R.id.timeline_button)
-    LinearLayout timeline_button;
-    @BindView(R.id.imgUser)
-    CircleImageView imgUser;
-    @BindView(R.id.tvUsername)
-    TextView tvUsername;
-    @BindView(R.id.tvEmail)
-    TextView tvEmail;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.drawerLayout) DrawerLayout drawerLayout;
+    @BindView(R.id.nvView) NavigationView navigationView;
+    @BindView(R.id.shimmer_recycler_view) RecyclerView rvPost;
+    @BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
+    @BindView(R.id.sign_out_button) LinearLayout sign_out_button;
+    @BindView(R.id.profile_button) LinearLayout profile_button;
+    @BindView(R.id.home_button) LinearLayout home_button;
+    @BindView(R.id.timeline_button) LinearLayout timeline_button;
+    @BindView(R.id.imgUser) CircleImageView imgUser;
+    @BindView(R.id.tvUsername) TextView tvUsername;
+    @BindView(R.id.tvEmail) TextView tvEmail;
+    @BindView(R.id.progress_bar) ProgressBar progress_bar;
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
@@ -135,8 +129,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             onRestoreInstanceState(savedInstanceState);
         }
-
-
+        setUpListenDataChange();
     }
 
     private void setUpDrawerLayout() {
@@ -188,7 +181,6 @@ public class MainActivity extends AppCompatActivity {
         postAdapter = new PostAdapter(this);
         rvPost.setAdapter(postAdapter);
         rvPost.setLayoutManager(new LinearLayoutManager(this));
-        rvPost.showShimmerAdapter();
 
         setUpRefresh();
         handleClickEvent();
@@ -290,8 +282,56 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         EventBus.getDefault().unregister(this);
-        super.onPause();
         firebaseAuth.removeAuthStateListener(authStateListener);
+        super.onPause();
+    }
+
+    private void setUpListenDataChange() {
+        postsDBRef.child(FireBaseConfig.POSTS_CHILD)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        long count = dataSnapshot.getChildrenCount();
+                        if (hasNewPost(count) && postAdapter.getItemCount() > 0) {
+                            Post newPost = new Post();
+                            for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                newPost = child.getValue(Post.class);
+                            }
+                            sendNotification(newPost.getAuthor() + " shared food at "
+                                    + newPost.getLocation());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+    private void sendNotification(String messageBody) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_stat_ic_notification)
+                .setContentTitle("Share Food Message")
+                .setContentText(messageBody)
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    private boolean hasNewPost(long count) {
+        return count > postAdapter.getItemCount();
     }
 
     private void fetchPosts() {
@@ -308,7 +348,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         Collections.reverse(posts);
                         postAdapter.setPosts(posts);
-                        rvPost.hideShimmerAdapter();
+                        progress_bar.setVisibility(View.GONE);
                     }
 
                     @Override
@@ -331,7 +371,6 @@ public class MainActivity extends AppCompatActivity {
                             users.add(user);
                         }
                         postAdapter.setUsers(users);
-                        rvPost.hideShimmerAdapter();
                     }
 
                     @Override

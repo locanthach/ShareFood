@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.utils.ParseRelativeData;
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,19 +28,12 @@ public class UserTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     List<Post> posts;
     private Context context;
-    private GiveAwayListener giveAwayListener;
     private RepostListener repostListener;
 
-    public interface GiveAwayListener {
-        void onItemClick(Post post);
-    }
     public interface RepostListener {
         void onItemClick(Post post);
     }
 
-    public void setGiveAwayListener(GiveAwayListener listener) {
-        this.giveAwayListener = listener;
-    }
     public void setRepostListener(RepostListener listener) {
         this.repostListener = listener;
     }
@@ -60,11 +54,9 @@ public class UserTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ViewHolder viewHolder = (ViewHolder) holder;
         Glide.with(context).load(post.getPhotoUrl()).placeholder(R.drawable.ic_placeholder_food_image).animate(R.anim.slide_in_right).centerCrop().into(viewHolder.imgFood);
         viewHolder.tvTime.setText(post.getRelativeTime());
-        viewHolder.giveAway_button.setOnClickListener(v -> {
-            if (giveAwayListener != null) {
-                giveAwayListener.onItemClick(post);
-            }
-        });
+        //Set up given button on click listener
+        viewHolder.giveAway_button.setOnClickListener(v -> EventBus.getDefault()
+                .post(new GivenEvent(post)));
         viewHolder.repost_button.setOnClickListener(v -> {
             if (repostListener != null) {
                 repostListener.onItemClick(post);
@@ -112,6 +104,14 @@ public class UserTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+    }
+
+    public static class GivenEvent {
+        public final Post post;
+
+        public GivenEvent(Post post) {
+            this.post = post;
         }
     }
 }

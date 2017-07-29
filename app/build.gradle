@@ -53,6 +53,7 @@ dependencies {
     //QRcode scan
     compile 'me.dm7.barcodescanner:zxing:1.9.4'
     //RecylerView animation
+    compile 'com.marshalchen.ultimaterecyclerview:library:0.7.3'
     compile 'com.github.sharish:ShimmerRecyclerView:v1.0.1'
     //Custom Toast
     compile 'com.github.GrenderG:Toasty:1.2.5'

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
@@ -29,15 +30,21 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.adapter.UserTimeLineAdapter;
+import com.locanthach.sharefood.common.Constant;
 import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.model.User;
 import com.locanthach.sharefood.utils.StringUtils;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -130,15 +137,25 @@ public class UserTimeLineActivity extends AppCompatActivity {
                 });
     }
 
-    private void handleEventClick() {
-        userTimeLineAdapter.setGiveAwayListener(post -> {
+    @Subscribe
+    public void onEvent(UserTimeLineAdapter.GivenEvent event) {
+        Post post = event.post;
+        post.setStatus(String.valueOf(Constant.STATUS_GIVEN));
+        String key = post.getId();
+        Map<String, Object> postValues = post.toMap();
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/posts/" + key, postValues);
+        childUpdates.put("/user-posts/" + post.getUid() + "/" + key, postValues);
+        postsDBRef.updateChildren(childUpdates);
+        Toast.makeText(this, "Given", Toast.LENGTH_SHORT).show();
+    }
 
-        });
+    private void handleEventClick() {
         userTimeLineAdapter.setRepostListener(post -> {
             showRepostDialog(post);
         });
 
-        profile_button.setOnClickListener(v ->{
+        profile_button.setOnClickListener(v -> {
             startActivity(new Intent(UserTimeLineActivity.this, UserDetailActitvity.class));
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         });
@@ -184,7 +201,7 @@ public class UserTimeLineActivity extends AppCompatActivity {
         tvUsernamePost = (TextView) dialog.findViewById(R.id.tvUsernamePost);
         tvStatus = (TextView) dialog.findViewById(R.id.tvStatus);
 
-        Glide.with(this).load(post.getPhotoUrl()).override(56,56).animate(R.anim.slide_in_left).into(imgPost);
+        Glide.with(this).load(post.getPhotoUrl()).override(56, 56).animate(R.anim.slide_in_left).into(imgPost);
         tvUsernamePost.setText(post.getAuthor());
         tvStatus.setText(post.getContent());
 
@@ -205,7 +222,7 @@ public class UserTimeLineActivity extends AppCompatActivity {
         toolbar_title.setText(StringUtils.usernameFromEmail(mFirebaseUser.getEmail()));
         userTimeLineAdapter = new UserTimeLineAdapter(this);
         rvPost.setAdapter(userTimeLineAdapter);
-        rvPost.setLayoutManager(new GridLayoutManager(this,2));
+        rvPost.setLayoutManager(new GridLayoutManager(this, 2));
         rvPost.showShimmerAdapter();
     }
 
@@ -216,6 +233,7 @@ public class UserTimeLineActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         setUpNavigationDrawer();
     }
+
     private void setUpNavigationDrawer() {
         postsDBRef.child(FireBaseConfig.USERS_CHILD)
                 .child(FireBaseConfig.getUid())
@@ -231,8 +249,7 @@ public class UserTimeLineActivity extends AppCompatActivity {
                                         .override(58, 58)
                                         .centerCrop()
                                         .into(imgUser);
-                            }else{
-
+                            } else {
                             }
                         }
                     }
@@ -270,5 +287,17 @@ public class UserTimeLineActivity extends AppCompatActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         actionBarDrawerToggle.syncState();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onPause() {
+        EventBus.getDefault().unregister(this);
+        super.onPause();
     }
 }

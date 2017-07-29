@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="post"
+            type="com.locanthach.sharefood.model.Post" />
+
+        <variable
+            name="user"
+            type="com.locanthach.sharefood.model.User" />
+    </data>
+
+    <ImageView
+        android:id="@+id/imgPost"
+        android:layout_width="match_parent"
+        android:layout_height="104dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:scaleType="centerCrop"
+        app:image="@{post.photoUrl}"
+        tools:src="@drawable/saigon" />
+</layout>

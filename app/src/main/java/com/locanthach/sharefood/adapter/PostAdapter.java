@@ -50,11 +50,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
             }
         }
         holder.bind(context, posts.get(position), postOwner, uid);
-//        holder.itemView.setOnClickListener(v -> {
-//            Intent intent = new Intent(context, PostDetailActivity.class);
-//            intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, posts.get(position));
-//            context.startActivity(intent);
-//        });
     }
 
     @Override

@@ -27,7 +27,7 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="?attr/colorPrimary"
+                    android:background="#ff303030"
                     app:titleTextColor="@color/white">
 
                     <TextView
@@ -51,13 +51,21 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:indeterminateTint="?android:colorAccent"
+                android:indeterminateTintMode="src_in" />
             <android.support.v4.widget.SwipeRefreshLayout
                 android:id="@+id/swipeContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
 
-                <com.cooltechworks.views.shimmer.ShimmerRecyclerView
+                <android.support.v7.widget.RecyclerView
                     android:id="@+id/shimmer_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
