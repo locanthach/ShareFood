@@ -1,4 +1,4 @@
-package com.locanthach.sharefood.utils;
+package com.locanthach.sharefood.util;
 
 import android.animation.Animator;
 import android.content.Context;

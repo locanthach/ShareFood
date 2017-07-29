@@ -1,6 +1,6 @@
 package com.locanthach.sharefood.model;
 
-import com.locanthach.sharefood.utils.ParseRelativeData;
+import com.locanthach.sharefood.util.ParseRelativeData;
 
 import java.io.Serializable;
 import java.text.DateFormat;

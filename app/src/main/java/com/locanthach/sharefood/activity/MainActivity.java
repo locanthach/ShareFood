@@ -44,9 +44,9 @@ import com.locanthach.sharefood.adapter.PostAdapter;
 import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.model.User;
-import com.locanthach.sharefood.utils.FileUtils;
-import com.locanthach.sharefood.utils.PermissionUtils;
-import com.locanthach.sharefood.utils.StringUtils;
+import com.locanthach.sharefood.util.FileUtils;
+import com.locanthach.sharefood.util.PermissionUtils;
+import com.locanthach.sharefood.util.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

@@ -1,4 +1,4 @@
-package com.locanthach.sharefood.utils;
+package com.locanthach.sharefood.util;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

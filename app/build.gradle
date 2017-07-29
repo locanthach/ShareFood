@@ -51,6 +51,10 @@ dependencies {
     compile 'com.daimajia.easing:library:2.0@aar'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.daimajia.androidanimations:library:2.2@aar'
+    //ElasticDragDismissLinearLayout
+    compile 'com.github.Commit451:ElasticDragDismissLayout:1.0.4'
+    //Switch button
+    compile 'com.github.zcweng:switch-button:0.0.3@aar'
     //QRcode scan
     compile 'me.dm7.barcodescanner:zxing:1.9.4'
     //RecylerView animation

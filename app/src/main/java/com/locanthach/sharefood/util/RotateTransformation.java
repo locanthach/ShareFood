@@ -1,8 +1,7 @@
-package com.locanthach.sharefood.utils;
+package com.locanthach.sharefood.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.media.ExifInterface;
 
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;

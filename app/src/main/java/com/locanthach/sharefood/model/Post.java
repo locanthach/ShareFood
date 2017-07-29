@@ -6,15 +6,15 @@ import android.os.Parcelable;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.locanthach.sharefood.common.Constant;
-import com.locanthach.sharefood.utils.ParseRelativeData;
+import com.locanthach.sharefood.util.ParseRelativeData;
 
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.locanthach.sharefood.utils.ParseRelativeData.getRelativeTimeAgo;
-import static com.locanthach.sharefood.utils.ParseRelativeData.getStringCount;
+import static com.locanthach.sharefood.util.ParseRelativeData.getRelativeTimeAgo;
+import static com.locanthach.sharefood.util.ParseRelativeData.getStringCount;
 
 /**
  * Created by An Lee on 7/16/2017.

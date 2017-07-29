@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
-import com.cooltechworks.views.shimmer.ShimmerAdapter;
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,7 +33,7 @@ import com.locanthach.sharefood.common.Constant;
 import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.model.User;
-import com.locanthach.sharefood.utils.StringUtils;
+import com.locanthach.sharefood.util.StringUtils;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import org.greenrobot.eventbus.EventBus;
@@ -49,9 +48,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static com.locanthach.sharefood.R.id.tvEmail;
-import static com.locanthach.sharefood.R.id.tvUsername;
 
 /**
  * Created by phant on 26-Jul-17.

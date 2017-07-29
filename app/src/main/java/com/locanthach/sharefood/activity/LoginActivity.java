@@ -19,8 +19,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.model.User;
-import com.locanthach.sharefood.utils.StringUtils;
-import com.locanthach.sharefood.utils.ToastUtils;
+import com.locanthach.sharefood.util.StringUtils;
+import com.locanthach.sharefood.util.ToastUtils;
 import com.tuyenmonkey.mkloader.MKLoader;
 
 import butterknife.BindView;

@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.model.Post;
-import com.locanthach.sharefood.utils.ParseRelativeData;
+
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;

@@ -12,8 +12,8 @@ import com.locanthach.sharefood.model.User;
 
 import org.greenrobot.eventbus.EventBus;
 
-import static com.locanthach.sharefood.utils.BindingUtil.loadImage;
-import static com.locanthach.sharefood.utils.BindingUtil.loadImageAva;
+import static com.locanthach.sharefood.util.BindingUtil.loadImage;
+import static com.locanthach.sharefood.util.BindingUtil.loadImageAva;
 
 /**
  * Created by An Lee on 7/16/2017.

@@ -32,8 +32,8 @@ import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.model.User;
 import com.locanthach.sharefood.service.MyFirebaseMessagingService;
-import com.locanthach.sharefood.utils.FileUtils;
-import com.locanthach.sharefood.utils.PhotoUtils;
+import com.locanthach.sharefood.util.FileUtils;
+import com.locanthach.sharefood.util.PhotoUtils;
 import com.vstechlab.easyfonts.EasyFonts;
 
 import java.util.HashMap;

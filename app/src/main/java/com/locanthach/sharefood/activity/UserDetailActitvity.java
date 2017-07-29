@@ -23,7 +23,7 @@ import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.model.User;
 import com.locanthach.sharefood.ui.NumberAnimTextView;
-import com.locanthach.sharefood.utils.ParseRelativeData;
+import com.locanthach.sharefood.util.ParseRelativeData;
 
 import java.util.HashMap;
 import java.util.Map;

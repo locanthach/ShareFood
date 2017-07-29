@@ -26,7 +26,7 @@ import com.vstechlab.easyfonts.EasyFonts;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.locanthach.sharefood.utils.BindingUtil.loadImage;
+import static com.locanthach.sharefood.util.BindingUtil.loadImage;
 
 public class PostDetailActivity extends AppCompatActivity {
     private static final String TAG = "PostDetailActivity";

@@ -1,18 +1,11 @@
-package com.locanthach.sharefood.utils;
+package com.locanthach.sharefood.util;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.locanthach.sharefood.activity.MainActivity;
-import com.locanthach.sharefood.activity.PostActivity;
-
 import java.io.IOException;
-
-import es.dmoral.toasty.Toasty;
 
 /**
  * Created by phant on 23-Jul-17.

@@ -1,4 +1,4 @@
-package com.locanthach.sharefood.utils;
+package com.locanthach.sharefood.util;
 
 import android.text.TextUtils;
 import android.widget.EditText;
