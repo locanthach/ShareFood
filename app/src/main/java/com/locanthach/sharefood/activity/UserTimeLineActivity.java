@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
@@ -116,9 +115,11 @@ public class UserTimeLineActivity extends AppCompatActivity {
                         posts = new ArrayList<>();
                         for (DataSnapshot child : dataSnapshot.getChildren()) {
                             Post post = child.getValue(Post.class);
-                            post.setId(child.getKey());
-                            child.getValue();
-                            posts.add(post);
+                            if (Integer.parseInt(post.getStatus()) != Constant.STATUS_DELETED) {
+                                post.setId(child.getKey());
+                                child.getValue();
+                                posts.add(post);
+                            }
                         }
                         Collections.reverse(posts);
                         userTimeLineAdapter.setUserPosts(posts);
@@ -143,7 +144,22 @@ public class UserTimeLineActivity extends AppCompatActivity {
         childUpdates.put("/posts/" + key, postValues);
         childUpdates.put("/user-posts/" + post.getUid() + "/" + key, postValues);
         postsDBRef.updateChildren(childUpdates);
-        Toast.makeText(this, "Given", Toast.LENGTH_SHORT).show();
+        posts.set(event.position, post);
+        userTimeLineAdapter.notifyItemChanged(event.position);
+    }
+
+    @Subscribe
+    public void onEvent(UserTimeLineAdapter.DeleteEvent event) {
+        Post post = event.post;
+        post.setStatus(String.valueOf(Constant.STATUS_DELETED));
+        String key = post.getId();
+        Map<String, Object> postValues = post.toMap();
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/posts/" + key, postValues);
+        childUpdates.put("/user-posts/" + post.getUid() + "/" + key, postValues);
+        postsDBRef.updateChildren(childUpdates);
+        posts.remove(event.position);
+        userTimeLineAdapter.notifyItemRemoved(event.position);
     }
 
     private void handleEventClick() {

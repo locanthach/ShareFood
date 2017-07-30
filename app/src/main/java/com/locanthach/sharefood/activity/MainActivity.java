@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        getSupportActionBar().setHomeButtonEnabled(true);
-        postAdapter = new PostAdapter(this);
+        postAdapter = new PostAdapter();
         rvPost.setAdapter(postAdapter);
         rvPost.setLayoutManager(new LinearLayoutManager(this));
 

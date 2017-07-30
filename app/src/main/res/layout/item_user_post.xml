@@ -31,6 +31,7 @@
                     android:scaleType="fitCenter"
                     tools:src="@drawable/ic_placeholder_food_image" />
                 <com.haozhang.lib.SlantedTextView
+                    android:id="@+id/stvStatus"
                     android:layout_gravity="end"
                     android:layout_width="80dp"
                     android:layout_height="80dp"

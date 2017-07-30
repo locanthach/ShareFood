@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.haozhang.lib.SlantedTextView;
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.model.Post;
 
@@ -19,6 +20,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.locanthach.sharefood.common.Constant.STATUS_GIVEN;
 
 /**
  * Created by phant on 26-Jul-17.
@@ -55,13 +58,31 @@ public class UserTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         Glide.with(context).load(post.getPhotoUrl()).placeholder(R.drawable.ic_placeholder_food_image).animate(R.anim.slide_in_right).centerCrop().into(viewHolder.imgFood);
         viewHolder.tvTime.setText(post.getRelativeTime());
         //Set up given button on click listener
-        viewHolder.giveAway_button.setOnClickListener(v -> EventBus.getDefault()
-                .post(new GivenEvent(post)));
+        viewHolder.giveAway_button.setOnClickListener(v -> {
+            EventBus.getDefault()
+                    .post(new GivenEvent(post, position));
+            viewHolder.stvStatus.setText("Given").setVisibility(View.VISIBLE);
+        });
+        //Set up delete button on click listener
+//        viewHolder.delete_button.setOnClickListener(v -> EventBus.getDefault()
+//                .post(new DeleteEvent(post, position)));
+        //Set up repost button on click listener
         viewHolder.repost_button.setOnClickListener(v -> {
             if (repostListener != null) {
                 repostListener.onItemClick(post);
             }
         });
+        //Set on long click listener
+        viewHolder.imgFood.setOnLongClickListener(v -> {
+            // TODO Something
+            return true;
+        });
+        viewHolder.stvStatus.setVisibility(View.GONE);
+        //If post is given ...
+        if (Integer.parseInt(post.getStatus()) == STATUS_GIVEN) {
+            // TODO Something
+            viewHolder.stvStatus.setText("Given").setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -92,6 +113,8 @@ public class UserTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.stvStatus)
+        SlantedTextView stvStatus;
         @BindView(R.id.imgFood)
         ImageView imgFood;
         @BindView(R.id.tvTime)
@@ -109,9 +132,21 @@ public class UserTimeLineAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public static class GivenEvent {
         public final Post post;
+        public final int position;
 
-        public GivenEvent(Post post) {
+        public GivenEvent(Post post, int position) {
             this.post = post;
+            this.position = position;
+        }
+    }
+
+    public static class DeleteEvent {
+        public final Post post;
+        public final int position;
+
+        public DeleteEvent(Post post, int position) {
+            this.post = post;
+            this.position = position;
         }
     }
 }

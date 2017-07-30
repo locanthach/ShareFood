@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -16,6 +17,7 @@ import com.like.LikeButton;
 import com.like.OnLikeListener;
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.adapter.CommentAdapter;
+import com.locanthach.sharefood.common.Constant;
 import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.databinding.ActivityPostDetailBinding;
 import com.locanthach.sharefood.model.Comment;
@@ -59,6 +61,7 @@ public class PostDetailActivity extends AppCompatActivity {
         setUpView();
         increaseViewCount(mPost);
         setUpLike();
+        setUpStatusPost(mPost);
         setFont();
     }
 
@@ -233,5 +236,12 @@ public class PostDetailActivity extends AppCompatActivity {
         childUpdates.put("/user-posts/" + post.getUid() + "/" + key, postValues);
 
         FirebaseDatabase.getInstance().getReference().updateChildren(childUpdates);
+    }
+
+    private void setUpStatusPost(Post post) {
+        binding.stvStatus.setVisibility(View.GONE);
+        if (Integer.parseInt(post.getStatus()) == Constant.STATUS_GIVEN) {
+            binding.stvStatus.setText("Given").setVisibility(View.VISIBLE);
+        }
     }
 }

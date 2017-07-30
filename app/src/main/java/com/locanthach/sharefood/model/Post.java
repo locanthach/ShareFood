@@ -44,7 +44,7 @@ public class Post implements Parcelable {
         this.photoUrl = photoUrl;
         this.location = location;
         this.time = DateFormat.getDateTimeInstance().format(new Date());
-        this.status = String.valueOf(Constant.STATUS_AVAIABLE);
+        this.status = String.valueOf(Constant.STATUS_AVAILABLE);
         this.likeCount = String.valueOf(0);
         this.viewCount = String.valueOf(0);
     }

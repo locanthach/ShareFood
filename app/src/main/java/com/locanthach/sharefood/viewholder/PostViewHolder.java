@@ -3,9 +3,11 @@ package com.locanthach.sharefood.viewholder;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.adapter.PostAdapter;
+import com.locanthach.sharefood.common.Constant;
 import com.locanthach.sharefood.databinding.ItemPostBinding;
 import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.model.User;
@@ -22,6 +24,7 @@ import static com.locanthach.sharefood.util.BindingUtil.loadImageAva;
 
 public class PostViewHolder extends RecyclerView.ViewHolder {
     public final ItemPostBinding binding;
+    private Context context;
 
     public PostViewHolder(ItemPostBinding binding) {
         super(binding.getRoot());
@@ -39,6 +42,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 //    }
 //
     public void bind(Context context, Post post, User user, String currentUid) {
+        this.context = context;
         binding.setPost(post);
         binding.setUser(user);
         //Deactive like icon
@@ -48,17 +52,25 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 .setColorFilter(context.getResources().getColor(R.color.blueGrey800),
                         PorterDuff.Mode.SRC_IN);
         if (islike(post, currentUid)) {
-            //If logging user like post, active like icon
+            //If user liked post, active like icon
             binding.btnLike
                     .getDrawable()
                     .mutate()
                     .setColorFilter(context.getResources().getColor(R.color.red400),
                             PorterDuff.Mode.SRC_IN);
         }
+        setUpStatusPost(post);
         setUpLikeClick();
         setImagePostClick();
         loadImageAva(binding.imgUser, user.getProfileImageUrl());
         loadImage(binding.imgPost, post.getPhotoUrl());
+    }
+
+    private void setUpStatusPost(Post post) {
+        binding.stvStatus.setVisibility(View.GONE);
+        if (Integer.parseInt(post.getStatus()) == Constant.STATUS_GIVEN) {
+            binding.stvStatus.setText("Given").setVisibility(View.VISIBLE);
+        }
     }
 
     private boolean islike(Post post, String currentUid) {

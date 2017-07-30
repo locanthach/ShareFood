@@ -69,14 +69,33 @@
                     tools:text="5 minute ago" />
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imgPost"
-                android:layout_width="match_parent"
-                android:layout_height="208sp"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                app:image="@{post.photoUrl}"
-                tools:src="@drawable/bg_home" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imgPost"
+                    android:layout_width="match_parent"
+                    android:layout_height="208sp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    app:image="@{post.photoUrl}"
+                    tools:src="@drawable/bg_home" />
+
+                <com.haozhang.lib.SlantedTextView
+                    android:id="@+id/stvStatus"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center"
+                    app:slantedBackgroundColor="@color/colorPrimaryDark"
+                    app:slantedLength="40dp"
+                    app:slantedMode="right"
+                    app:slantedText="Android"
+                    app:slantedTextColor="@color/black"
+                    app:slantedTextSize="16sp" />
+            </RelativeLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"

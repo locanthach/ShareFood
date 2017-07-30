@@ -89,7 +89,7 @@
             app:borderWidth="0dp"
             app:layout_anchor="@id/shimmer_recycler_view"
             app:layout_anchorGravity="bottom|end"
-            app:layout_behavior="com.locanthach.sharefood.utils.ScrollAwareFABBehavior" />
+            app:layout_behavior="com.locanthach.sharefood.util.ScrollAwareFABBehavior" />
 
     </android.support.design.widget.CoordinatorLayout>
 

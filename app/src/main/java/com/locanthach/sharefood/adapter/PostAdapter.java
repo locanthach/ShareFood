@@ -25,17 +25,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     private final ArrayList<Post> posts;
     private final ArrayList<User> users;
     private String uid;
-    private final Context context;
+    private Context context;
     private static final String STATE = "listState";
 
-    public PostAdapter(Context context) {
+    public PostAdapter() {
         this.posts = new ArrayList<>();
         this.users = new ArrayList<>();
-        this.context = context;
     }
 
     @Override
     public PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        this.context = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         return new PostViewHolder(DataBindingUtil.inflate(layoutInflater, R.layout.item_post, parent, false));
     }

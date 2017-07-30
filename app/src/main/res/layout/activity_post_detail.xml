@@ -43,15 +43,33 @@
                         android:layout_height="256sp"
                         android:background="#30000000">
 
-                        <ImageView
-                            android:id="@+id/ivCover"
-                            android:layout_width="match_parent"
-                            android:layout_height="256sp"
-                            android:adjustViewBounds="true"
-                            android:background="@color/white"
-                            android:scaleType="centerCrop"
-                            android:src="@{post.photoUrl}"
-                            tools:src="@drawable/saigon" />
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/ivCover"
+                                android:layout_width="match_parent"
+                                android:layout_height="256sp"
+                                android:adjustViewBounds="true"
+                                android:background="@color/white"
+                                android:scaleType="centerCrop"
+                                android:src="@{post.photoUrl}"
+                                tools:src="@drawable/saigon" />
+
+                            <com.haozhang.lib.SlantedTextView
+                                android:id="@+id/stvStatus"
+                                android:layout_width="96sp"
+                                android:layout_height="96sp"
+                                android:layout_alignParentRight="true"
+                                android:gravity="center"
+                                app:slantedBackgroundColor="@color/colorPrimaryDark"
+                                app:slantedLength="48sp"
+                                app:slantedMode="right"
+                                app:slantedText="Android"
+                                app:slantedTextColor="@color/black"
+                                app:slantedTextSize="24sp" />
+                        </RelativeLayout>
 
                         <TextView
                             android:id="@+id/tvContent"
