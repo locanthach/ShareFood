@@ -104,7 +104,7 @@
                 android:id="@+id/sign_up_button"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimaryDark"
+                android:background="@drawable/nice_button_enabled"
                 android:text="Sign Up"
                 android:textColor="@android:color/white" />
         </com.balysv.materialripple.MaterialRippleLayout>

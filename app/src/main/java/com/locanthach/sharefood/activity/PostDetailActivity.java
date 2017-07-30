@@ -4,8 +4,9 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.View;
 
+import com.commit451.elasticdragdismisslayout.ElasticDragDismissLinearLayout;
+import com.commit451.elasticdragdismisslayout.ElasticDragDismissListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -15,7 +16,6 @@ import com.like.LikeButton;
 import com.like.OnLikeListener;
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.adapter.CommentAdapter;
-import com.locanthach.sharefood.common.Constant;
 import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.databinding.ActivityPostDetailBinding;
 import com.locanthach.sharefood.model.Comment;
@@ -27,10 +27,13 @@ import com.vstechlab.easyfonts.EasyFonts;
 import java.util.HashMap;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class PostDetailActivity extends AppCompatActivity {
     private static final String TAG = "PostDetailActivity";
-
     public static final String EXTRA_POST = "post";
+
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mPostReference;
@@ -48,6 +51,7 @@ public class PostDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_detail);
+
         // Get post key from intent
         mPost = getIntent().getExtras().getParcelable(EXTRA_POST);
         binding.setPost(mPost);
@@ -60,8 +64,19 @@ public class PostDetailActivity extends AppCompatActivity {
         setUpView();
         increaseViewCount(mPost);
         setUpLike();
-        setUpStatusPost(mPost);
+//        setUpStatusPost(mPost);
         setFont();
+
+        binding.draggableFrame.addListener(new ElasticDragDismissListener() {
+            @Override
+            public void onDrag(float elasticOffset, float elasticOffsetPixels, float rawOffset, float rawOffsetPixels) {}
+
+            @Override
+            public void onDragDismissed() {
+                //if you are targeting 21+ you might want to finish after transition
+                finish();
+            }
+        });
     }
 
     private void setUpView() {
@@ -210,10 +225,10 @@ public class PostDetailActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference().updateChildren(childUpdates);
     }
 
-    private void setUpStatusPost(Post post) {
-        binding.stvStatus.setVisibility(View.GONE);
-        if (Integer.parseInt(post.getStatus()) == Constant.STATUS_GIVEN) {
-            binding.stvStatus.setText("Given").setVisibility(View.VISIBLE);
-        }
-    }
+//    private void setUpStatusPost(Post post) {
+//        binding.stvStatus.setVisibility(View.GONE);
+//        if (Integer.parseInt(post.getStatus()) == Constant.STATUS_GIVEN) {
+//            binding.stvStatus.setText("Given").setVisibility(View.VISIBLE);
+//        }
+//    }
 }

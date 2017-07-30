@@ -186,7 +186,9 @@ public class UserTimeLineActivity extends AppCompatActivity {
                 .positiveText("Log out")
                 .onPositive((dialog, which) -> {
                     firebaseAuth.signOut();
-                    startActivity(new Intent(UserTimeLineActivity.this, LoginActivity.class));
+                    Intent intent = new Intent(UserTimeLineActivity.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 })
                 .neutralText("Cancel")

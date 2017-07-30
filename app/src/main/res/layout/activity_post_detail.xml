@@ -10,278 +10,247 @@
             type="com.locanthach.sharefood.model.Post" />
     </data>
 
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/activity_collapsing_toolbar"
+    <com.commit451.elasticdragdismisslayout.ElasticDragDismissRelativeLayout
+        android:id="@+id/draggable_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        tools:context=".activity.PostDetailActivity">
+        android:transitionGroup="false"
+        app:dragDismissDistance="112dp"
+        app:dragDismissScale="0.95">
 
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/appBar"
+        <View
+            android:id="@+id/background"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:background="@color/background_light" />
 
-            <android.support.design.widget.CollapsingToolbarLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fitsSystemWindows="true"
-                app:contentScrim="?attr/colorPrimary"
-                app:expandedTitleMarginEnd="64dp"
-                app:expandedTitleMarginStart="48dp"
-                app:layout_scrollFlags="scroll">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fitsSystemWindows="true"
-                    android:orientation="vertical"
-                    app:layout_collapseMode="parallax">
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="256sp"
-                        android:background="#30000000">
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-                            <ImageView
-                                android:id="@+id/ivCover"
-                                android:layout_width="match_parent"
-                                android:layout_height="256sp"
-                                android:adjustViewBounds="true"
-                                android:background="@color/white"
-                                android:scaleType="centerCrop"
-                                android:src="@{post.photoUrl}"
-                                tools:src="@drawable/saigon" />
-
-                            <com.haozhang.lib.SlantedTextView
-                                android:id="@+id/stvStatus"
-                                android:layout_width="96sp"
-                                android:layout_height="96sp"
-                                android:layout_alignParentRight="true"
-                                android:gravity="center"
-                                app:slantedBackgroundColor="@color/colorPrimaryDark"
-                                app:slantedLength="48sp"
-                                app:slantedMode="right"
-                                app:slantedText="Android"
-                                app:slantedTextColor="@color/black"
-                                app:slantedTextSize="24sp" />
-                        </RelativeLayout>
-
-                        <TextView
-                            android:id="@+id/tvContent"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:background="#50000000"
-                            android:ellipsize="end"
-                            android:fontFamily="sans-serif-medium"
-                            android:maxLines="2"
-                            android:padding="16sp"
-                            android:text="@{post.content}"
-                            android:textColor="@color/white"
-                            android:textSize="20sp"
-                            tools:text="@string/Status" />
-                    </FrameLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:background="#804DB6AC"
-                        android:gravity="center"
-                        android:padding="8dp">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <com.like.LikeButton
-                                android:id="@+id/btnLike"
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_gravity="center"
-                                android:layout_marginBottom="4sp"
-                                app:anim_scale_factor="2"
-                                app:icon_size="20dp"
-                                app:liked="true" />
-
-                            <TextView
-                                android:id="@+id/tvLikeCount"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:fontFamily="sans-serif-light"
-                                android:text="@{post.likeString}"
-                                android:textColor="@color/white"
-                                android:textSize="14sp"
-                                tools:text="342 Likes" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginBottom="4sp"
-                                android:src="@drawable/ic_view" />
-
-                            <TextView
-                                android:id="@+id/tvViews"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:fontFamily="sans-serif-light"
-                                android:text="@{post.viewString}"
-                                android:textColor="@color/white"
-                                android:textSize="14sp"
-                                tools:text="342 Views" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginBottom="4sp"
-                                android:src="@drawable/ic_location" />
-
-                            <TextView
-                                android:id="@+id/tvLocation"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:fontFamily="sans-serif-light"
-                                android:text="@{post.location}"
-                                android:textColor="@color/white"
-                                android:textSize="14sp"
-                                tools:text="Room 3" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:layout_collapseMode="pin" />
-            </android.support.design.widget.CollapsingToolbarLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="4sp"
-                app:elevation="16dp"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/imgUser1"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_margin="8dp"
-                    android:src="@drawable/saigon" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="start|center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tvAuthor"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:text="@{post.author}"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        tools:text="phan.thanhloc1705" />
-
-                    <TextView
-                        android:id="@+id/tvTime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:paddingTop="4sp"
-                        android:text="@{post.relativeTime}"
-                        android:textColor="@color/white"
-                        tools:text="3 minutes ago" />
-                </LinearLayout>
-            </LinearLayout>
-        </android.support.design.widget.AppBarLayout>
-
-        <RelativeLayout
+        <FrameLayout
+            android:id="@+id/imageLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:layout_alignParentTop="true">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rvComments"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_above="@+id/layoutComment"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                tools:listitem="@layout/item_comment" />
-
-            <LinearLayout
-                android:id="@+id/layoutComment"
+            <com.locanthach.sharefood.widget.ParallaxScrimageView
+                android:id="@+id/ivCover"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:background="@color/colorPrimary"
-                android:elevation="10dp"
-                android:orientation="horizontal"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                android:background="@color/light_grey"
+                android:foreground="@drawable/mid_grey_ripple"
+                android:minHeight="128dp"
+                android:src="@{post.photoUrl}"
+                android:stateListAnimator="@animator/app_bar_pin"
+                app:maxScrimAlpha="0.4"
+                app:parallaxFactor="-0.5"
+                app:scrimAlpha="0"
+                app:scrimColor="@color/scrim" />
 
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingLeft="4sp"
-                    android:transitionGroup="true"
-                    app:hintAnimationEnabled="true"
-                    app:hintTextAppearance="@anim/slide_in_left">
+            <TextView
+                android:id="@+id/tvContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="#50000000"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="2"
+                android:padding="16sp"
+                android:text="@{post.content}"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                tools:text="@string/Status" />
+        </FrameLayout>
 
-                    <EditText
-                        android:id="@+id/etComment"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/teal200"
-                        android:hint="@string/reply"
-                        android:textColor="@color/grey300"
-                        tools:text="Reply" />
-                </android.support.design.widget.TextInputLayout>
+        <LinearLayout
+            android:id="@+id/buttonLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageLayout"
+            android:layout_gravity="center"
+            android:clipToPadding="false"
+            android:gravity="center"
+            android:padding="8dp">
 
-                <ImageButton
-                    android:id="@+id/btnComment"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <com.like.LikeButton
+                    android:id="@+id/btnLike"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="4sp"
+                    app:anim_scale_factor="2"
+                    app:icon_size="20dp"
+                    app:liked="true" />
+
+                <TextView
+                    android:id="@+id/tvLikeCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="?android:selectableItemBackgroundBorderless"
-                    android:onClick="postComment"
-                    android:padding="4sp"
-                    android:src="@drawable/ic_send" />
+                    android:fontFamily="sans-serif-light"
+                    android:text="@{post.likeString}"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    tools:text="342 Likes" />
             </LinearLayout>
-        </RelativeLayout>
-        <!--</android.support.v4.widget.NestedScrollView>-->
-    </android.support.design.widget.CoordinatorLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="4sp"
+                    android:src="@drawable/ic_view" />
+
+                <TextView
+                    android:id="@+id/tvViews"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="sans-serif-light"
+                    android:text="@{post.viewString}"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    tools:text="342 Views" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="4sp"
+                    android:src="@drawable/ic_location" />
+
+                <TextView
+                    android:id="@+id/tvLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="sans-serif-light"
+                    android:text="@{post.location}"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    tools:text="Room 3" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/userLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/buttonLayout"
+            android:orientation="horizontal"
+            android:padding="4sp"
+            app:elevation="16dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgUser1"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/saigon" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="start|center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvAuthor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:text="@{post.author}"
+                    android:textColor="@color/dribbble_dark"
+                    android:textStyle="bold"
+                    tools:text="phan.thanhloc1705" />
+
+                <TextView
+                    android:id="@+id/tvTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:paddingTop="4sp"
+                    android:text="@{post.relativeTime}"
+                    android:textColor="@color/black"
+                    tools:text="3 minutes ago" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <!-- dummy view stopping the below RecyclerView from capturing focus which messes up layout -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:focusableInTouchMode="true"
+            android:importantForAccessibility="no" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvComments"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/userLayout"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/padding_normal"
+            android:scrollbarStyle="insideOverlay"
+            android:scrollbars="vertical"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+
+        <LinearLayout
+            android:id="@+id/layoutComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/rvComments"
+            android:background="@color/colorPrimary"
+            android:elevation="10dp"
+            android:orientation="horizontal"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="4sp"
+                android:transitionGroup="true"
+                app:hintAnimationEnabled="true"
+                app:hintTextAppearance="@anim/slide_in_left">
+
+                <EditText
+                    android:id="@+id/etComment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/teal200"
+                    android:hint="@string/reply"
+                    android:textColor="@color/grey300"
+                    tools:text="Reply" />
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageButton
+                android:id="@+id/btnComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:onClick="postComment"
+                android:padding="4sp"
+                android:src="@drawable/ic_send" />
+        </LinearLayout>
+    </com.commit451.elasticdragdismisslayout.ElasticDragDismissRelativeLayout>
 </layout>
