@@ -15,11 +15,9 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
-import com.cooltechworks.views.shimmer.ShimmerAdapter;
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -50,27 +48,36 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.locanthach.sharefood.R.id.tvEmail;
-import static com.locanthach.sharefood.R.id.tvUsername;
-
 /**
  * Created by phant on 26-Jul-17.
  */
 
 public class UserTimeLineActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
-    @BindView(R.id.shimmer_recycler_view) ShimmerRecyclerView rvPost;
-    @BindView(R.id.nvView) NavigationView nvView;
-    @BindView(R.id.sign_out_button) LinearLayout sign_out_button;
-    @BindView(R.id.profile_button) LinearLayout profile_button;
-    @BindView(R.id.timeline_button) LinearLayout timeline_button;
-    @BindView(R.id.drawerLayout) DrawerLayout drawerLayout;
-    @BindView(R.id.home_button) LinearLayout home_button;
-    @BindView(R.id.imgUser) CircleImageView imgUser;
-    @BindView(R.id.tvUsername) TextView tvUsername;
-    @BindView(R.id.tvEmail) TextView tvEmail;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.swipeContainer)
+    SwipeRefreshLayout swipeContainer;
+    @BindView(R.id.shimmer_recycler_view)
+    ShimmerRecyclerView rvPost;
+    @BindView(R.id.nvView)
+    NavigationView nvView;
+    @BindView(R.id.sign_out_button)
+    LinearLayout sign_out_button;
+    @BindView(R.id.profile_button)
+    LinearLayout profile_button;
+    @BindView(R.id.timeline_button)
+    LinearLayout timeline_button;
+    @BindView(R.id.drawerLayout)
+    DrawerLayout drawerLayout;
+    @BindView(R.id.home_button)
+    LinearLayout home_button;
+    @BindView(R.id.imgUser)
+    CircleImageView imgUser;
+    @BindView(R.id.tvUsername)
+    TextView tvUsername;
+    @BindView(R.id.tvEmail)
+    TextView tvEmail;
     private MaterialEditText etRepost;
     private ImageView imgPost;
     private TextView tvUsernamePost;
@@ -120,9 +127,11 @@ public class UserTimeLineActivity extends AppCompatActivity {
                         posts = new ArrayList<>();
                         for (DataSnapshot child : dataSnapshot.getChildren()) {
                             Post post = child.getValue(Post.class);
-                            post.setId(child.getKey());
-                            child.getValue();
-                            posts.add(post);
+                            if (Integer.parseInt(post.getStatus()) != Constant.STATUS_DELETED) {
+                                post.setId(child.getKey());
+                                child.getValue();
+                                posts.add(post);
+                            }
                         }
                         Collections.reverse(posts);
                         userTimeLineAdapter.setUserPosts(posts);
@@ -147,7 +156,22 @@ public class UserTimeLineActivity extends AppCompatActivity {
         childUpdates.put("/posts/" + key, postValues);
         childUpdates.put("/user-posts/" + post.getUid() + "/" + key, postValues);
         postsDBRef.updateChildren(childUpdates);
-        Toast.makeText(this, "Given", Toast.LENGTH_SHORT).show();
+        posts.set(event.position, post);
+        userTimeLineAdapter.notifyItemChanged(event.position);
+    }
+
+    @Subscribe
+    public void onEvent(UserTimeLineAdapter.DeleteEvent event) {
+        Post post = event.post;
+        post.setStatus(String.valueOf(Constant.STATUS_DELETED));
+        String key = post.getId();
+        Map<String, Object> postValues = post.toMap();
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/posts/" + key, postValues);
+        childUpdates.put("/user-posts/" + post.getUid() + "/" + key, postValues);
+        postsDBRef.updateChildren(childUpdates);
+        posts.remove(event.position);
+        userTimeLineAdapter.notifyItemRemoved(event.position);
     }
 
     private void handleEventClick() {
@@ -261,7 +285,9 @@ public class UserTimeLineActivity extends AppCompatActivity {
         tvUsername.setText(StringUtils.usernameFromEmail(firebaseAuth.getCurrentUser().getEmail()));
         tvEmail.setText(firebaseAuth.getCurrentUser().getEmail());
 
-    };
+    }
+
+    ;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

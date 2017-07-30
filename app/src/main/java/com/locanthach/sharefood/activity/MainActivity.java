@@ -41,6 +41,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.adapter.PostAdapter;
+import com.locanthach.sharefood.common.Constant;
 import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.model.User;
@@ -86,20 +87,34 @@ public class MainActivity extends AppCompatActivity {
     private List<User> users;
     private User currentUser;
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.drawerLayout) DrawerLayout drawerLayout;
-    @BindView(R.id.nvView) NavigationView navigationView;
-    @BindView(R.id.shimmer_recycler_view) RecyclerView rvPost;
-    @BindView(R.id.fab) FloatingActionButton fab;
-    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
-    @BindView(R.id.sign_out_button) LinearLayout sign_out_button;
-    @BindView(R.id.profile_button) LinearLayout profile_button;
-    @BindView(R.id.home_button) LinearLayout home_button;
-    @BindView(R.id.timeline_button) LinearLayout timeline_button;
-    @BindView(R.id.imgUser) CircleImageView imgUser;
-    @BindView(R.id.tvUsername) TextView tvUsername;
-    @BindView(R.id.tvEmail) TextView tvEmail;
-    @BindView(R.id.progress_bar) ProgressBar progress_bar;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.drawerLayout)
+    DrawerLayout drawerLayout;
+    @BindView(R.id.nvView)
+    NavigationView navigationView;
+    @BindView(R.id.shimmer_recycler_view)
+    RecyclerView rvPost;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    @BindView(R.id.swipeContainer)
+    SwipeRefreshLayout swipeContainer;
+    @BindView(R.id.sign_out_button)
+    LinearLayout sign_out_button;
+    @BindView(R.id.profile_button)
+    LinearLayout profile_button;
+    @BindView(R.id.home_button)
+    LinearLayout home_button;
+    @BindView(R.id.timeline_button)
+    LinearLayout timeline_button;
+    @BindView(R.id.imgUser)
+    CircleImageView imgUser;
+    @BindView(R.id.tvUsername)
+    TextView tvUsername;
+    @BindView(R.id.tvEmail)
+    TextView tvEmail;
+    @BindView(R.id.progress_bar)
+    ProgressBar progress_bar;
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
@@ -178,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        getSupportActionBar().setHomeButtonEnabled(true);
-        postAdapter = new PostAdapter(this);
+        postAdapter = new PostAdapter();
         rvPost.setAdapter(postAdapter);
         rvPost.setLayoutManager(new LinearLayoutManager(this));
 
@@ -342,9 +357,11 @@ public class MainActivity extends AppCompatActivity {
                         posts = new ArrayList<>();
                         for (DataSnapshot child : dataSnapshot.getChildren()) {
                             Post post = child.getValue(Post.class);
-                            post.setId(child.getKey());
-                            child.getValue();
-                            posts.add(post);
+                            if (Integer.parseInt(post.getStatus()) != Constant.STATUS_DELETED) {
+                                post.setId(child.getKey());
+                                child.getValue();
+                                posts.add(post);
+                            }
                         }
                         Collections.reverse(posts);
                         postAdapter.setPosts(posts);
