@@ -4,9 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,12 +21,11 @@ import com.locanthach.sharefood.databinding.ActivityPostDetailBinding;
 import com.locanthach.sharefood.model.Comment;
 import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.model.User;
+import com.locanthach.sharefood.util.BindingUtil;
 import com.vstechlab.easyfonts.EasyFonts;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.locanthach.sharefood.util.BindingUtil.loadImage;
 
 public class PostDetailActivity extends AppCompatActivity {
     private static final String TAG = "PostDetailActivity";
@@ -53,6 +50,8 @@ public class PostDetailActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_detail);
         // Get post key from intent
         mPost = getIntent().getExtras().getParcelable(EXTRA_POST);
+        binding.setPost(mPost);
+        BindingUtil.loadImage(binding.ivCover, mPost.getPhotoUrl());
         mPostKey = mPost.getId();
         if (mPostKey == null) {
             throw new IllegalArgumentException("Must pass EXTRA_POST_KEY");
@@ -85,35 +84,6 @@ public class PostDetailActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        // Add value event listener to the post
-        // [START post_value_event_listener]
-        ValueEventListener postListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-                Post post = dataSnapshot.getValue(Post.class);
-                // [START_EXCLUDE]
-                binding.setPost(post);
-                loadImage(binding.ivCover, mPost.getPhotoUrl());
-                // [END_EXCLUDE]
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                // [START_EXCLUDE]
-                Toast.makeText(PostDetailActivity.this, "Failed to load post.",
-                        Toast.LENGTH_SHORT).show();
-                // [END_EXCLUDE]
-            }
-        };
-        mPostReference.addValueEventListener(postListener);
-        // [END post_value_event_listener]
-
-        // Keep copy of post listener so we can remove it when app stops
-        mPostListener = postListener;
-
         // Listen for comments
         mAdapter = new CommentAdapter(this, mCommentsReference);
         binding.rvComments.setAdapter(mAdapter);
@@ -181,6 +151,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 childUpdates.put("/posts/" + key, postValues);
                 childUpdates.put("/user-posts/" + post.getUid() + "/" + key, postValues);
                 firebaseDatabase.getReference().updateChildren(childUpdates);
+                binding.tvLikeCount.setText(post.getLikeString());
             }
 
             @Override
@@ -193,6 +164,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 childUpdates.put("/posts/" + key, postValues);
                 childUpdates.put("/user-posts/" + post.getUid() + "/" + key, postValues);
                 firebaseDatabase.getReference().updateChildren(childUpdates);
+                binding.tvLikeCount.setText(post.getLikeString());
             }
         });
     }

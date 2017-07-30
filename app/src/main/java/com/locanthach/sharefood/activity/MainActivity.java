@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.PorterDuff;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -86,20 +87,34 @@ public class MainActivity extends AppCompatActivity {
     private List<User> users;
     private User currentUser;
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.drawerLayout) DrawerLayout drawerLayout;
-    @BindView(R.id.nvView) NavigationView navigationView;
-    @BindView(R.id.shimmer_recycler_view) RecyclerView rvPost;
-    @BindView(R.id.fab) FloatingActionButton fab;
-    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
-    @BindView(R.id.sign_out_button) LinearLayout sign_out_button;
-    @BindView(R.id.profile_button) LinearLayout profile_button;
-    @BindView(R.id.home_button) LinearLayout home_button;
-    @BindView(R.id.timeline_button) LinearLayout timeline_button;
-    @BindView(R.id.imgUser) CircleImageView imgUser;
-    @BindView(R.id.tvUsername) TextView tvUsername;
-    @BindView(R.id.tvEmail) TextView tvEmail;
-    @BindView(R.id.progress_bar) ProgressBar progress_bar;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.drawerLayout)
+    DrawerLayout drawerLayout;
+    @BindView(R.id.nvView)
+    NavigationView navigationView;
+    @BindView(R.id.shimmer_recycler_view)
+    RecyclerView rvPost;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    @BindView(R.id.swipeContainer)
+    SwipeRefreshLayout swipeContainer;
+    @BindView(R.id.sign_out_button)
+    LinearLayout sign_out_button;
+    @BindView(R.id.profile_button)
+    LinearLayout profile_button;
+    @BindView(R.id.home_button)
+    LinearLayout home_button;
+    @BindView(R.id.timeline_button)
+    LinearLayout timeline_button;
+    @BindView(R.id.imgUser)
+    CircleImageView imgUser;
+    @BindView(R.id.tvUsername)
+    TextView tvUsername;
+    @BindView(R.id.tvEmail)
+    TextView tvEmail;
+    @BindView(R.id.progress_bar)
+    ProgressBar progress_bar;
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
@@ -471,16 +486,27 @@ public class MainActivity extends AppCompatActivity {
         String key = post.getId();
         if (isLiked(post, userId)) {
             post = disLike(userId, post);
+            event.btnLike
+                    .getDrawable()
+                    .mutate()
+                    .setColorFilter(this.getResources().getColor(R.color.blueGrey800),
+                            PorterDuff.Mode.SRC_IN);
         } else {
             post = like(userId, post);
+            event.btnLike
+                    .getDrawable()
+                    .mutate()
+                    .setColorFilter(this.getResources().getColor(R.color.red400),
+                            PorterDuff.Mode.SRC_IN);
         }
+        event.tvLikeCount.setText(post.getLikeString());
         Map<String, Object> postValues = post.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/posts/" + key, postValues);
         childUpdates.put("/user-posts/" + post.getUid() + "/" + key, postValues);
         postsDBRef.updateChildren(childUpdates);
-        postAdapter.updatePost(post);
+//        postAdapter.updatePost(post);
     }
 
     private Post like(String userId, Post post) {

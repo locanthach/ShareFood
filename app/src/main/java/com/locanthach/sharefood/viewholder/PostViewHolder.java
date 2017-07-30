@@ -86,6 +86,6 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
     private void setUpLikeClick() {
         binding.btnLike.setOnClickListener(v -> EventBus.getDefault()
-                .post(new PostAdapter.LikeEvent(binding.btnLike, binding.getPost())));
+                .post(new PostAdapter.LikeEvent(binding.btnLike, binding.getPost(), binding.tvLikeCount)));
     }
 }

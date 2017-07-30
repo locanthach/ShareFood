@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.model.Post;
@@ -116,10 +117,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     public static class LikeEvent {
         public final ImageView btnLike;
         public final Post post;
+        public final TextView tvLikeCount;
 
-        public LikeEvent(ImageView btnLike, Post post) {
+        public LikeEvent(ImageView btnLike, Post post, TextView tvLikeCount) {
             this.btnLike = btnLike;
             this.post = post;
+            this.tvLikeCount = tvLikeCount;
         }
     }
 
