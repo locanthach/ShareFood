@@ -43,9 +43,12 @@ import com.google.firebase.storage.StorageReference;
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.adapter.PostAdapter;
 import com.locanthach.sharefood.common.FireBaseConfig;
+import com.locanthach.sharefood.dao.PostDAO;
+import com.locanthach.sharefood.dao.UserDAO;
 import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.model.User;
 import com.locanthach.sharefood.util.FileUtils;
+import com.locanthach.sharefood.util.NetworkUtils;
 import com.locanthach.sharefood.util.PermissionUtils;
 import com.locanthach.sharefood.util.StringUtils;
 
@@ -63,6 +66,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
+import io.realm.Realm;
 
 import static com.locanthach.sharefood.activity.PostDetailActivity.EXTRA_POST;
 
@@ -83,9 +87,11 @@ public class MainActivity extends AppCompatActivity {
     private PostAdapter postAdapter;
     private String mCurrentPhotoPath = null;
     private StorageReference mStorageReference;
-    private List<Post> posts;
-    private List<User> users;
+    private List<Post> mPosts;
+    private List<User> mUsers;
     private User currentUser;
+    private PostDAO postDAO = new PostDAO();
+    private UserDAO userDAO = new UserDAO();
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -122,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Realm.init(this);
         setUpView();
         setUpFireBase();
         setUpDrawerLayout();
@@ -132,8 +139,7 @@ public class MainActivity extends AppCompatActivity {
                 //user already logged in
                 //SHOW TIMELINE
                 postAdapter.setCurrentUid(user.getUid());
-                fetchPosts();
-                fetchUsers();
+                loadData();
                 setUpNavigationDrawer();
                 CHECK_FIRSTIME_USER_LOGIN = true;
 
@@ -269,8 +275,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void swipeToRefresh() {
         swipeContainer.setOnRefreshListener(() -> {
-            fetchPosts();
-            fetchUsers();
+            loadData();
             swipeContainer.setRefreshing(false);
         });
     }
@@ -354,15 +359,19 @@ public class MainActivity extends AppCompatActivity {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        posts = new ArrayList<>();
+                        mPosts = new ArrayList<>();
                         for (DataSnapshot child : dataSnapshot.getChildren()) {
                             Post post = child.getValue(Post.class);
                             post.setId(child.getKey());
                             child.getValue();
-                            posts.add(post);
+                            mPosts.add(post);
                         }
-                        Collections.reverse(posts);
-                        postAdapter.setPosts(posts);
+                        // Save data to Realm
+                        postDAO.clearAll();
+                        postDAO.storePosts(mPosts);
+
+                        Collections.reverse(mPosts);
+                        postAdapter.setPosts(mPosts);
                         progress_bar.setVisibility(View.GONE);
                     }
 
@@ -378,14 +387,18 @@ public class MainActivity extends AppCompatActivity {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        users = new ArrayList<>();
+                        mUsers = new ArrayList<>();
                         for (DataSnapshot child : dataSnapshot.getChildren()) {
                             User user = child.getValue(User.class);
                             user.setId(child.getKey());
                             child.getValue();
-                            users.add(user);
+                            mUsers.add(user);
                         }
-                        postAdapter.setUsers(users);
+                        // Save data to Realm
+                        userDAO.clearAll();
+                        userDAO.storeUsers(mUsers);
+
+                        postAdapter.setUsers(mUsers);
                     }
 
                     @Override
@@ -549,5 +562,26 @@ public class MainActivity extends AppCompatActivity {
         mCurrentPhotoPath = savedInstanceState.getString(KEEP_IMAGE_PATH);
         List<Post> statePostList = postAdapter.getStateList(savedInstanceState);
         postAdapter.setPosts(statePostList);
+    }
+
+    private void loadData() {
+        if (NetworkUtils.isNetworkAvailable(this)) {
+            getDataOnline();
+        } else {
+            getDataOffline();
+            Toast.makeText(this, "NO INTERNET", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void getDataOnline() {
+        fetchPosts();
+        fetchUsers();
+    }
+
+    private void getDataOffline() {
+        mPosts = postDAO.getAll();
+        mUsers = userDAO.getAll();
+        postAdapter.setPosts(mPosts);
+        postAdapter.setUsers(mUsers);
     }
 }

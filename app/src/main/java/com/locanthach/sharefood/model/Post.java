@@ -49,6 +49,20 @@ public class Post implements Parcelable {
         this.viewCount = String.valueOf(0);
     }
 
+    public Post(String id, String uid, String author, String content, String photoUrl, String location, String time, String likeCount, String status, String viewCount, Map<String, Boolean> likes) {
+        this.id = id;
+        this.uid = uid;
+        this.author = author;
+        this.content = content;
+        this.photoUrl = photoUrl;
+        this.location = location;
+        this.time = time;
+        this.likeCount = likeCount;
+        this.status = status;
+        this.viewCount = viewCount;
+        this.likes = likes;
+    }
+
     protected Post(Parcel in) {
         final int N = in.readInt();
         for (int i = 0; i < N; i++) {
