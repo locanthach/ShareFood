@@ -29,14 +29,10 @@ import es.dmoral.toasty.Toasty;
 
 public class LoginActivity extends AppCompatActivity {
 
-    @BindView(R.id.edtEmail)
-    EditText edtEmail;
-    @BindView(R.id.edtPassword)
-    EditText edtPassword;
-    @BindView(R.id.login_button)
-    AppCompatButton login_button;
-    @BindView(R.id.btnRegister)
-    TextView btnRegister;
+    @BindView(R.id.edtEmail) EditText edtEmail;
+    @BindView(R.id.edtPassword) EditText edtPassword;
+    @BindView(R.id.login_button) AppCompatButton login_button;
+    @BindView(R.id.btnRegister) TextView btnRegister;
     @BindView(R.id.loader)
     MKLoader loader;
     @BindView(R.id.viewTrans)

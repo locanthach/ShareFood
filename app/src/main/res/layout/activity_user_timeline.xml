@@ -25,7 +25,7 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="?attr/colorPrimary"
+                    android:background="#ff303030"
                     app:titleTextColor="@color/white">
 
                     <TextView
@@ -70,6 +70,7 @@
     <!-- Nav drawer -->
     <android.support.design.widget.NavigationView
         android:id="@+id/nvView"
+        android:background="#ff303030"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start">
@@ -149,7 +150,7 @@
                         android:layout_gravity="start|center"
                         android:layout_marginStart="16dp"
                         android:text="Home"
-                        android:textColor="#000000"
+                        android:textColor="@color/white"
                         android:textSize="14dp" />
                 </LinearLayout>
 
@@ -175,7 +176,7 @@
                         android:layout_gravity="start|center"
                         android:layout_marginStart="16dp"
                         android:text="Timeline"
-                        android:textColor="#000000"
+                        android:textColor="@color/white"
                         android:textSize="14dp" />
                 </LinearLayout>
 
@@ -201,7 +202,7 @@
                         android:layout_gravity="start|center"
                         android:layout_marginStart="16dp"
                         android:text="Profile"
-                        android:textColor="#000000"
+                        android:textColor="@color/white"
                         android:textSize="14dp" />
                 </LinearLayout>
 
@@ -229,7 +230,7 @@
                         android:layout_gravity="start|center"
                         android:layout_marginStart="16dp"
                         android:text="Log out"
-                        android:textColor="#000000"
+                        android:textColor="@color/white"
                         android:textSize="14dp" />
                 </LinearLayout>
             </FrameLayout>
