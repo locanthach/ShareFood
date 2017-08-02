@@ -36,7 +36,7 @@ public class PostGridAdapter extends RecyclerView.Adapter<PostGridViewHolder> {
     public PostGridViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         this.context = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        return new PostGridViewHolder(DataBindingUtil.inflate(layoutInflater, R.layout.item_post_grid, parent, false));
+        return new PostGridViewHolder(DataBindingUtil.inflate(layoutInflater, R.layout.item_post_image, parent, false));
     }
 
     @Override

@@ -8,10 +8,6 @@
         <variable
             name="post"
             type="com.locanthach.sharefood.model.Post" />
-
-        <variable
-            name="user"
-            type="com.locanthach.sharefood.model.User" />
     </data>
 
     <ImageView
