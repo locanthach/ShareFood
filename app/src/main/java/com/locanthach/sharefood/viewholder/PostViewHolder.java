@@ -93,7 +93,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             long count = ParseRelativeData.getRelativeTime(time);
             long second = (count / 1000) % 60;
             long minute = (count / (1000 * 60)) % 60;
-            String jumper = String.format("%02d:%02d", minute, second);
+            String jumper = String.format("%02d minutes %02d", minute, second);
 
             binding.tvTime.setText(jumper + " ago");
             timeJumper(time);
