@@ -68,7 +68,7 @@
             android:layout_gravity="center"
             android:clipToPadding="false"
             android:gravity="center"
-            android:padding="8dp">
+            android:padding="4sp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -155,14 +155,13 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/buttonLayout"
             android:orientation="horizontal"
-            android:padding="4sp"
             app:elevation="16dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgUser1"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_margin="8dp"
+                android:layout_margin="4dp"
                 android:src="@drawable/saigon" />
 
             <LinearLayout
@@ -205,10 +204,9 @@
             android:id="@+id/rvComments"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/layoutComment"
             android:layout_below="@+id/userLayout"
             android:clipToPadding="false"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/padding_normal"
             android:scrollbarStyle="insideOverlay"
             android:scrollbars="vertical"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
@@ -217,7 +215,7 @@
             android:id="@+id/layoutComment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/rvComments"
+            android:layout_alignParentBottom="true"
             android:background="@color/colorPrimary"
             android:elevation="10dp"
             android:orientation="horizontal"
