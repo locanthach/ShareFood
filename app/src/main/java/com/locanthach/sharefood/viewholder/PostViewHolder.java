@@ -2,6 +2,7 @@ package com.locanthach.sharefood.viewholder;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -11,6 +12,7 @@ import com.locanthach.sharefood.common.Constant;
 import com.locanthach.sharefood.databinding.ItemPostBinding;
 import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.model.User;
+import com.locanthach.sharefood.util.ParseRelativeData;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -54,6 +56,12 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         setImagePostClick();
         loadImageAva(binding.imgUser, user.getProfileImageUrl());
         loadImage(binding.imgPost, post.getPhotoUrl());
+        long relativeTime = ParseRelativeData.getRelativeTime(post.getTime());
+        if (relativeTime < 3600000) {
+            timeJumper(relativeTime);
+        } else {
+            binding.tvTime.setText(post.getRelativeTime());
+        }
     }
 
     private void setUpStatusPost(Post post) {
@@ -77,5 +85,18 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     private void setUpLikeClick() {
         binding.btnLike.setOnClickListener(v -> EventBus.getDefault()
                 .post(new PostAdapter.LikeEvent(binding.btnLike, binding.getPost(), binding.tvLikeCount)));
+    }
+
+    private void timeJumper(long time) {
+        new Handler().postDelayed(() -> {
+            //update text
+            long count = time + 1000;
+            long second = (count / 1000) % 60;
+            long minute = (count / (1000 * 60)) % 60;
+            String jumper = String.format("%02d:%02d", minute, second);
+
+            binding.tvTime.setText(jumper + " ago");
+            timeJumper(count);
+        }, 1000);
     }
 }

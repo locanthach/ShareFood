@@ -32,6 +32,22 @@ public class ParseRelativeData {
         return relativeDate;
     }
 
+    public static long getRelativeTime(String date) {
+        String twitterFormat = "MMM dd, yyyy h:mm:ss aa";
+        SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+        sf.setLenient(true);
+
+        long relative = 0;
+        try {
+            long dateMillis = sf.parse(date).getTime();
+            long now = sf.parse(DateFormat.getDateTimeInstance().format(new Date())).getTime();
+            relative = now - dateMillis;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return relative;
+    }
+
     public static String getLikeCount(String likeCount) {
         String count = likeCount + " likes";
         if (hasOne(likeCount)) {

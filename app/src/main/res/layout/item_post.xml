@@ -64,7 +64,6 @@
                     android:layout_gravity="center"
                     android:fontFamily="sans-serif-light"
                     android:gravity="end"
-                    android:text="@{post.relativeTime}"
                     android:textColor="#000000"
                     android:textSize="14sp"
                     tools:text="5 minute ago" />
