@@ -19,6 +19,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -42,6 +43,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.adapter.PostAdapter;
+import com.locanthach.sharefood.adapter.PostGridAdapter;
 import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.dao.PostDAO;
 import com.locanthach.sharefood.dao.UserDAO;
@@ -69,6 +71,8 @@ import es.dmoral.toasty.Toasty;
 import io.realm.Realm;
 
 import static com.locanthach.sharefood.activity.PostDetailActivity.EXTRA_POST;
+import static com.locanthach.sharefood.common.Constant.GRID_LAYOUT;
+import static com.locanthach.sharefood.common.Constant.LINEAR_LAYOUT;
 
 public class MainActivity extends AppCompatActivity {
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1000;
@@ -85,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser user;
     private FirebaseAuth.AuthStateListener authStateListener;
     private PostAdapter postAdapter;
+    private PostGridAdapter postGridAdapter;
     private String mCurrentPhotoPath = null;
     private StorageReference mStorageReference;
     private List<Post> mPosts;
@@ -92,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
     private User currentUser;
     private PostDAO postDAO = new PostDAO();
     private UserDAO userDAO = new UserDAO();
+    private int mCurrentView;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -121,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
     TextView tvEmail;
     @BindView(R.id.progress_bar)
     ProgressBar progress_bar;
+    @BindView(R.id.btnViewType)
+    TextView btnViewType;
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
@@ -139,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
                 //user already logged in
                 //SHOW TIMELINE
                 postAdapter.setCurrentUid(user.getUid());
+                postGridAdapter.setCurrentUid(user.getUid());
                 loadData();
                 setUpNavigationDrawer();
                 CHECK_FIRSTIME_USER_LOGIN = true;
@@ -151,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
             onRestoreInstanceState(savedInstanceState);
         }
         setUpListenDataChange();
+        setUpViewTypeButton();
     }
 
     private void setUpDrawerLayout() {
@@ -200,8 +210,8 @@ public class MainActivity extends AppCompatActivity {
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        getSupportActionBar().setHomeButtonEnabled(true);
         postAdapter = new PostAdapter();
-        rvPost.setAdapter(postAdapter);
-        rvPost.setLayoutManager(new LinearLayoutManager(this));
+        postGridAdapter = new PostGridAdapter();
+        linearLayout(true);
 
         setUpRefresh();
         handleClickEvent();
@@ -372,6 +382,7 @@ public class MainActivity extends AppCompatActivity {
 
                         Collections.reverse(mPosts);
                         postAdapter.setPosts(mPosts);
+                        postGridAdapter.setPosts(mPosts);
                         progress_bar.setVisibility(View.GONE);
                     }
 
@@ -399,6 +410,7 @@ public class MainActivity extends AppCompatActivity {
                         userDAO.storeUsers(mUsers);
 
                         postAdapter.setUsers(mUsers);
+                        postGridAdapter.setUsers(mUsers);
                     }
 
                     @Override
@@ -469,6 +481,7 @@ public class MainActivity extends AppCompatActivity {
                 Post post = data.getExtras().getParcelable(NEW_POST);
                 if (post != null) {
                     postAdapter.addPost(post);
+                    postGridAdapter.addPost(post);
                     rvPost.smoothScrollToPosition(0);
                 }
             }
@@ -553,6 +566,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         postAdapter.setState(outState);
+        postGridAdapter.setState(outState);
         outState.putString(KEEP_IMAGE_PATH, mCurrentPhotoPath);
         super.onSaveInstanceState(outState);
     }
@@ -561,7 +575,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         mCurrentPhotoPath = savedInstanceState.getString(KEEP_IMAGE_PATH);
         List<Post> statePostList = postAdapter.getStateList(savedInstanceState);
+        List<Post> statePostGridList = postGridAdapter.getStateList(savedInstanceState);
         postAdapter.setPosts(statePostList);
+        postGridAdapter.setPosts(statePostGridList);
     }
 
     private void loadData() {
@@ -583,5 +599,33 @@ public class MainActivity extends AppCompatActivity {
         mUsers = userDAO.getAll();
         postAdapter.setPosts(mPosts);
         postAdapter.setUsers(mUsers);
+        postGridAdapter.setPosts(mPosts);
+        postGridAdapter.setUsers(mUsers);
+    }
+
+    private void setUpViewTypeButton() {
+        btnViewType.setOnClickListener(v -> {
+            if (mCurrentView == LINEAR_LAYOUT)
+                linearLayout(false);
+            else {
+                linearLayout(true);
+            }
+        });
+    }
+
+    private void linearLayout(boolean type) {
+        if (type) {
+            rvPost.setAdapter(postAdapter);
+            rvPost.setLayoutManager(new LinearLayoutManager(this));
+            //set icon
+            btnViewType.setBackground(this.getDrawable(R.drawable.ic_grid));
+            mCurrentView = LINEAR_LAYOUT;
+        } else {
+            rvPost.setAdapter(postGridAdapter);
+            rvPost.setLayoutManager(new GridLayoutManager(this, 2));
+            //set icon
+            btnViewType.setBackground(this.getDrawable(R.drawable.ic_linear));
+            mCurrentView = GRID_LAYOUT;
+        }
     }
 }

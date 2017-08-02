@@ -8,7 +8,7 @@ import android.view.View;
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.adapter.PostAdapter;
 import com.locanthach.sharefood.common.Constant;
-import com.locanthach.sharefood.databinding.ItemPostBinding;
+import com.locanthach.sharefood.databinding.ItemPostGridBinding;
 import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.model.User;
 
@@ -18,15 +18,14 @@ import static com.locanthach.sharefood.util.BindingUtil.loadImage;
 import static com.locanthach.sharefood.util.BindingUtil.loadImageAva;
 
 /**
- * Created by An Lee on 7/16/2017.
+ * Created by An Lee on 8/2/2017.
  */
 
-
-public class PostViewHolder extends RecyclerView.ViewHolder {
-    public final ItemPostBinding binding;
+public class PostGridViewHolder extends RecyclerView.ViewHolder {
+    public final ItemPostGridBinding binding;
     private Context context;
 
-    public PostViewHolder(ItemPostBinding binding) {
+    public PostGridViewHolder(ItemPostGridBinding binding) {
         super(binding.getRoot());
         this.binding = binding;
     }

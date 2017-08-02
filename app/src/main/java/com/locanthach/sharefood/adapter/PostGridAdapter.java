@@ -7,43 +7,40 @@ import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.model.User;
-import com.locanthach.sharefood.viewholder.PostViewHolder;
+import com.locanthach.sharefood.viewholder.PostGridViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by An Lee on 7/16/2017.
+ * Created by An Lee on 8/2/2017.
  */
 
-public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
+public class PostGridAdapter extends RecyclerView.Adapter<PostGridViewHolder> {
     private final ArrayList<Post> posts;
     private final ArrayList<User> users;
-    private String uid;
     private Context context;
+    private String uid;
     private static final String STATE = "listState";
 
-    public PostAdapter() {
+    public PostGridAdapter() {
         this.posts = new ArrayList<>();
         this.users = new ArrayList<>();
     }
 
     @Override
-    public PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PostGridViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         this.context = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        return new PostViewHolder(DataBindingUtil
-                .inflate(layoutInflater, R.layout.item_post, parent, false));
+        return new PostGridViewHolder(DataBindingUtil.inflate(layoutInflater, R.layout.item_post_grid, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(PostViewHolder holder, int position) {
+    public void onBindViewHolder(PostGridViewHolder holder, int position) {
         User postOwner = new User();
         for (User user : users) {
             if (posts.get(position).getUid().equals(user.getId())) {
@@ -59,8 +56,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         return posts.size();
     }
 
-    public void setCurrentUid(String uid) {
-        this.uid = uid;
+    public void addPost(Post post) {
+        posts.add(0, post);
+        notifyItemInserted(0);
     }
 
     public void setPosts(List<Post> data) {
@@ -75,25 +73,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         notifyDataSetChanged();
     }
 
-    public void updatePost(Post data) {
-        for (int i = 0; i < posts.size(); i++) {
-            if (posts.get(i).getId().equals(data.getId())) {
-                posts.set(i, data);
-                notifyItemChanged(i);
-                return;
-            }
-        }
-    }
-
-    public void addPost(Post post) {
-        posts.add(0, post);
-        notifyItemInserted(0);
-    }
-
-    public void appendData(List<Post> newPosts) {
-        int nextPos = posts.size();
-        posts.addAll(nextPos, newPosts);
-        notifyItemRangeChanged(nextPos, newPosts.size());
+    public void setCurrentUid(String uid) {
+        this.uid = uid;
     }
 
     public void setState(Bundle state) {
@@ -102,25 +83,5 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
     public List<Post> getStateList(Bundle state) {
         return state.getParcelableArrayList(STATE);
-    }
-
-    public static class LikeEvent {
-        public final ImageView btnLike;
-        public final Post post;
-        public final TextView tvLikeCount;
-
-        public LikeEvent(ImageView btnLike, Post post, TextView tvLikeCount) {
-            this.btnLike = btnLike;
-            this.post = post;
-            this.tvLikeCount = tvLikeCount;
-        }
-    }
-
-    public static class ImagePostEvent {
-        public final Post post;
-
-        public ImagePostEvent(Post post) {
-            this.post = post;
-        }
     }
 }

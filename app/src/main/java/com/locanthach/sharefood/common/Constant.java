@@ -10,4 +10,6 @@ public class Constant {
     public static final int STATUS_AVAILABLE = 0;
     public static final int STATUS_GIVEN = 1;
     public static final int STATUS_DELETED = -1;
+    public static final int LINEAR_LAYOUT = 1;
+    public static final int GRID_LAYOUT = 2;
 }
