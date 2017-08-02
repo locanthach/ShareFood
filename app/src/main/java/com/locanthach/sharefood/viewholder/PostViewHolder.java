@@ -58,7 +58,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         loadImage(binding.imgPost, post.getPhotoUrl());
         long relativeTime = ParseRelativeData.getRelativeTime(post.getTime());
         if (relativeTime < 3600000) {
-            timeJumper(relativeTime);
+            timeJumper(post.getTime());
         } else {
             binding.tvTime.setText(post.getRelativeTime());
         }
@@ -87,16 +87,16 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 .post(new PostAdapter.LikeEvent(binding.btnLike, binding.getPost(), binding.tvLikeCount)));
     }
 
-    private void timeJumper(long time) {
+    private void timeJumper(String time) {
         new Handler().postDelayed(() -> {
             //update text
-            long count = time + 1000;
+            long count = ParseRelativeData.getRelativeTime(time);
             long second = (count / 1000) % 60;
             long minute = (count / (1000 * 60)) % 60;
             String jumper = String.format("%02d:%02d", minute, second);
 
             binding.tvTime.setText(jumper + " ago");
-            timeJumper(count);
+            timeJumper(time);
         }, 1000);
     }
 }
