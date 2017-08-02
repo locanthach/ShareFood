@@ -54,6 +54,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         setUpStatusPost(post);
         setUpLikeClick();
         setImagePostClick();
+        setUpCommentClick();
         loadImageAva(binding.imgUser, user.getProfileImageUrl());
         loadImage(binding.imgPost, post.getPhotoUrl());
         long relativeTime = ParseRelativeData.getRelativeTime(post.getTime());
@@ -85,6 +86,11 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     private void setUpLikeClick() {
         binding.btnLike.setOnClickListener(v -> EventBus.getDefault()
                 .post(new PostAdapter.LikeEvent(binding.btnLike, binding.getPost(), binding.tvLikeCount)));
+    }
+
+    private void setUpCommentClick() {
+        binding.commentLayout.setOnClickListener(v -> EventBus.getDefault()
+                .post(new PostAdapter.CommentClickEvent(binding.getPost())));
     }
 
     private void timeJumper(String time) {

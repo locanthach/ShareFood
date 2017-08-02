@@ -147,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
                 //user already logged in
                 //SHOW TIMELINE
                 postAdapter.setCurrentUid(user.getUid());
-                postGridAdapter.setCurrentUid(user.getUid());
                 loadData();
                 setUpNavigationDrawer();
                 CHECK_FIRSTIME_USER_LOGIN = true;
@@ -412,7 +411,6 @@ public class MainActivity extends AppCompatActivity {
                         userDAO.storeUsers(mUsers);
 
                         postAdapter.setUsers(mUsers);
-                        postGridAdapter.setUsers(mUsers);
                     }
 
                     @Override
@@ -496,6 +494,7 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_POST_CODE);
     }
 
+    //Image on click listener
     @Subscribe
     public void onEvent(PostAdapter.ImagePostEvent event) {
         Intent intent = new Intent(MainActivity.this, PostDetailActivity.class);
@@ -503,10 +502,19 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //Like on click listener
     @Subscribe
     public void onEvent(PostAdapter.LikeEvent event) {
         String userId = firebaseAuth.getCurrentUser().getUid();
         setUpLike(userId, event);
+    }
+
+    //Comment on click listener
+    @Subscribe
+    public void onEvent(PostAdapter.CommentClickEvent event) {
+        //Todo something
+        Post post = event.post;
+        Toast.makeText(this, "Comment clicked !!", Toast.LENGTH_SHORT).show();
     }
 
     private void setUpLike(String userId, PostAdapter.LikeEvent event) {
@@ -602,7 +610,6 @@ public class MainActivity extends AppCompatActivity {
         postAdapter.setPosts(mPosts);
         postAdapter.setUsers(mUsers);
         postGridAdapter.setPosts(mPosts);
-        postGridAdapter.setUsers(mUsers);
     }
 
     private void setUpViewTypeButton() {

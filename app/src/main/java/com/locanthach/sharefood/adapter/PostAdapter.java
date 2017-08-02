@@ -123,4 +123,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
             this.post = post;
         }
     }
+
+    public static class CommentClickEvent {
+        public final Post post;
+
+        public CommentClickEvent(Post post) {
+            this.post = post;
+        }
+    }
 }

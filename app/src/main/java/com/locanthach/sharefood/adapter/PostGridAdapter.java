@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 
 import com.locanthach.sharefood.R;
 import com.locanthach.sharefood.model.Post;
-import com.locanthach.sharefood.model.User;
 import com.locanthach.sharefood.viewholder.PostGridViewHolder;
 
 import java.util.ArrayList;
@@ -22,14 +21,11 @@ import java.util.List;
 
 public class PostGridAdapter extends RecyclerView.Adapter<PostGridViewHolder> {
     private final ArrayList<Post> posts;
-    private final ArrayList<User> users;
     private Context context;
-    private String uid;
     private static final String STATE = "listState";
 
     public PostGridAdapter() {
         this.posts = new ArrayList<>();
-        this.users = new ArrayList<>();
     }
 
     @Override
@@ -41,14 +37,7 @@ public class PostGridAdapter extends RecyclerView.Adapter<PostGridViewHolder> {
 
     @Override
     public void onBindViewHolder(PostGridViewHolder holder, int position) {
-        User postOwner = new User();
-        for (User user : users) {
-            if (posts.get(position).getUid().equals(user.getId())) {
-                postOwner = user;
-                postOwner.setId(user.getId());
-            }
-        }
-        holder.bind(context, posts.get(position), postOwner, uid);
+        holder.bind(context, posts.get(position));
     }
 
     @Override
@@ -65,16 +54,6 @@ public class PostGridAdapter extends RecyclerView.Adapter<PostGridViewHolder> {
         posts.clear();
         posts.addAll(data);
         notifyDataSetChanged();
-    }
-
-    public void setUsers(List<User> data) {
-        users.clear();
-        users.addAll(data);
-        notifyDataSetChanged();
-    }
-
-    public void setCurrentUid(String uid) {
-        this.uid = uid;
     }
 
     public void setState(Bundle state) {
