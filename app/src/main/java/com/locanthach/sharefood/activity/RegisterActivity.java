@@ -99,7 +99,7 @@ public class RegisterActivity extends AppCompatActivity {
                 })
                 .addOnSuccessListener(authResult -> {
                     Toasty.success(this, "Success!", Toast.LENGTH_SHORT, true).show();
-                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                    Intent intent = new Intent(RegisterActivity.this, QRScannerActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
