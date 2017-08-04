@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.NotificationCompat;
@@ -47,6 +49,7 @@ import com.locanthach.sharefood.adapter.PostGridAdapter;
 import com.locanthach.sharefood.common.FireBaseConfig;
 import com.locanthach.sharefood.dao.PostDAO;
 import com.locanthach.sharefood.dao.UserDAO;
+import com.locanthach.sharefood.fragment.MyDialogFragment;
 import com.locanthach.sharefood.model.Post;
 import com.locanthach.sharefood.model.User;
 import com.locanthach.sharefood.util.FileUtils;
@@ -98,37 +101,23 @@ public class MainActivity extends AppCompatActivity {
     private PostDAO postDAO = new PostDAO();
     private UserDAO userDAO = new UserDAO();
     private int mCurrentView;
+    private BottomSheetBehavior mBottomSheetBehavior;
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.drawerLayout)
-    DrawerLayout drawerLayout;
-    @BindView(R.id.nvView)
-    NavigationView navigationView;
-    @BindView(R.id.shimmer_recycler_view)
-    RecyclerView rvPost;
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
-    @BindView(R.id.swipeContainer)
-    SwipeRefreshLayout swipeContainer;
-    @BindView(R.id.sign_out_button)
-    LinearLayout sign_out_button;
-    @BindView(R.id.profile_button)
-    LinearLayout profile_button;
-    @BindView(R.id.home_button)
-    LinearLayout home_button;
-    @BindView(R.id.timeline_button)
-    LinearLayout timeline_button;
-    @BindView(R.id.imgUser)
-    CircleImageView imgUser;
-    @BindView(R.id.tvUsername)
-    TextView tvUsername;
-    @BindView(R.id.tvEmail)
-    TextView tvEmail;
-    @BindView(R.id.progress_bar)
-    ProgressBar progress_bar;
-    @BindView(R.id.btnViewType)
-    TextView btnViewType;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.drawerLayout) DrawerLayout drawerLayout;
+    @BindView(R.id.nvView) NavigationView navigationView;
+    @BindView(R.id.shimmer_recycler_view) RecyclerView rvPost;
+    @BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
+    @BindView(R.id.sign_out_button) LinearLayout sign_out_button;
+    @BindView(R.id.profile_button) LinearLayout profile_button;
+    @BindView(R.id.home_button) LinearLayout home_button;
+    @BindView(R.id.timeline_button) LinearLayout timeline_button;
+    @BindView(R.id.imgUser) CircleImageView imgUser;
+    @BindView(R.id.tvUsername) TextView tvUsername;
+    @BindView(R.id.tvEmail) TextView tvEmail;
+    @BindView(R.id.progress_bar) ProgressBar progress_bar;
+    @BindView(R.id.btnViewType) TextView btnViewType;
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
@@ -163,36 +152,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpDrawerLayout() {
-        //setting Event Icon in NavigationView
-        navigationView.setNavigationItemSelectedListener(item -> {
-            selectDrawerItem(item);
-            return true;
-        });
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.open, R.string.close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
     }
 
-    private void selectDrawerItem(MenuItem item) {
-        //Sample Code
-        String title;
-        switch (item.getItemId()) {
-            case R.id.home_button:
-                title = "Home";
-                break;
-            case R.id.signOut_button:
-                title = "Sign out";
-                break;
-            default:
-                title = "None";
-                break;
-        }
-//        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.content, SimpleFragment.newInstance(title))
-//                .commit();
-        drawerLayout.closeDrawers();
-        toolbar.setTitle(item.getTitle());
-    }
 
     private void setUpFireBase() {
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -214,6 +178,8 @@ public class MainActivity extends AppCompatActivity {
 
         setUpRefresh();
         handleClickEvent();
+
+        mBottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottom_sheet));
     }
 
     private void setUpNavigationDrawer() {
@@ -451,7 +417,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void fab_button(View view) {
-//        startActivity(new Intent(MainActivity.this, PostActivity.class));
         openCamera(CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
     }
 
@@ -514,7 +479,10 @@ public class MainActivity extends AppCompatActivity {
     public void onEvent(PostAdapter.CommentClickEvent event) {
         //Todo something
         Post post = event.post;
-        Toast.makeText(this, "Comment clicked !!", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Comment clicked !!", Toast.LENGTH_SHORT).show();
+        new MyDialogFragment();
+        BottomSheetDialogFragment bottomSheetDialogFragment = MyDialogFragment.newInstance(post);
+        bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
     }
 
     private void setUpLike(String userId, PostAdapter.LikeEvent event) {
